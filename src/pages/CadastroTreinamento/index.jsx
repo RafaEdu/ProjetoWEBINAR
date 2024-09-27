@@ -6,11 +6,13 @@ function CadastroTreinamento() {
     <div className='container'>
       <form action="">
         <h1>Cadastro De Novo Curso</h1>
-        <input name="titulo" type='text' />
-        <input name="descrição" type='text' />
-        <input name="vencimento" type='date' />
+        <input name="titulo" type='text' placeholder='Dê um título' />
+        <input name="descrição" type='text' placeholder='Descrição do curso' />
+        <input name="vencimento" type='date' placeholder='Data de vencimento' />
         <input name="anexo" type='file' />
+        <button type='button'>Cadastrar</button>
       </form>
+
     </div>
 
   )
