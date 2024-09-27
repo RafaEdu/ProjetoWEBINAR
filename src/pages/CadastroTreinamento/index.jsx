@@ -84,7 +84,6 @@ function CadastroTreinamento() {
           )}
         </div>
 
-        <input name="anexo" type='file' />
         <button type='button'>Cadastrar</button>
       </form>
     </div>
