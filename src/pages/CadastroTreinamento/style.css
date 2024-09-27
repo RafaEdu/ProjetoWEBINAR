@@ -21,12 +21,18 @@ form {
 
 input[type="text"],
 input[type="date"],
-input[type="file"] {
+input[type="file"],
+select {
   padding: 10px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
+}
+
+select {
+  cursor: pointer;
+  background-color: white;
 }
 
 button {
@@ -44,6 +50,43 @@ button:hover {
   background-color: #034638;
 }
 
+/* Selected Machines Section */
+h2 {
+  font-size: 18px;
+  color: #034638;
+  margin-bottom: 10px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background-color: #f4f4f4;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+ul li button {
+  background-color: #ff4d4d;
+  padding: 5px 10px;
+  font-size: 14px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+ul li button:hover {
+  background-color: #cc0000;
+}
+
+/* Responsive Styling */
 @media (max-width: 768px) {
   .container {
     max-width: 100%;
@@ -53,11 +96,16 @@ button:hover {
 
   input[type="text"],
   input[type="date"],
-  input[type="file"] {
+  input[type="file"],
+  select {
     font-size: 14px;
   }
 
   button {
+    font-size: 14px;
+  }
+
+  ul li {
     font-size: 14px;
   }
 }
