@@ -4,7 +4,7 @@ import CadastroTreinamento from './pages/CadastroTreinamento';
 import CadastroLinhas from './pages/CadastroLinhas';
 import CadastroMaquinas from './pages/CadastroMaquinas';
 import CadastroUsuarios from './pages/CadastroUsuarios';
-import LoginUsuarios from './pages/LoginUsuarios';
+//import LoginUsuarios from './pages/LoginUsuarios';
 import './index.css';
 
 function App() {
@@ -24,8 +24,7 @@ function App() {
         {currentPage === 'treinamento' && <CadastroTreinamento />}
         {currentPage === 'linha' && <CadastroLinhas />}
         {currentPage === 'maquinas' && <CadastroMaquinas />}
-        {currentPage === 'novo usuario' && <CadastroUsuarios />}
-        {currentPage === 'login' && <LoginUsuarios />}
+        {currentPage === 'novo usuario' && <CadastroUsuarios />} 
       </div>
     </div>
   );
