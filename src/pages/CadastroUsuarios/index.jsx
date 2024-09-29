@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './styles.css';
+import './style.css';
 
 function CadastroFuncionarios() {
   const [nomeFuncionario, setNomeFuncionario] = useState('');
