@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import CadastroTreinamento from './pages/CadastroTreinamento';
 import CadastroLinhas from './pages/CadastroLinhas';
 import CadastroMaquinas from './pages/CadastroMaquinas';
+import CadastroUsuarios from './pages/CadastroUsuarios';
+import LoginUsuarios from './pages/LoginUsuarios';
 import './index.css';
 
 function App() {
@@ -14,12 +16,16 @@ function App() {
         <button onClick={() => setCurrentPage('treinamento')}>Cadastro de Treinamento</button>
         <button onClick={() => setCurrentPage('linha')}>Cadastro de Linha</button>
         <button onClick={() => setCurrentPage('maquinas')}>Cadastro de Máquinas</button>
+        <button onClick={() => setCurrentPage('novo usuário')}>Novo usuário</button>
+        <button onClick={() => setCurrentPage('login')}>Entrar</button>
       </nav>
 
       <div>
         {currentPage === 'treinamento' && <CadastroTreinamento />}
         {currentPage === 'linha' && <CadastroLinhas />}
         {currentPage === 'maquinas' && <CadastroMaquinas />}
+        {currentPage === 'novo usuario' && <CadastroUsuarios />}
+        {currentPage === 'login' && <LoginUsuarios />}
       </div>
     </div>
   );
