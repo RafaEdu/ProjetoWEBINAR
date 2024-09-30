@@ -12,12 +12,12 @@ h1 {
     color: #034638;
     margin-bottom: 20px;
 }
-  
+
 form {
     display: flex;
     flex-direction: column;
 }
-  
+
 input[type="text"],
 input[type="email"],
 input[type="password"] {
@@ -42,7 +42,7 @@ button {
 button:hover {
     background-color: #034638;
 }
-  
+
 h2 {
     font-size: 18px;
     color: #034638;
@@ -63,22 +63,23 @@ ul li {
 
 @media (max-width: 768px) {
     .container {
-      max-width: 100%;
-      margin: 20px;
-      padding: 15px;
+        max-width: 100%;
+        margin: 20px;
+        padding: 15px;
     }
 
     input[type="text"],
     input[type="email"],
     input[type="password"] {
-      font-size: 14px;
+        font-size: 14px;
     }
 
     button {
-      font-size: 14px;
+        font-size: 14px;
     }
 
     ul li {
-      font-size: 14px;
+        font-size: 14px;
     }
 }
+
