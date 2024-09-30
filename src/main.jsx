@@ -16,7 +16,7 @@ function App() {
         <button onClick={() => setCurrentPage('treinamento')}>Cadastro de Treinamento</button>
         <button onClick={() => setCurrentPage('linha')}>Cadastro de Linha</button>
         <button onClick={() => setCurrentPage('maquinas')}>Cadastro de Máquinas</button>
-        <button onClick={() => setCurrentPage('novo usuário')}>Novo usuário</button>
+        <button onClick={() => setCurrentPage('novo usuario')}>Novo usuário</button>
         <button onClick={() => setCurrentPage('login')}>Entrar</button>
       </nav>
 
@@ -24,7 +24,7 @@ function App() {
         {currentPage === 'treinamento' && <CadastroTreinamento />}
         {currentPage === 'linha' && <CadastroLinhas />}
         {currentPage === 'maquinas' && <CadastroMaquinas />}
-        {currentPage === 'novo usuario' && <CadastroUsuarios />} 
+        {currentPage === 'novo usuario' && <CadastroUsuarios />}
         {currentPage === 'login' && <LoginUsuarios />}
       </div>
     </div>
