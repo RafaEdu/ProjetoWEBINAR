@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './style.css';
 
-function LoginUsuarios() {
+function LoginUsuarios({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
@@ -9,15 +9,12 @@ function LoginUsuarios() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Validação simples
-    if (email.trim() === '' || senha.trim() === '') {
-      setErro('Email e senha são obrigatórios.');
+    // Verificar se o email e senha são o padrão
+    if (email === 'usuario@gmail.com' && senha === 'usuario') {
+      setErro(''); // Limpa o erro
+      onLoginSuccess(); // Chama a função passada como prop quando o login for bem-sucedido
     } else {
-      // Realizar login (a lógica de autenticação seria adicionada aqui)
-      console.log('Login realizado:', email);
-      setErro(''); // Limpa qualquer erro
-      setEmail(''); // Limpa os campos após o login
-      setSenha('');
+      setErro('Email ou senha inválidos.');
     }
   };
 

@@ -1,4 +1,4 @@
-import { StrictMode, useState } from 'react';
+import { StrictMode, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import CadastroTreinamento from './pages/CadastroTreinamento';
 import CadastroLinhas from './pages/CadastroLinhas';
@@ -8,7 +8,32 @@ import LoginUsuarios from './pages/LoginUsuarios';
 import './index.css';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentPage, setCurrentPage] = useState('treinamento');
+
+  
+  useEffect(() => {
+    const authStatus = localStorage.getItem('isAuthenticated');
+    if (authStatus === 'true') {
+      setIsAuthenticated(true); 
+    }
+  }, []);
+
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true); 
+    localStorage.setItem('isAuthenticated', 'true'); 
+  };
+
+
+  const handleLogout = () => {
+    setIsAuthenticated(false); 
+    localStorage.removeItem('isAuthenticated');
+  };
+
+  if (!isAuthenticated) {
+    return <LoginUsuarios onLoginSuccess={handleLoginSuccess} />;
+  }
 
   return (
     <div>
@@ -17,7 +42,8 @@ function App() {
         <button onClick={() => setCurrentPage('linha')}>Cadastro de Linha</button>
         <button onClick={() => setCurrentPage('maquinas')}>Cadastro de Máquinas</button>
         <button onClick={() => setCurrentPage('novo usuario')}>Novo usuário</button>
-        <button onClick={() => setCurrentPage('login')}>Entrar</button>
+        <button className="logout-button" onClick={handleLogout}>Logout</button>
+
       </nav>
 
       <div>
@@ -25,7 +51,6 @@ function App() {
         {currentPage === 'linha' && <CadastroLinhas />}
         {currentPage === 'maquinas' && <CadastroMaquinas />}
         {currentPage === 'novo usuario' && <CadastroUsuarios />}
-        {currentPage === 'login' && <LoginUsuarios />}
       </div>
     </div>
   );
