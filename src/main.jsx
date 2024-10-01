@@ -8,7 +8,7 @@ import LoginUsuarios from './pages/LoginUsuarios';
 import './index.css';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('treinamento');
+  const [currentPage, setCurrentPage] = useState('login');
 
   return (
     <div>
