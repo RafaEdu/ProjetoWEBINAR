@@ -28,7 +28,7 @@ function App() {
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('isAuthenticated');
-    setCurrentPage('login'); 
+    setCurrentPage('login'); // Redireciona para a página de login após logout
   };
 
   if (!isAuthenticated) {
