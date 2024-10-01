@@ -18,18 +18,29 @@ Cor terciária: #41b02a
 */
 
 .logout-button {
-  background-color: red; /* Cor de fundo vermelha */
-  color: white; /* Cor do texto branca */
-  border: none; /* Sem borda */
-  padding: 10px 20px; /* Padding para tornar o botão maior */
-  cursor: pointer; /* Muda o cursor para uma mão ao passar sobre o botão */
-  position: absolute; /* Para posicionar o botão */
-  right: 20px; /* Espaçamento do lado direito */
-  top: 20px; /* Espaçamento do topo (ajuste conforme necessário) */
-  border-radius: 5px; /* Cantos arredondados */
-  font-weight: bold; /* Deixar o texto mais destacado */
+  background-color: red;
+  /* Cor de fundo vermelha */
+  color: white;
+  /* Cor do texto branca */
+  border: none;
+  /* Sem borda */
+  padding: 10px 20px;
+  /* Padding para tornar o botão maior */
+  cursor: pointer;
+  /* Muda o cursor para uma mão ao passar sobre o botão */
+  position: absolute;
+  /* Para posicionar o botão */
+  right: 20px;
+  /* Espaçamento do lado direito */
+  top: 20px;
+  /* Espaçamento do topo (ajuste conforme necessário) */
+  border-radius: 5px;
+  /* Cantos arredondados */
+  font-weight: bold;
+  /* Deixar o texto mais destacado */
 }
 
 .logout-button:hover {
-  background-color: darkred; /* Muda a cor ao passar o mouse */
+  background-color: darkred;
+  /* Muda a cor ao passar o mouse */
 }

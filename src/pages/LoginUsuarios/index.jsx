@@ -20,11 +20,11 @@ function LoginUsuarios({ onLoginSuccess }) {
 
   return (
     <div className="container">
-      <h1>Login de Funcionários</h1>
+      <h1>Entrar no sistema</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="email"
-          placeholder="Email do Funcionário"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
