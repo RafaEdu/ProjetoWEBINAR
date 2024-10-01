@@ -8,31 +8,27 @@ import LoginUsuarios from './pages/LoginUsuarios';
 import './index.css';
 
 function App() {
-<<<<<<< HEAD
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentPage, setCurrentPage] = useState('treinamento');
-=======
   const [currentPage, setCurrentPage] = useState('login');
->>>>>>> fbfeb145be9ee23a4030677db1210d513f02dc99
 
-  
   useEffect(() => {
     const authStatus = localStorage.getItem('isAuthenticated');
     if (authStatus === 'true') {
-      setIsAuthenticated(true); 
+      setIsAuthenticated(true);
+      setCurrentPage('treinamento'); // Defina a página inicial após o login
     }
   }, []);
 
-
   const handleLoginSuccess = () => {
-    setIsAuthenticated(true); 
-    localStorage.setItem('isAuthenticated', 'true'); 
+    setIsAuthenticated(true);
+    localStorage.setItem('isAuthenticated', 'true');
+    setCurrentPage('treinamento'); // Redireciona para a página de treinamento após o login
   };
 
-
   const handleLogout = () => {
-    setIsAuthenticated(false); 
+    setIsAuthenticated(false);
     localStorage.removeItem('isAuthenticated');
+    setCurrentPage('login'); 
   };
 
   if (!isAuthenticated) {
@@ -47,7 +43,6 @@ function App() {
         <button onClick={() => setCurrentPage('maquinas')}>Cadastro de Máquinas</button>
         <button onClick={() => setCurrentPage('novo usuario')}>Novo usuário</button>
         <button className="logout-button" onClick={handleLogout}>Logout</button>
-
       </nav>
 
       <div>
