@@ -8,8 +8,12 @@ import LoginUsuarios from './pages/LoginUsuarios';
 import './index.css';
 
 function App() {
+<<<<<<< HEAD
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentPage, setCurrentPage] = useState('treinamento');
+=======
+  const [currentPage, setCurrentPage] = useState('login');
+>>>>>>> fbfeb145be9ee23a4030677db1210d513f02dc99
 
   
   useEffect(() => {
