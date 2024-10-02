@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',
+    'backend',
 ]
 
 MIDDLEWARE = [
@@ -80,7 +81,8 @@ DATABASES = {
         'NAME':'bancoWebinar',
         'USER':'postgres',
         'PASSWORD':'postgres',
-        'HOST':'localhost'
+        'HOST':'localhost',
+        'PORT':'5432',
     }
 }
 

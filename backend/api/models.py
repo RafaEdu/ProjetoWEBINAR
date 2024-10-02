@@ -2,38 +2,34 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-class User(AbstractUser):
-    matricula = models.IntegerField(unique=True)
+class User(models.Model):
+    email = models.EmailField(unique=True)
     nome = models.CharField(max_length=100)
-    area = models.ForeignKey('Area', on_delete=models.SET_NULL, null=True)
-    setor = models.CharField(max_length=100)
+    senha = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.nome
 
-class Admin(User):
-    idadm = models.AutoField(primary_key=True)
+class Admin(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    is_adm = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Admin: {self.user.nome}"
 
 
 class Maquina(models.Model):
     idmaquina = models.AutoField(primary_key=True)
     idcurso = models.ForeignKey('Curso', on_delete=models.CASCADE)
-
-
-class Linha(models.Model):
-    idlinha = models.AutoField(primary_key=True)
-    idmaquina = models.ForeignKey(Maquina, on_delete=models.CASCADE)
-
-
-class Funcionario(models.Model):
-    idmatricula = models.ForeignKey(User, on_delete=models.CASCADE)
-    idmaquina = models.ForeignKey(Maquina, on_delete=models.CASCADE)
-    idcursos = models.ForeignKey('Curso', on_delete=models.CASCADE)
+    nomeMaquina = models.CharField(max_length=100)
 
 
 class Curso(models.Model):
     idcurso = models.AutoField(primary_key=True)
     descricao = models.CharField(max_length=255)
-    porcentagem = models.IntegerField()
-    vencimento = models.DateField()
+    tempoDuracao = models.TimeField()
     idquestionario = models.ForeignKey('Questionario', on_delete=models.CASCADE)
     idarea = models.ForeignKey('Area', on_delete=models.CASCADE)
 
@@ -55,12 +51,15 @@ class Video(models.Model):
     idvideo = models.AutoField(primary_key=True)
     duracao = models.TimeField()
     descricao = models.CharField(max_length=255)
+    arquivo_video = models.FileField(upload_to='videos/')  # Atributo para anexar vídeos
 
 
 class Slide(models.Model):
     idslide = models.AutoField(primary_key=True)
     descricao = models.CharField(max_length=255)
     paginas = models.IntegerField()
+    arquivo_pdf = models.FileField(upload_to='slides/')  # Atributo para anexar PDFs
+
 
 
 class Aula(models.Model):
