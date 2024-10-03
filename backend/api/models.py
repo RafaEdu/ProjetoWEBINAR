@@ -28,9 +28,6 @@ class Admin(models.Model):
         return f"Admin: {self.user.nome}"
 
 
-class Maquina(models.Model):
-    idmaquina = models.AutoField(primary_key=True)
-    nomeMaquina = models.CharField(max_length=100)
 
 
 class Curso(models.Model):
@@ -39,6 +36,11 @@ class Curso(models.Model):
     tempoDuracao = models.TimeField()
     idquestionario = models.ForeignKey('Questionario', on_delete=models.CASCADE)
     idarea = models.ForeignKey('Area', on_delete=models.CASCADE)
+
+
+class Maquina(models.Model):
+    idmaquina = models.AutoField(primary_key=True)
+    nomeMaquina = models.CharField(max_length=100)
 
 
 class Questionario(models.Model):
