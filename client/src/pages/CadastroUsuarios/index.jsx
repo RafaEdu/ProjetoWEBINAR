@@ -65,7 +65,7 @@ function CadastroUsuarios() {
         senha: senhaFuncionario,
         is_active: true,
         is_admin: isAdmin,
-        idmaquina_id: maquinasSelecionadas.map(maquina => maquina.value) // Usando o ID da máquina selecionada
+        maquinas: maquinasSelecionadas.map(maquina => maquina.value)
       };
 
       try {

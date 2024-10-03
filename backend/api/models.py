@@ -8,13 +8,12 @@ class User(models.Model):
     senha = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    idmaquina = models.ForeignKey(
-        'Maquina',  # Certifique-se de que Maquina esteja definido corretamente
-        on_delete=models.CASCADE,
+    maquinas = models.ManyToManyField(
+        'Maquina',
         related_name='usuarios',
-        null=True,  # Permitir valores nulos
         blank=True  # Permitir que o campo fique em branco
     )
+
 
 
     def __str__(self):
