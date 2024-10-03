@@ -1,80 +1,97 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
 
 function CadastroUsuarios() {
-  // Estado para as opções de máquinas disponíveis e selecionadas
-  const [opcoesMaquinas, setOpcoesMaquinas] = useState([
-    { value: "1", label: "Máquina 1" },
-    { value: "2", label: "Máquina 2" },
-    { value: "3", label: "Máquina 3" }
-  ]);
-
+  const [opcoesMaquinas, setOpcoesMaquinas] = useState([]);
   const [maquinasSelecionadas, setMaquinasSelecionadas] = useState([]);
-  const [selectedMachine, setSelectedMachine] = useState("");
+  const [selectedMachine, setSelectedMachine] = useState('');
 
   const [nomeFuncionario, setNomeFuncionario] = useState('');
   const [emailFuncionario, setEmailFuncionario] = useState('');
   const [senhaFuncionario, setSenhaFuncionario] = useState('');
   const [funcionariosCadastrados, setFuncionariosCadastrados] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false); 
+  const [isAdmin, setIsAdmin] = useState(false);
   const [erro, setErro] = useState('');
 
-  
+  // Buscar máquinas do banco de dados ao carregar a página
+  useEffect(() => {
+    const fetchMaquinas = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/maquinas/');
+        const data = await response.json();
+        const maquinas = data.map(maquina => ({
+          value: maquina.idmaquina,  // Pegando o id da máquina
+          label: maquina.nomeMaquina,  // Pegando o nome da máquina
+        }));
+        setOpcoesMaquinas(maquinas);
+      } catch (error) {
+        console.error('Erro ao buscar máquinas:', error);
+      }
+    };
+
+    fetchMaquinas();
+  }, []);
+
   const handleSelecionarMaquina = (event) => {
     const selectedValue = event.target.value;
-
-    
-    const maquinaSelecionada = opcoesMaquinas.find(maquina => maquina.value === selectedValue);
+    const maquinaSelecionada = opcoesMaquinas.find(maquina => maquina.value.toString() === selectedValue);
 
     if (maquinaSelecionada) {
-     
       setMaquinasSelecionadas([...maquinasSelecionadas, maquinaSelecionada]);
-
-     
-      setOpcoesMaquinas(opcoesMaquinas.filter(maquina => maquina.value !== selectedValue));
-
-  
+      setOpcoesMaquinas(opcoesMaquinas.filter(maquina => maquina.value.toString() !== selectedValue));
       setSelectedMachine("");
     }
   };
 
-  // Função para remover uma máquina da lista de selecionadas e voltar ao select
   const handleRemoverMaquina = (valor) => {
-    // Encontrar a máquina a ser removida
     const maquinaRemovida = maquinasSelecionadas.find(maquina => maquina.value === valor);
-
     if (maquinaRemovida) {
-      // Remover a máquina da lista de selecionadas
       setMaquinasSelecionadas(maquinasSelecionadas.filter(maquina => maquina.value !== valor));
-
-      // Adicionar de volta ao select
       setOpcoesMaquinas([...opcoesMaquinas, maquinaRemovida]);
     }
   };
 
-  // Função para cadastrar o usuário
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Verifica se os campos estão preenchidos
     if (nomeFuncionario.trim() === '' || emailFuncionario.trim() === '' || senhaFuncionario.trim() === '') {
       setErro('Todos os campos são obrigatórios.');
     } else if (funcionariosCadastrados.some(func => func.email === emailFuncionario)) {
       setErro('Este email já está cadastrado.');
     } else {
-      // Cadastra o funcionário
       const novoFuncionario = {
         nome: nomeFuncionario,
         email: emailFuncionario,
-        isAdmin: isAdmin,
-        maquinas: maquinasSelecionadas.map(maquina => maquina.label)
+        senha: senhaFuncionario,
+        is_active: true,
+        is_admin: isAdmin,
+        idmaquina_id: maquinasSelecionadas.map(maquina => maquina.value) // Usando o ID da máquina selecionada
       };
-      setFuncionariosCadastrados([...funcionariosCadastrados, novoFuncionario]);
-      setNomeFuncionario('');
-      setEmailFuncionario('');
-      setSenhaFuncionario('');
-      setMaquinasSelecionadas([]); 
-      setErro('');
+
+      try {
+        const response = await fetch('http://localhost:8000/api/users/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(novoFuncionario),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setFuncionariosCadastrados([...funcionariosCadastrados, data]);
+          setNomeFuncionario('');
+          setEmailFuncionario('');
+          setSenhaFuncionario('');
+          setMaquinasSelecionadas([]);
+          setErro('');
+        } else {
+          setErro('Erro ao cadastrar o funcionário.');
+        }
+      } catch (error) {
+        console.error('Erro ao cadastrar funcionário:', error);
+        setErro('Erro na conexão com o servidor.');
+      }
     }
   };
 
@@ -83,16 +100,16 @@ function CadastroUsuarios() {
       <h1>Cadastro de Usuários</h1>
       <form onSubmit={handleSubmit}>
         <input
-          type="text"
-          placeholder="Nome do Usuário"
-          value={nomeFuncionario}
-          onChange={(e) => setNomeFuncionario(e.target.value)}
-        />
-        <input
           type="email"
           placeholder="Email do Usuário"
           value={emailFuncionario}
           onChange={(e) => setEmailFuncionario(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Nome do Usuário"
+          value={nomeFuncionario}
+          onChange={(e) => setNomeFuncionario(e.target.value)}
         />
         <input
           type="password"
@@ -107,7 +124,7 @@ function CadastroUsuarios() {
             checked={isAdmin}
             onChange={() => setIsAdmin(!isAdmin)}
           />
-            Admin 
+          Admin
         </label>
 
         <select
@@ -149,8 +166,8 @@ function CadastroUsuarios() {
       <ul>
         {funcionariosCadastrados.map((funcionario, index) => (
           <li key={index}>
-            {funcionario.nome} - {funcionario.email} - {funcionario.isAdmin ? 'Admin' : 'Funcionário'}<br />
-            Máquinas: {funcionario.maquinas.join(', ')}
+            {funcionario.nome} - {funcionario.email} - {funcionario.is_admin ? 'Admin' : 'Funcionário'}<br />
+            Máquinas: {funcionario.idmaquina_id.join(", ")}
           </li>
         ))}
       </ul>

@@ -11,19 +11,37 @@ function CadastroMaquinas() {
     setErro(''); // Limpa o erro ao digitar um novo nome
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    // Verifica se o nome da máquina já existe
-    if (maquinasCadastradas.includes(nomeMaquina)) {
-      setErro('Essa máquina já está cadastrada.');
-    } else if (nomeMaquina.trim() === '') {
+
+    if (nomeMaquina.trim() === '') {
       setErro('O nome da máquina não pode estar vazio.');
-    } else {
-      // Cadastra a nova máquina
-      setMaquinasCadastradas([...maquinasCadastradas, nomeMaquina]);
-      setNomeMaquina(''); // Reseta o campo de input
-      console.log('Máquina cadastrada:', nomeMaquina);
+      return;
+    }
+
+    try {
+      // Faz o POST para a API de máquinas
+      const response = await fetch('http://localhost:8000/api/maquinas/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nomeMaquina: nomeMaquina,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Adiciona a nova máquina à lista de cadastradas
+        setMaquinasCadastradas([...maquinasCadastradas, data.nomeMaquina]);
+        setNomeMaquina(''); // Reseta o campo de input
+      } else {
+        setErro('Erro ao cadastrar a máquina.');
+      }
+    } catch (error) {
+      console.error('Erro ao cadastrar máquina:', error);
+      setErro('Erro na conexão com o servidor.');
     }
   };
 
