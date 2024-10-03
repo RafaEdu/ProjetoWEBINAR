@@ -30,7 +30,6 @@ class Admin(models.Model):
 
 class Maquina(models.Model):
     idmaquina = models.AutoField(primary_key=True)
-    idcurso = models.ForeignKey('Curso', on_delete=models.CASCADE)
     nomeMaquina = models.CharField(max_length=100)
 
 
