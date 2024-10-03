@@ -1,14 +1,20 @@
 from rest_framework import serializers
-from .models import User, Maquina
+from .models import User, Maquina, Area 
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
 
 class MaquinaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Maquina
         fields = '__all__'
 
-class UserSerializer(serializers.ModelSerializer):
-    maquinas = MaquinaSerializer(many=True, read_only=True)
 
+class AreaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = '__all__'
+        model = Area  
+        fields = '__all__'  
