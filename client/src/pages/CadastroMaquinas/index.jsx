@@ -5,10 +5,12 @@ function CadastroMaquinas() {
   const [nomeMaquina, setNomeMaquina] = useState('');
   const [maquinasCadastradas, setMaquinasCadastradas] = useState([]);
   const [erro, setErro] = useState('');
+  const [carregando, setCarregando] = useState(true); // Adiciona estado de carregamento
 
   // Função para buscar máquinas cadastradas ao carregar a página
   const fetchMaquinas = async () => {
     try {
+      setCarregando(true); // Inicia o carregamento
       const response = await fetch('http://localhost:8000/api/maquinas/');
       if (response.ok) {
         const data = await response.json();
@@ -19,6 +21,8 @@ function CadastroMaquinas() {
     } catch (error) {
       console.error('Erro ao buscar máquinas:', error);
       setErro('Erro na conexão com o servidor.');
+    } finally {
+      setCarregando(false); // Finaliza o carregamento
     }
   };
 
@@ -65,6 +69,11 @@ function CadastroMaquinas() {
     }
   };
 
+  // Renderiza mensagem de erro ou carregando
+  if (carregando) {
+    return <div>Carregando...</div>;
+  }
+
   return (
     <div className="container">
       <h1>Cadastro de Máquinas</h1>
@@ -80,11 +89,15 @@ function CadastroMaquinas() {
       </form>
 
       <h2>Máquinas Cadastradas:</h2>
-      <ul>
-        {maquinasCadastradas.map((maquina, index) => (
-          <li key={index}>{maquina}</li>
-        ))}
-      </ul>
+      {maquinasCadastradas.length === 0 ? (
+        <p>Nenhuma máquina cadastrada.</p>
+      ) : (
+        <ul>
+          {maquinasCadastradas.map((maquina, index) => (
+            <li key={index}>{maquina}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
