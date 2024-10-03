@@ -1,10 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.css';
 
 function CadastroMaquinas() {
   const [nomeMaquina, setNomeMaquina] = useState('');
   const [maquinasCadastradas, setMaquinasCadastradas] = useState([]);
   const [erro, setErro] = useState('');
+
+  // Função para buscar máquinas cadastradas ao carregar a página
+  const fetchMaquinas = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/maquinas/');
+      if (response.ok) {
+        const data = await response.json();
+        setMaquinasCadastradas(data); // Atualiza o estado com a lista de máquinas vindas do servidor
+      } else {
+        setErro('Erro ao buscar máquinas cadastradas.');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar máquinas:', error);
+      setErro('Erro na conexão com o servidor.');
+    }
+  };
+
+  useEffect(() => {
+    fetchMaquinas(); // Busca as máquinas cadastradas quando o componente for montado
+  }, []);
 
   const handleChange = (event) => {
     setNomeMaquina(event.target.value);
