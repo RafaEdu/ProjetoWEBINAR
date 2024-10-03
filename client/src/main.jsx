@@ -1,7 +1,7 @@
 import { StrictMode, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import CadastroTreinamento from './pages/CadastroTreinamento';
-import CadastroLinhas from './pages/CadastroLinhas';
+import CadastroAulas from './pages/CadastroAulas';
 import CadastroMaquinas from './pages/CadastroMaquinas';
 import CadastroUsuarios from './pages/CadastroUsuarios';
 import LoginUsuarios from './pages/LoginUsuarios';
@@ -39,15 +39,15 @@ function App() {
     <div>
       <nav>
         <button onClick={() => setCurrentPage('treinamento')}>Cadastro de Treinamento</button>
-        <button onClick={() => setCurrentPage('linha')}>Cadastro de Linha</button>
+        <button onClick={() => setCurrentPage('aulas')}>Cadastro de Aulas</button>
         <button onClick={() => setCurrentPage('maquinas')}>Cadastro de Máquinas</button>
-        <button onClick={() => setCurrentPage('novo usuario')}>Novo usuário</button>
+        <button onClick={() => setCurrentPage('novo usuario')}>Cadastro de Usuários</button>
         <button className="logout-button" onClick={handleLogout}>Logout</button>
       </nav>
 
       <div>
         {currentPage === 'treinamento' && <CadastroTreinamento />}
-        {currentPage === 'linha' && <CadastroLinhas />}
+        {currentPage === 'aulas' && <CadastroAulas />}
         {currentPage === 'maquinas' && <CadastroMaquinas />}
         {currentPage === 'novo usuario' && <CadastroUsuarios />}
       </div>
