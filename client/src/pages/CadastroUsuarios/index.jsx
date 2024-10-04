@@ -56,42 +56,44 @@ function CadastroUsuarios() {
 
     if (nomeFuncionario.trim() === '' || emailFuncionario.trim() === '' || senhaFuncionario.trim() === '') {
       setErro('Todos os campos são obrigatórios.');
+      return;
     } else if (funcionariosCadastrados.some(func => func.email === emailFuncionario)) {
       setErro('Este email já está cadastrado.');
-    } else {
-      const novoFuncionario = {
-        nome: nomeFuncionario,
-        email: emailFuncionario,
-        senha: senhaFuncionario,
-        is_active: true,
-        is_admin: isAdmin,
-        maquinas: maquinasSelecionadas.map(maquina => maquina.value)
-      };
+      return;
+    }
 
-      try {
-        const response = await fetch('http://localhost:8000/api/users/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(novoFuncionario),
-        });
+    const novoFuncionario = {
+      nome: nomeFuncionario,
+      email: emailFuncionario,
+      senha: senhaFuncionario,
+      is_active: true,
+      is_admin: isAdmin,
+      maquinas: maquinasSelecionadas.map(maquina => maquina.value)
+    };
 
-        if (response.ok) {
-          const data = await response.json();
-          setFuncionariosCadastrados([...funcionariosCadastrados, data]);
-          setNomeFuncionario('');
-          setEmailFuncionario('');
-          setSenhaFuncionario('');
-          setMaquinasSelecionadas([]);
-          setErro('');
-        } else {
-          setErro('Erro ao cadastrar o funcionário.');
-        }
-      } catch (error) {
-        console.error('Erro ao cadastrar funcionário:', error);
-        setErro('Erro na conexão com o servidor.');
+    try {
+      const response = await fetch('http://localhost:8000/api/users/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(novoFuncionario),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setFuncionariosCadastrados([...funcionariosCadastrados, data]);
+        setNomeFuncionario('');  // Limpa os campos
+        setEmailFuncionario('');
+        setSenhaFuncionario('');
+        setMaquinasSelecionadas([]);
+        setErro('');
+      } else {
+        setErro('Erro ao cadastrar o funcionário.');
       }
+    } catch (error) {
+      console.error('Erro ao cadastrar funcionário:', error);
+      setErro('Erro na conexão com o servidor.');
     }
   };
 
@@ -167,7 +169,7 @@ function CadastroUsuarios() {
         {funcionariosCadastrados.map((funcionario, index) => (
           <li key={index}>
             {funcionario.nome} - {funcionario.email} - {funcionario.is_admin ? 'Admin' : 'Funcionário'}<br />
-            Máquinas: {funcionario.idmaquina_id.join(", ")}
+            Máquinas: {funcionario.maquinas.join(", ")}
           </li>
         ))}
       </ul>
