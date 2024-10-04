@@ -4,8 +4,9 @@ import CadastroTreinamento from './pages/CadastroTreinamento';
 import CadastroAulas from './pages/CadastroAulas';
 import CadastroMaquinas from './pages/CadastroMaquinas';
 import CadastroUsuarios from './pages/CadastroUsuarios';
-import CadastroArea from './pages/CadastroAreas';  // Importar o novo componente de cadastro de área
+import CadastroArea from './pages/CadastroAreas';  
 import LoginUsuarios from './pages/LoginUsuarios';
+import CadastroQuestionario from './pages/CadastroQuestionario';
 import './index.css';
 
 function App() {
@@ -43,7 +44,8 @@ function App() {
         <button onClick={() => setCurrentPage('aulas')}>Cadastro de Aulas</button>
         <button onClick={() => setCurrentPage('maquinas')}>Cadastro de Máquinas</button>
         <button onClick={() => setCurrentPage('novo usuario')}>Cadastro de Usuários</button>
-        <button onClick={() => setCurrentPage('area')}>Cadastro de Áreas</button> {/* Novo botão para Cadastro de Áreas */}
+        <button onClick={() => setCurrentPage('area')}>Cadastro de Áreas</button>
+        <button onClick={() => setCurrentPage('questionario')}>Cadastro de Questionarios</button>
         <button className="logout-button" onClick={handleLogout}>Logout</button>
       </nav>
 
@@ -52,7 +54,8 @@ function App() {
         {currentPage === 'aulas' && <CadastroAulas />}
         {currentPage === 'maquinas' && <CadastroMaquinas />}
         {currentPage === 'novo usuario' && <CadastroUsuarios />}
-        {currentPage === 'area' && <CadastroArea />} {/* Renderiza o componente de cadastro de áreas */}
+        {currentPage === 'area' && <CadastroArea />}
+        {currentPage === 'questionario' && <CadastroQuestionario />}  
       </div>
     </div>
   );
