@@ -27,8 +27,6 @@ class Admin(models.Model):
         return f"Admin: {self.user.nome}"
 
 
-
-
 class Curso(models.Model):
     idcurso = models.AutoField(primary_key=True)
     descricao = models.CharField(max_length=255)
@@ -44,7 +42,7 @@ class Maquina(models.Model):
 
 class Questionario(models.Model):
     idquestionario = models.AutoField(primary_key=True)
-    titulo = models.CharField(max_length=255)  # Título do questionário
+    titulo = models.CharField(max_length=255)  
         
     def __str__(self):
         return self.titulo
