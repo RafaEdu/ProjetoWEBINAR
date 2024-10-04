@@ -44,10 +44,29 @@ class Maquina(models.Model):
 
 class Questionario(models.Model):
     idquestionario = models.AutoField(primary_key=True)
-    pergunta = models.CharField(max_length=255)
-    alternativas = models.CharField(max_length=255)
-    respostas = models.CharField(max_length=255)
+    titulo = models.CharField(max_length=255)  # Título do questionário
+        
+    def __str__(self):
+        return self.titulo
 
+
+class Pergunta(models.Model):
+    idpergunta = models.AutoField(primary_key=True)
+    texto = models.TextField()  # Texto da pergunta
+    questionario = models.ForeignKey(Questionario, related_name='perguntas', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.texto
+    
+
+class Alternativa(models.Model):
+    idalternativa = models.AutoField(primary_key=True)
+    texto = models.CharField(max_length=255)  # Texto da alternativa
+    is_correta = models.BooleanField(default=False)  # Se a alternativa é a correta
+    pergunta = models.ForeignKey(Pergunta, related_name='alternativas', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.texto
 
 class Area(models.Model):
     idarea = models.AutoField(primary_key=True)
