@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import User, Maquina, Area  
-from .serializers import UserSerializer, MaquinaSerializer, AreaSerializer  # Importar o serializer de Area
+from .models import User, Maquina, Area , Questionario 
+from .serializers import UserSerializer, MaquinaSerializer, AreaSerializer, QuestionarioSerializer
 
 
 class MaquinaViewSet(viewsets.ModelViewSet):
@@ -17,3 +17,10 @@ class UserViewSet(viewsets.ModelViewSet):
 class AreaViewSet(viewsets.ModelViewSet):
     queryset = Area.objects.all()
     serializer_class = AreaSerializer
+
+    from rest_framework import viewsets
+
+
+class QuestionarioViewSet(viewsets.ModelViewSet):
+    queryset = Questionario.objects.all()
+    serializer_class = QuestionarioSerializer

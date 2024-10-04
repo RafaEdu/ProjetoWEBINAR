@@ -53,29 +53,46 @@ function CriarQuestionario() {
     setPerguntas(novasPerguntas);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
 
-    const novoQuestionario = { titulo, perguntas };
-
-    try {
-      const response = await fetch('http://localhost:8000/api/questionarios/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(novoQuestionario),
-      });
-
-      if (response.ok) {
-        console.log('Questionário cadastrado com sucesso!');
-      } else {
-        console.error('Erro ao cadastrar o questionário.');
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+    
+      const novoQuestionario = {
+        titulo: titulo,
+        perguntas: perguntas.map((pergunta) => ({
+          texto: pergunta.texto,
+          alternativas: pergunta.alternativas.map((alt) => ({
+            texto: alt.texto,
+            is_correta: alt.is_correta
+          }))
+        }))
+      };
+    
+      try {
+        const response = await fetch('http://localhost:8000/api/questionarios/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(novoQuestionario),
+        });
+    
+        if (response.ok) {
+          console.log('Questionário cadastrado com sucesso!');
+          
+          // Limpar campos após o cadastro bem-sucedido
+          setTitulo('');  // Limpar o campo título
+          setPerguntas([{ texto: '', alternativas: [{ texto: '', is_correta: false }] }]);  // Resetar perguntas e alternativas
+    
+        } else {
+          console.error('Erro ao cadastrar o questionário.');
+        }
+      } catch (error) {
+        console.error('Erro na conexão com o servidor:', error);
       }
-    } catch (error) {
-      console.error('Erro na conexão com o servidor:', error);
-    }
-  };
+    };
+    
+
 
   return (
     <div className="container">
