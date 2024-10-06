@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Maquina, Area, Questionario, Pergunta, Alternativa 
+from .models import User, Maquina, Area, Questionario, Pergunta, Alternativa, Curso 
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -24,6 +24,11 @@ class AlternativaSerializer(serializers.ModelSerializer):
         model = Alternativa
         fields = ['texto', 'is_correta']
 
+class AlternativaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Alternativa
+        fields = ['texto', 'is_correta']
+
 class PerguntaSerializer(serializers.ModelSerializer):
     alternativas = AlternativaSerializer(many=True)
 
@@ -36,7 +41,7 @@ class QuestionarioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Questionario
-        fields = ['titulo', 'perguntas']
+        fields = ['idquestionario', 'titulo', 'perguntas']  # Adicione o campo idquestionario
 
     def create(self, validated_data):
         perguntas_data = validated_data.pop('perguntas')
@@ -49,3 +54,10 @@ class QuestionarioSerializer(serializers.ModelSerializer):
                 Alternativa.objects.create(pergunta=pergunta, **alternativa_data)
                 
         return questionario
+
+
+
+class CursoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Curso
+        fields = '__all__'

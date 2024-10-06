@@ -27,17 +27,21 @@ class Admin(models.Model):
         return f"Admin: {self.user.nome}"
 
 
-class Curso(models.Model):
-    idcurso = models.AutoField(primary_key=True)
-    descricao = models.CharField(max_length=255)
-    tempoDuracao = models.TimeField()
-    idquestionario = models.ForeignKey('Questionario', on_delete=models.CASCADE)
-    idarea = models.ForeignKey('Area', on_delete=models.CASCADE)
-
-
 class Maquina(models.Model):
     idmaquina = models.AutoField(primary_key=True)
     nomeMaquina = models.CharField(max_length=100)
+
+class Curso(models.Model):
+    idcurso = models.AutoField(primary_key=True)
+    titulo = models.CharField(max_length=255)
+    descricao = models.CharField(max_length=255)
+    idquestionario = models.ForeignKey('Questionario', on_delete=models.CASCADE)
+    idarea = models.ForeignKey('Area', on_delete=models.CASCADE)
+    dataCriacao = models.DateField()
+    maquina = models.ForeignKey(Maquina, on_delete=models.CASCADE)
+
+
+
 
 
 class Questionario(models.Model):
