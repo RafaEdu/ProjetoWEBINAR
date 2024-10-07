@@ -153,16 +153,6 @@ function CadastroTreinamento() {
           ))}
         </select>
 
-        {selectedQuestionario && (
-          <div>
-            <h2>Questionário Selecionado</h2>
-            {questionarios.find(q => q.idquestionario === selectedQuestionario) ? (
-              <p>{questionarios.find(q => q.idquestionario === selectedQuestionario).titulo}</p>
-            ) : (
-              <p>Questionário não encontrado.</p>
-            )}
-          </div>
-        )}
 
         {errorMessage && <p className="error-message">{errorMessage}</p>} 
 
