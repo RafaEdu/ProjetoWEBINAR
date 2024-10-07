@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+import os
 from django.contrib.auth.models import AbstractUser
 
 
@@ -75,12 +77,22 @@ class Area(models.Model):
 
 class Video(models.Model):
     idvideo = models.AutoField(primary_key=True)
-    arquivo_video = models.FileField(upload_to='videos/')  # Atributo para anexar vídeos
+    arquivo_video = models.FileField(upload_to='videos/')  # Mantém a estrutura
+
+    def save(self, *args, **kwargs):
+        # Cria o diretório se não existir
+        os.makedirs(os.path.join(settings.MEDIA_ROOT, 'videos'), exist_ok=True)
+        super(Video, self).save(*args, **kwargs)
 
 
 class Slide(models.Model):
     idslide = models.AutoField(primary_key=True)
-    arquivo_pdf = models.FileField(upload_to='slides/')  # Atributo para anexar PDFs
+    arquivo_pdf = models.FileField(upload_to='slides/')
+
+    def save(self, *args, **kwargs):
+        # Cria o diretório se não existir
+        os.makedirs(os.path.join(settings.MEDIA_ROOT, 'slides'), exist_ok=True)
+        super(Slide, self).save(*args, **kwargs)
 
 
 
