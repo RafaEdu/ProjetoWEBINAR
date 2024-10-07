@@ -15,7 +15,6 @@ class User(models.Model):
     )
 
 
-
     def __str__(self):
         return self.nome
 
@@ -39,8 +38,6 @@ class Curso(models.Model):
     idarea = models.ForeignKey('Area', on_delete=models.CASCADE)
     dataCriacao = models.DateField()
     maquina = models.ForeignKey(Maquina, on_delete=models.CASCADE)
-
-
 
 
 
@@ -78,15 +75,11 @@ class Area(models.Model):
 
 class Video(models.Model):
     idvideo = models.AutoField(primary_key=True)
-    duracao = models.TimeField()
-    descricao = models.CharField(max_length=255)
     arquivo_video = models.FileField(upload_to='videos/')  # Atributo para anexar vídeos
 
 
 class Slide(models.Model):
     idslide = models.AutoField(primary_key=True)
-    descricao = models.CharField(max_length=255)
-    paginas = models.IntegerField()
     arquivo_pdf = models.FileField(upload_to='slides/')  # Atributo para anexar PDFs
 
 
@@ -95,5 +88,6 @@ class Aula(models.Model):
     idaula = models.AutoField(primary_key=True)
     titulo = models.CharField(max_length=255)
     duracao = models.TimeField()
-    idvideo = models.ForeignKey(Video, on_delete=models.CASCADE)
-    idslide = models.ForeignKey(Slide, on_delete=models.CASCADE)
+    idvideo = models.ForeignKey(Video, on_delete=models.CASCADE, null=True)
+    idslide = models.ForeignKey(Slide, on_delete=models.CASCADE, null=True)
+    idcurso = models.ForeignKey(Curso, on_delete=models.CASCADE, null=False)
