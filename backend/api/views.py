@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from rest_framework import viewsets
-from .models import User, Maquina, Area , Questionario, Curso 
-from .serializers import UserSerializer, MaquinaSerializer, AreaSerializer, QuestionarioSerializer, CursoSerializer
+from rest_framework import viewsets, status 
+from rest_framework.response import Response  
+from rest_framework import serializers  
+from .models import Aula, Video, Slide, User, Maquina, Area, Questionario, Curso
+from .serializers import UserSerializer, MaquinaSerializer, AreaSerializer, QuestionarioSerializer, CursoSerializer, AulaSerializer, VideoSerializer, SlideSerializer
 
 
 class MaquinaViewSet(viewsets.ModelViewSet):
@@ -28,4 +30,37 @@ class QuestionarioViewSet(viewsets.ModelViewSet):
 
 class CursoViewSet(viewsets.ModelViewSet):
     queryset = Curso.objects.all()
-    serializer_class = CursoSerializer   
+    serializer_class = CursoSerializer  
+
+
+
+class AulaViewSet(viewsets.ModelViewSet):
+    queryset = Aula.objects.all()
+    serializer_class = AulaSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        video_data = request.FILES.get('video', None)
+        slide_data = request.FILES.get('slide', None)
+
+        if video_data:
+            video = Video.objects.create(arquivo_video=video_data)
+            serializer.save(idvideo=video)
+        elif slide_data:
+            slide = Slide.objects.create(arquivo_pdf=slide_data)
+            serializer.save(idslide=slide)
+        else:
+            return Response({"error": "You must attach a video or a slide."}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class VideoViewSet(viewsets.ModelViewSet):
+    queryset = Video.objects.all()
+    serializer_class = VideoSerializer
+
+class SlideViewSet(viewsets.ModelViewSet):
+    queryset = Slide.objects.all()
+    serializer_class = SlideSerializer
+ 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css'; // Mantendo o estilo igual aos outros
 
 function CadastroAula() {
@@ -9,39 +9,110 @@ function CadastroAula() {
   const [tipo, setTipo] = useState(''); // Armazena 'video' ou 'slide'
   const [video, setVideo] = useState(null); // Para armazenar o vídeo
   const [slide, setSlide] = useState(null); // Para armazenar o PDF
+  const [curso, setCurso] = useState([]); // Para armazenar os cursos
+  const [selectedCurso, setSelectedCurso] = useState(''); // Para armazenar o curso selecionado
   const [erro, setErro] = useState('');
   const [sucesso, setSucesso] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const cursosResponse = await fetch('http://localhost:8000/api/cursos/');
+        
+        if (!cursosResponse.ok) {
+          throw new Error('Erro ao buscar dados dos cursos');
+        }
+
+        const cursosData = await cursosResponse.json();
+        setCurso(cursosData); // Define os cursos recebidos da API
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+        setErro('Erro ao carregar os cursos. Tente novamente mais tarde.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleSelecionarCurso = (event) => {
+    const selectedValue = event.target.value;
+    setSelectedCurso(selectedValue);
+    console.log('Curso selecionado:', selectedValue); // Debug
+  };
 
   const handleTipoChange = (event) => {
     setTipo(event.target.value);
     setVideo(null);
     setSlide(null);
+    console.log('Tipo selecionado:', event.target.value); // Debug
   };
 
-  const handleSubmit = (event) => {
+  const handleVideoChange = (e) => {
+    const file = e.target.files[0];
+    setVideo(file);
+    console.log('Vídeo selecionado:', file); // Debug
+  };
+
+  const handleSlideChange = (e) => {
+    const file = e.target.files[0];
+    setSlide(file);
+    console.log('Slide selecionado:', file); // Debug
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Validações básicas
-    if (!titulo || !horas || !minutos || !segundos || !tipo) {
-      setErro('Todos os campos são obrigatórios.');
-      setSucesso('');
-      return;
+    // Validação dos campos obrigatórios
+    if (!titulo || !horas || !minutos || !segundos || !tipo || !selectedCurso) {
+        setErro('Todos os campos são obrigatórios.');
+        return;
     }
 
-    // Verifica se anexou o arquivo correto
     if (tipo === 'video' && !video) {
-      setErro('Por favor, anexe um vídeo.');
-      return;
+        setErro('Por favor, anexe um vídeo.');
+        return;
     } else if (tipo === 'slide' && !slide) {
-      setErro('Por favor, anexe um arquivo PDF.');
-      return;
+        setErro('Por favor, anexe um arquivo PDF.');
+        return;
     }
 
-    // Simulação de cadastro (substituir por integração real com backend)
-    setSucesso('Aula cadastrada com sucesso!');
-    setErro('');
+    const formData = new FormData();
+    formData.append('titulo', titulo);
+    formData.append('duracao', `${horas}:${minutos}:${segundos}`);
+    formData.append('idcurso', selectedCurso);
 
-    // Limpar os campos após o cadastro
+    // Adiciona o arquivo de vídeo ou slide dependendo do tipo selecionado
+    if (tipo === 'video') {
+        formData.append('video', video);  // Envia o arquivo de vídeo
+    } else if (tipo === 'slide') {
+        formData.append('slide', slide);  // Envia o arquivo de slide (PDF)
+    }
+
+    try {
+        const response = await fetch('http://localhost:8000/api/aulas/', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao cadastrar a aula');
+        }
+
+        setSucesso('Aula cadastrada com sucesso!');
+        setErro('');
+        resetForm();
+    } catch (error) {
+        console.error('Erro ao cadastrar aula:', error);
+        setErro('Erro ao cadastrar a aula. Tente novamente mais tarde.');
+    }
+};
+
+
+  const resetForm = () => {
     setTitulo('');
     setHoras('');
     setMinutos('');
@@ -49,93 +120,115 @@ function CadastroAula() {
     setTipo('');
     setVideo(null);
     setSlide(null);
+    setSelectedCurso('');
+    setErro('');
+    setSucesso('');
   };
 
   return (
     <div className="container">
       <h1>Cadastro de Aula</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Título da aula"
-          value={titulo}
-          onChange={(e) => setTitulo(e.target.value)}
-        />
+      {isLoading ? (
+        <p>Carregando cursos...</p>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Título da aula"
+            value={titulo}
+            onChange={(e) => setTitulo(e.target.value)}
+          />
 
-        {/* Campo de duração com precisão de horas, minutos e segundos */}
-        <div className="duration-container">
-          <label>Duração:</label>
-          <input
-            type="number"
-            placeholder="Horas"
-            value={horas}
-            onChange={(e) => setHoras(e.target.value)}
-            min="0"
-          />
-          <input
-            type="number"
-            placeholder="Minutos"
-            value={minutos}
-            onChange={(e) => setMinutos(e.target.value)}
-            min="0"
-            max="59"
-          />
-          <input
-            type="number"
-            placeholder="Segundos"
-            value={segundos}
-            onChange={(e) => setSegundos(e.target.value)}
-            min="0"
-            max="59"
-          />
-        </div>
+          <h2>Curso</h2>
+          <select
+            name="cursos"
+            value={selectedCurso}
+            onChange={handleSelecionarCurso}
+            required
+          >
+            <option value="" disabled>Selecione um curso</option>
+            {curso.map((opcao) => (
+              <option key={opcao.idcurso} value={opcao.idcurso}>
+                {opcao.titulo}
+              </option>
+            ))}
+          </select>
 
-        <div>
-          <label>
+          {/* Campo de duração com precisão de horas, minutos e segundos */}
+          <div className="duration-container">
+            <label>Duração:</label>
             <input
-              type="radio"
-              value="video"
-              checked={tipo === 'video'}
-              onChange={handleTipoChange}
+              type="number"
+              placeholder="Horas"
+              value={horas}
+              onChange={(e) => setHoras(e.target.value)}
+              min="0"
             />
-            Vídeo
-          </label>
-          <label>
             <input
-              type="radio"
-              value="slide"
-              checked={tipo === 'slide'}
-              onChange={handleTipoChange}
+              type="number"
+              placeholder="Minutos"
+              value={minutos}
+              onChange={(e) => setMinutos(e.target.value)}
+              min="0"
+              max="59"
             />
-            Slide
-          </label>
-        </div>
-
-        {tipo === 'video' && (
-          <div>
             <input
-              type="file"
-              accept="video/*"
-              onChange={(e) => setVideo(e.target.files[0])}
+              type="number"
+              placeholder="Segundos"
+              value={segundos}
+              onChange={(e) => setSegundos(e.target.value)}
+              min="0"
+              max="59"
             />
           </div>
-        )}
 
-        {tipo === 'slide' && (
           <div>
-            <input
-              type="file"
-              accept=".pdf"
-              onChange={(e) => setSlide(e.target.files[0])}
-            />
+            <label>
+              <input
+                type="radio"
+                value="video"
+                checked={tipo === 'video'}
+                onChange={handleTipoChange}
+              />
+              Vídeo
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="slide"
+                checked={tipo === 'slide'}
+                onChange={handleTipoChange}
+              />
+              Slide
+            </label>
           </div>
-        )}
 
-        {erro && <p style={{ color: 'red' }}>{erro}</p>}
-        {sucesso && <p style={{ color: 'green' }}>{sucesso}</p>}
+          {tipo === 'video' && (
+            <div>
+              <input
+                type="file"
+                accept="video/*"
+                onChange={handleVideoChange} // Atualizado
+              />
+            </div>
+          )}
 
-        <button type="submit">Cadastrar Aula</button>
-      </form>
+          {tipo === 'slide' && (
+            <div>
+              <input
+                type="file"
+                accept=".pdf"
+                onChange={handleSlideChange} // Atualizado
+              />
+            </div>
+          )}
+
+          {erro && <p style={{ color: 'red' }}>{erro}</p>}
+          {sucesso && <p style={{ color: 'green' }}>{sucesso}</p>}
+
+          <button type="submit">Cadastrar Aula</button>
+        </form>
+      )}
     </div>
   );
 }

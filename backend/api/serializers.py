@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Maquina, Area, Questionario, Pergunta, Alternativa, Curso 
+from .models import User, Maquina, Area, Questionario, Pergunta, Alternativa, Curso, Video, Slide, Aula
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -61,3 +61,42 @@ class CursoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Curso
         fields = '__all__'
+
+
+class VideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = ['idvideo', 'arquivo_video']
+
+class SlideSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Slide
+        fields = ['idslide', 'arquivo_pdf']
+
+class AulaSerializer(serializers.ModelSerializer):
+    video = VideoSerializer(required=False)  # Relacionamento opcional com Video
+    slide = SlideSerializer(required=False)  # Relacionamento opcional com Slide
+
+    class Meta:
+        model = Aula
+        fields = ['idaula', 'titulo', 'duracao', 'idcurso', 'video', 'slide']
+
+    def create(self, validated_data):
+        video_data = validated_data.pop('video', None)
+        slide_data = validated_data.pop('slide', None)
+
+        # Criação da instância de aula
+        aula = Aula.objects.create(**validated_data)
+
+        # Se tiver vídeo, cria o objeto de vídeo e associa à aula
+        if video_data:
+            video_instance = Video.objects.create(**video_data)
+            aula.idvideo = video_instance
+
+        # Se tiver slide, cria o objeto de slide e associa à aula
+        if slide_data:
+            slide_instance = Slide.objects.create(**slide_data)
+            aula.idslide = slide_instance
+
+        aula.save()  # Salva as atualizações no banco
+        return aula
