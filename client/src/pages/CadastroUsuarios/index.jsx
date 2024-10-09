@@ -5,30 +5,29 @@ function CadastroUsuarios() {
   const [opcoesMaquinas, setOpcoesMaquinas] = useState([]);
   const [maquinasSelecionadas, setMaquinasSelecionadas] = useState([]);
   const [selectedMachine, setSelectedMachine] = useState('');
-
+  
   const [nomeFuncionario, setNomeFuncionario] = useState('');
   const [emailFuncionario, setEmailFuncionario] = useState('');
   const [senhaFuncionario, setSenhaFuncionario] = useState('');
-  const [funcionariosCadastrados, setFuncionariosCadastrados] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [erro, setErro] = useState('');
+  const [mensagem, setMensagem] = useState('');
 
-  // Buscar máquinas do banco de dados ao carregar a página
+  // Buscar máquinas ao carregar a página
   useEffect(() => {
     const fetchMaquinas = async () => {
       try {
         const response = await fetch('http://localhost:8000/api/maquinas/');
         const data = await response.json();
         const maquinas = data.map(maquina => ({
-          value: maquina.idmaquina,  // Pegando o id da máquina
-          label: maquina.nomeMaquina,  // Pegando o nome da máquina
+          value: maquina.idmaquina,
+          label: maquina.nomeMaquina,
         }));
         setOpcoesMaquinas(maquinas);
       } catch (error) {
         console.error('Erro ao buscar máquinas:', error);
       }
     };
-
     fetchMaquinas();
   }, []);
 
@@ -39,7 +38,7 @@ function CadastroUsuarios() {
     if (maquinaSelecionada) {
       setMaquinasSelecionadas([...maquinasSelecionadas, maquinaSelecionada]);
       setOpcoesMaquinas(opcoesMaquinas.filter(maquina => maquina.value.toString() !== selectedValue));
-      setSelectedMachine("");
+      setSelectedMachine('');
     }
   };
 
@@ -57,9 +56,6 @@ function CadastroUsuarios() {
     if (nomeFuncionario.trim() === '' || emailFuncionario.trim() === '' || senhaFuncionario.trim() === '') {
       setErro('Todos os campos são obrigatórios.');
       return;
-    } else if (funcionariosCadastrados.some(func => func.email === emailFuncionario)) {
-      setErro('Este email já está cadastrado.');
-      return;
     }
 
     const novoFuncionario = {
@@ -68,26 +64,23 @@ function CadastroUsuarios() {
       senha: senhaFuncionario,
       is_active: true,
       is_admin: isAdmin,
-      maquinas: maquinasSelecionadas.map(maquina => maquina.value)
+      maquinas: maquinasSelecionadas.map(maquina => maquina.value),
     };
 
     try {
       const response = await fetch('http://localhost:8000/api/users/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(novoFuncionario),
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setFuncionariosCadastrados([...funcionariosCadastrados, data]);
-        setNomeFuncionario('');  // Limpa os campos
+        setNomeFuncionario('');
         setEmailFuncionario('');
         setSenhaFuncionario('');
         setMaquinasSelecionadas([]);
         setErro('');
+        setMensagem('Funcionário cadastrado com sucesso!');
       } else {
         setErro('Erro ao cadastrar o funcionário.');
       }
@@ -149,9 +142,7 @@ function CadastroUsuarios() {
               {maquinasSelecionadas.map(maquina => (
                 <li key={maquina.value}>
                   {maquina.label}
-                  <button type="button" onClick={() => handleRemoverMaquina(maquina.value)}>
-                    Remover
-                  </button>
+                  <button type="button" onClick={() => handleRemoverMaquina(maquina.value)}>Remover</button>
                 </li>
               ))}
             </ul>
@@ -161,18 +152,9 @@ function CadastroUsuarios() {
         </div>
 
         {erro && <p style={{ color: 'red' }}>{erro}</p>}
+        {mensagem && <p style={{ color: 'green' }}>{mensagem}</p>}
         <button type="submit">Cadastrar Usuário</button>
       </form>
-
-      <h2>Usuários Cadastrados:</h2>
-      <ul>
-        {funcionariosCadastrados.map((funcionario, index) => (
-          <li key={index}>
-            {funcionario.nome} - {funcionario.email} - {funcionario.is_admin ? 'Admin' : 'Funcionário'}<br />
-            Máquinas: {funcionario.maquinas.join(", ")}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }

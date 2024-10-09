@@ -1,44 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './styles.css';
 
 function CadastroMaquinas() {
   const [nomeMaquina, setNomeMaquina] = useState('');
-  const [maquinasCadastradas, setMaquinasCadastradas] = useState([]);
   const [erro, setErro] = useState('');
-  const [carregando, setCarregando] = useState(true); // Adiciona estado de carregamento
-
-  // Função para buscar máquinas cadastradas ao carregar a página
-  const fetchMaquinas = async () => {
-    try {
-      setCarregando(true); // Inicia o carregamento
-      const response = await fetch('http://localhost:8000/api/maquinas/');
-      if (response.ok) {
-        const data = await response.json();
-
-        // Garantir que o retorno é uma lista antes de definir o estado
-        if (Array.isArray(data)) {
-          setMaquinasCadastradas(data.map(maquina => maquina.nomeMaquina));
-        } else {
-          throw new Error('Formato de dados inválido');
-        }
-      } else {
-        setErro('Erro ao buscar máquinas cadastradas.');
-      }
-    } catch (error) {
-      console.error('Erro ao buscar máquinas:', error);
-      setErro('Erro na conexão com o servidor.');
-    } finally {
-      setCarregando(false); // Finaliza o carregamento
-    }
-  };
-
-  useEffect(() => {
-    fetchMaquinas(); // Busca as máquinas cadastradas quando o componente for montado
-  }, []);
+  const [mensagem, setMensagem] = useState('');
 
   const handleChange = (event) => {
     setNomeMaquina(event.target.value);
     setErro(''); // Limpa o erro ao digitar um novo nome
+    setMensagem(''); // Limpa a mensagem ao alterar os dados
   };
 
   const handleSubmit = async (event) => {
@@ -56,16 +27,12 @@ function CadastroMaquinas() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          nomeMaquina: nomeMaquina,
-        }),
+        body: JSON.stringify({ nomeMaquina }),
       });
 
       if (response.ok) {
-        const data = await response.json();
-        // Adiciona a nova máquina à lista de cadastradas
-        setMaquinasCadastradas([...maquinasCadastradas, data.nomeMaquina]);
         setNomeMaquina(''); // Reseta o campo de input
+        setMensagem('Máquina cadastrada com sucesso!');
       } else {
         setErro('Erro ao cadastrar a máquina.');
       }
@@ -74,11 +41,6 @@ function CadastroMaquinas() {
       setErro('Erro na conexão com o servidor.');
     }
   };
-
-  // Se estiver carregando, mostra uma mensagem de carregamento
-  if (carregando) {
-    return <div>Carregando...</div>;
-  }
 
   return (
     <div className="container">
@@ -91,19 +53,9 @@ function CadastroMaquinas() {
           onChange={handleChange}
         />
         {erro && <p style={{ color: 'red' }}>{erro}</p>}
+        {mensagem && <p style={{ color: 'green' }}>{mensagem}</p>}
         <button type="submit">Cadastrar Máquina</button>
       </form>
-
-      <h2>Máquinas Cadastradas:</h2>
-      {maquinasCadastradas.length === 0 ? (
-        <p>Nenhuma máquina cadastrada.</p>
-      ) : (
-        <ul>
-          {maquinasCadastradas.map((maquina, index) => (
-            <li key={index}>{maquina}</li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 }
