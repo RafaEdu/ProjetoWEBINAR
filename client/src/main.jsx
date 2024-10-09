@@ -1,36 +1,29 @@
 import { StrictMode, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import CadastroTreinamento from './pages/CadastroTreinamento';
-import CadastroAulas from './pages/CadastroAulas';
-import CadastroMaquinas from './pages/CadastroMaquinas';
-import CadastroUsuarios from './pages/CadastroUsuarios';
-import CadastroArea from './pages/CadastroAreas';  
+import PaginaHome from './pages/PaginaHome';
 import LoginUsuarios from './pages/LoginUsuarios';
-import CadastroQuestionario from './pages/CadastroQuestionario';
 import './index.css';
+import { FaPowerOff } from "react-icons/fa6";
+import logo from './logo.png'; // Adicione a importação da imagem
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentPage, setCurrentPage] = useState('login');
 
   useEffect(() => {
     const authStatus = localStorage.getItem('isAuthenticated');
     if (authStatus === 'true') {
       setIsAuthenticated(true);
-      setCurrentPage('treinamento'); // Defina a página inicial após o login
     }
   }, []);
 
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
     localStorage.setItem('isAuthenticated', 'true');
-    setCurrentPage('treinamento'); // Redireciona para a página de treinamento após o login
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('isAuthenticated');
-    setCurrentPage('login'); // Redireciona para a página de login após logout
   };
 
   if (!isAuthenticated) {
@@ -38,25 +31,26 @@ function App() {
   }
 
   return (
-    <div>
-      <nav>
-        <button onClick={() => setCurrentPage('treinamento')}>Cadastro de Treinamento</button>
-        <button onClick={() => setCurrentPage('aulas')}>Cadastro de Aulas</button>
-        <button onClick={() => setCurrentPage('maquinas')}>Cadastro de Máquinas</button>
-        <button onClick={() => setCurrentPage('novo usuario')}>Cadastro de Usuários</button>
-        <button onClick={() => setCurrentPage('area')}>Cadastro de Áreas</button>
-        <button onClick={() => setCurrentPage('questionario')}>Cadastro de Questionarios</button>
-        <button className="logout-button" onClick={handleLogout}>Logout</button>
-      </nav>
-
-      <div>
-        {currentPage === 'treinamento' && <CadastroTreinamento />}
-        {currentPage === 'aulas' && <CadastroAulas />}
-        {currentPage === 'maquinas' && <CadastroMaquinas />}
-        {currentPage === 'novo usuario' && <CadastroUsuarios />}
-        {currentPage === 'area' && <CadastroArea />}
-        {currentPage === 'questionario' && <CadastroQuestionario />}  
-      </div>
+    <div className="app-container">
+      {isAuthenticated ? (
+        <>
+          <div className="main-navbar">
+            <div className="navbar-content">
+              <div className="logo">
+                <img src={logo} alt="Logo" style={{ height: '50px' }} /> {/* Ajuste a altura conforme necessário */}
+              </div>
+              <button onClick={handleLogout} className="logout-button">
+                <FaPowerOff />
+              </button>
+            </div>
+          </div>
+          <div className="main-content">
+            <PaginaHome onLogout={handleLogout} />
+          </div>
+        </>
+      ) : (
+        <LoginUsuarios onLoginSuccess={handleLoginSuccess} />
+      )}
     </div>
   );
 }

@@ -1,0 +1,40 @@
+.home-container {
+  display: flex;
+  height: 100vh; 
+}
+
+.sidebar {
+  width: 60px; 
+  background-color: #034638;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  position: fixed; 
+  height: 100%; 
+  left: 0; /* Fixa a sidebar na esquerda */
+  margin-top: 0;
+  align-items: center; /* Centraliza horizontalmente os botões */
+}
+
+.icon-button {
+  margin: 10px 0; 
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 24px; 
+  text-align: center;
+  width: 100%; 
+}
+
+.icon-button:hover {
+  color: #41b02a; 
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  margin-left: 50px; /* Espaço à esquerda para a sidebar */
+  margin-top: 0px;
+
+}

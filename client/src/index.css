@@ -18,29 +18,62 @@ Cor terciária: #41b02a
 */
 
 .logout-button {
-  background-color: red;
-  /* Cor de fundo vermelha */
-  color: white;
-  /* Cor do texto branca */
-  border: none;
-  /* Sem borda */
-  padding: 10px 20px;
-  /* Padding para tornar o botão maior */
-  cursor: pointer;
-  /* Muda o cursor para uma mão ao passar sobre o botão */
-  position: absolute;
-  /* Para posicionar o botão */
-  right: 20px;
-  /* Espaçamento do lado direito */
-  top: 50px;
-  /* Espaçamento do topo (ajuste conforme necessário) */
-  border-radius: 5px;
-  /* Cantos arredondados */
-  font-weight: bold;
-  /* Deixar o texto mais destacado */
+  background-color: #ffffff; /* Cor de fundo do botão de logout */
+  color: #034638; /* Cor do texto */
+  border: none; /* Sem borda */
+  padding: 10px; /* Padding para tornar o botão maior */
+  cursor: pointer; /* Muda o cursor para uma mão ao passar sobre o botão */
+  border-radius: 5px; /* Cantos arredondados */
+  font-weight: bold; /* Deixar o texto mais destacado */
+  display: flex; /* Alinha os filhos em linha */
+  align-items: center; /* Centraliza verticalmente o ícone */
+  justify-content: center; /* Centraliza horizontalmente o ícone */
+  transition: background-color 0.3s ease; /* Suaviza a transição de cor */
+  height: 40px; /* Define uma altura para o botão */
+  width: 40px; /* Define uma largura para o botão */
 }
 
 .logout-button:hover {
-  background-color: darkred;
-  /* Muda a cor ao passar o mouse */
+  background-color: #ce1a1a; /* Muda a cor ao passar o mouse */
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column; /* Alinha os filhos em coluna */
+  height: 100vh; /* Faz a altura da aplicação ocupar toda a tela */
+}
+
+.main-navbar {
+  width: 100%;
+  background-color: #034638; /* Cor da navbar */
+  padding: 10px;
+  position: fixed; /* Fixa a navbar no topo */
+  top: 0; /* Alinha ao topo da página */
+  left: 0;
+  z-index: 1000; /* Garante que a navbar fique acima de outros conteúdos */
+  height: 70px; /* Define a altura da navbar */
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between; /* Alinha os itens nas extremidades */
+  align-items: center; /* Centraliza verticalmente */
+  height: 100%; /* Faz com que o conteúdo da navbar ocupe toda a altura */
+}
+
+.logo {
+  color: white;
+  font-size: 24px;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  padding-top: 70px; /* Deve ser maior que a altura da navbar para evitar sobreposição */
+  overflow: auto; /* Adiciona rolagem se o conteúdo exceder a altura da tela */
+}
+
+.logo {
+  height: 50px; /* Ajuste a altura conforme necessário */
+  width: auto; /* Mantém a proporção */
 }
