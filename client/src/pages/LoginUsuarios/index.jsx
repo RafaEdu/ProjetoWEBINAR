@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './style.css';
+import './login.css';
+import logo from './logo.png'; // Certifique-se de que o caminho esteja correto
 
 function LoginUsuarios({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
@@ -9,34 +10,41 @@ function LoginUsuarios({ onLoginSuccess }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Verificar se o email e senha são o padrão
     if (email === 'usuario@gmail.com' && senha === 'usuario') {
-      setErro(''); // Limpa o erro
-      onLoginSuccess(); // Chama a função passada como prop quando o login for bem-sucedido
+      setErro('');
+      onLoginSuccess();
     } else {
       setErro('Email ou senha inválidos.');
     }
   };
 
   return (
-    <div className="container">
-      <h1>Entrar no sistema</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-        />
-        {erro && <p style={{ color: 'red' }}>{erro}</p>}
-        <button type="submit">Login</button>
-      </form>
+    <div className="login-body">
+      <div className="login-container">
+      
+        <img src={logo} alt="Logo" className="login-logo" />
+        
+        <p className="welcome-message">Seja bem-vindo(a) ao WebinarFruki</p>
+        
+        <form className="login-form" onSubmit={handleSubmit}>
+          <input
+            type="email"
+            className="login-input"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            className="login-input"
+            placeholder="Senha"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+          />
+          {erro && <p className="login-error">{erro}</p>}
+          <button type="submit" className="login-button">Login</button>
+        </form>
+      </div>
     </div>
   );
 }
