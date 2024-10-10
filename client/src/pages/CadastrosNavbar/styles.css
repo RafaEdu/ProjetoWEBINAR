@@ -1,24 +1,28 @@
 nav {
-    background-color: #034638;
-    padding: 10px;
-    position: fixed; /* Fixa a navbar */
-    top: 70px; /* Ajusta para ficar abaixo da navbar principal */
-    left: 0; /* Fixa à esquerda */
-    right: 0; /* Fixa à direita */
-    z-index: 1000; /* Garante que a navbar fique acima de outros conteúdos */
-  }
-  
-  nav button {
-    margin: 5px;
-    padding: 10px;
-    background-color: #41b02a;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  nav button:hover {
-    background-color: #034638;
-    color: white;
-  }
-  
+  background-color: #034638;
+  padding: 10px;
+  position: fixed;
+  /* Fixa a navbar */
+  top: 70px;
+  /* Ajusta para ficar abaixo da navbar principal */
+  left: 0;
+  /* Fixa à esquerda */
+  right: 0;
+  /* Fixa à direita */
+  z-index: 1000;
+  /* Garante que a navbar fique acima de outros conteúdos */
+}
+
+nav button {
+  margin: 5px;
+  padding: 10px;
+  background-color: #41b02a;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+nav button:hover {
+  background-color: #034638;
+  color: white;
+}

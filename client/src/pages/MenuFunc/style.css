@@ -1,0 +1,60 @@
+.dashboard-container {
+    display: flex;
+}
+
+.sidebar {
+    width: 60px;
+    background-color: #034638;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100%;
+    left: 0;
+    margin-top: 0;
+    align-items: center;
+}
+
+.icon-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    margin: 20px 0;
+    cursor: pointer;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.courses-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.courses-row {
+    margin-bottom: 20px;
+}
+
+.carousel {
+    display: flex;
+    overflow-x: auto;
+}
+
+.carousel-content {
+    display: flex;
+    gap: 15px;
+}
+
+.carousel-item {
+    min-width: 200px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    text-align: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
