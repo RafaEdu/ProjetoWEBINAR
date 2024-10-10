@@ -2,15 +2,14 @@ nav {
   background-color: #034638;
   padding: 10px;
   position: fixed;
-  /* Fixa a navbar */
-  top: 70px;
-  /* Ajusta para ficar abaixo da navbar principal */
-  left: 0;
-  /* Fixa à esquerda */
+  top: 70px; /* Ajusta para ficar abaixo da navbar principal */
+  left: 60px;
   right: 0;
-  /* Fixa à direita */
   z-index: 1000;
-  /* Garante que a navbar fique acima de outros conteúdos */
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente */
+  height: 80px; /* Define uma altura para alinhar os botões */
 }
 
 nav button {
@@ -20,6 +19,9 @@ nav button {
   color: white;
   border: none;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 nav button:hover {
