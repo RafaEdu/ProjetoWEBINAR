@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { FaBook, FaTools } from 'react-icons/fa'; // Importação dos ícones
+import { FaSwatchbook} from 'react-icons/fa'; // Importação dos ícones
+import { BsTools } from 'react-icons/bs'; // Importação dos ícones
 import './style.css';
 
 function MenuFunc() {
@@ -60,7 +61,7 @@ function MenuFunc() {
                                         <div key={maquina.id} className="carousel-item">
                                             <div className="icon-container">
                                                 <div className="icon-circle">
-                                                    <FaTools className="icon" />  {/* Ícone de ferramenta para máquinas */}
+                                                    <BsTools className="icon" />  {/* Ícone de ferramenta para máquinas */}
                                                 </div>
                                             </div>
                                             <div className="maquina-nome">{maquina.nomeMaquina}</div>
@@ -91,7 +92,7 @@ function MenuFunc() {
                                         <div key={curso.id} className="carousel-item">
                                             <div className="icon-container">
                                                 <div className="icon-circle">
-                                                    <FaBook className="icon" />  {/* Ícone de livro para cursos */}
+                                                    <FaSwatchbook className="icon" />  {/* Ícone de livro para cursos */}
                                                 </div>
                                             </div>
                                             <div className="curso-nome">{curso.titulo}</div>
