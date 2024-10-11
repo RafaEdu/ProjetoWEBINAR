@@ -1,32 +1,41 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { FaBook, FaTools } from 'react-icons/fa'; // Importação dos ícones
 import './style.css';
 
 function MenuFunc() {
-    const maquinasEmProgresso = [
-        { id: 1, nome: "Máquina 1" },
-        { id: 2, nome: "Máquina 2" },
-        { id: 3, nome: "Máquina 3" },
-        { id: 4, nome: "Máquina 4" },
-        { id: 5, nome: "Máquina 5" },
-        { id: 6, nome: "Máquina 6" },
-        { id: 7, nome: "Máquina 7" },
-    ];
-
-    const cursosEmProgresso = [
-        { id: 5, nome: "Curso A" },
-        { id: 6, nome: "Curso B" },
-        { id: 7, nome: "Curso C" },
-        { id: 8, nome: "Curso D" },
-        { id: 9, nome: "Curso F" },
-        { id: 10, nome: "Curso G" },
-    ];
+    const [maquinasEmProgresso, setMaquinasEmProgresso] = useState([]);
+    const [cursosEmProgresso, setCursosEmProgresso] = useState([]);
 
     const maquinasCarousel = useRef(null);
     const cursosCarousel = useRef(null);
 
-    // Função para mover o carrossel
+    useEffect(() => {
+        const fetchMaquinas = async () => {
+            try {
+                const response = await fetch('http://localhost:8000/api/maquinas'); 
+                const data = await response.json();
+                setMaquinasEmProgresso(data);
+            } catch (error) {
+                console.error('Erro ao buscar máquinas:', error);
+            }
+        };
+
+        const fetchCursos = async () => {
+            try {
+                const response = await fetch('http://localhost:8000/api/cursos'); 
+                const data = await response.json();
+                setCursosEmProgresso(data);
+            } catch (error) {
+                console.error('Erro ao buscar cursos:', error);
+            }
+        };
+
+        fetchMaquinas();
+        fetchCursos();
+    }, []);
+
     const handleScroll = (carouselRef, direction) => {
-        const itemWidth = carouselRef.current.querySelector('.carousel-item').offsetWidth + 75; // Adiciona a lacuna entre os itens
+        const itemWidth = carouselRef.current.querySelector('.carousel-item').offsetWidth + 75;
         if (direction === 'left') {
             carouselRef.current.scrollBy({ left: -itemWidth, behavior: 'smooth' });
         } else {
@@ -39,36 +48,62 @@ function MenuFunc() {
             <h2>Olá, (NOME DO USUÁRIO)</h2>
 
             <section className="courses-section">
-                {/* Máquinas em progresso */}
                 <div className="courses-row">
                     <h2>Máquinas Pendentes</h2>
                     <div className="carousel-container">
                         <button className="carousel-arrow left-arrow" onClick={() => handleScroll(maquinasCarousel, 'left')}>‹</button>
                         <div className="carousel" ref={maquinasCarousel}>
                             <div className="carousel-content">
-                                {maquinasEmProgresso.map((maquina) => (
-                                    <div key={maquina.id} className="carousel-item">
-                                        {maquina.nome}
-                                    </div>
-                                ))}
+                                {maquinasEmProgresso.map((maquina) => {
+                                    const progressPercent = 40; // Exemplo de valor estático para progresso
+                                    return (
+                                        <div key={maquina.id} className="carousel-item">
+                                            <div className="icon-container">
+                                                <div className="icon-circle">
+                                                    <FaTools className="icon" />  {/* Ícone de ferramenta para máquinas */}
+                                                </div>
+                                            </div>
+                                            <div className="maquina-nome">{maquina.nomeMaquina}</div>
+                                            <div className="progress-container">
+                                                <div className="progress-bar-container">
+                                                    <div className="progress-bar" style={{ width: `${progressPercent}%` }}></div>
+                                                </div>
+                                                <div className="progress-text">{progressPercent}%</div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                         <button className="carousel-arrow right-arrow" onClick={() => handleScroll(maquinasCarousel, 'right')}>›</button>
                     </div>
                 </div>
 
-                {/* Cursos em progresso */}
                 <div className="courses-row">
                     <h2>Cursos Pendentes</h2>
                     <div className="carousel-container">
                         <button className="carousel-arrow left-arrow" onClick={() => handleScroll(cursosCarousel, 'left')}>‹</button>
                         <div className="carousel" ref={cursosCarousel}>
                             <div className="carousel-content">
-                                {cursosEmProgresso.map((curso) => (
-                                    <div key={curso.id} className="carousel-item">
-                                        {curso.nome}
-                                    </div>
-                                ))}
+                                {cursosEmProgresso.map((curso) => {
+                                    const progressPercent = 70; // Exemplo de valor estático para progresso
+                                    return (
+                                        <div key={curso.id} className="carousel-item">
+                                            <div className="icon-container">
+                                                <div className="icon-circle">
+                                                    <FaBook className="icon" />  {/* Ícone de livro para cursos */}
+                                                </div>
+                                            </div>
+                                            <div className="curso-nome">{curso.titulo}</div>
+                                            <div className="progress-container">
+                                                <div className="progress-bar-container">
+                                                    <div className="progress-bar" style={{ width: `${progressPercent}%` }}></div>
+                                                </div>
+                                                <div className="progress-text">{progressPercent}%</div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                         <button className="carousel-arrow right-arrow" onClick={() => handleScroll(cursosCarousel, 'right')}>›</button>
