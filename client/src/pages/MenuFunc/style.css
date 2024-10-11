@@ -27,12 +27,22 @@
 .content {
     flex-grow: 1;
     padding: 20px;
+    padding-top: 30px;
+}
+
+h2 {
+    margin-top: 0px; /* Reduz o espaço acima da mensagem */
+    margin-bottom: 20px; /* Ajusta o espaço abaixo */
+    color: #034638; /* Torna o título mais destacado com a cor primária */
+   
 }
 
 .courses-section {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding-top: 50px;
+   
 }
 
 .courses-row {
@@ -41,7 +51,39 @@
 
 .carousel {
     display: flex;
-    overflow-x: auto;
+    overflow-x: hidden; 
+}
+
+.carousel::-webkit-scrollbar {
+    display: none; /* Para Chrome, Safari e Edge */
+}
+
+.carousel-content {
+    display: flex;
+    gap: 15px;
+}
+
+.carousel-item {
+    min-width: 200px;
+    margin-left: 60px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    text-align: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.carousel {
+    display: flex;
+    scroll-behavior: smooth;
+    width: 100%;
 }
 
 .carousel-content {
@@ -57,4 +99,37 @@
     text-align: center;
     flex-shrink: 0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-arrow {
+    background-color: #034638;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 34px;
+    padding: 10px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+   
+   
+    z-index: 1;
+}
+
+.left-arrow {
+    left: -40px; 
+    margin-top: -1px;
+}
+
+.right-arrow {
+    right: -50px;
+    margin-top: -1px;
+}
+
+.carousel-arrow:hover {
+    background-color: #41b02a;
 }

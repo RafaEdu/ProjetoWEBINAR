@@ -69,7 +69,7 @@ Cor terciária: #41b02a
 .main-content {
   flex-grow: 1;
   padding: 20px;
-  padding-top: 70px; /* Deve ser maior que a altura da navbar para evitar sobreposição */
+  padding-top: 40px; /* Deve ser maior que a altura da navbar para evitar sobreposição */
   overflow: auto; /* Adiciona rolagem se o conteúdo exceder a altura da tela */
 }
 

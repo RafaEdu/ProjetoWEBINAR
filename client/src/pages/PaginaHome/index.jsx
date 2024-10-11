@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import NavbarPage from '../CadastrosNavbar';
 import MenuFunc from '../MenuFunc';
+import MenuCurso from '../MenuCurso';
+import MenuMaq from '../MenuMaq';
 import './styles.css';
 import { FaHome, FaBook, FaRoute, FaFile, FaCog } from 'react-icons/fa';
 
 function PaginaHome() {
-  const [currentPage, setCurrentPage] = useState('home'); // Estado para rastrear a página atual
+  const [currentPage, setCurrentPage] = useState('MenuFunc'); // Estado para rastrear a página atual
   const [tooltips, setTooltips] = useState({
     home: 'Página Inicial',
-    MenuFunc: 'Máquinas',
-    option3: 'Cursos',
-    option4: 'Relatórios',
+    Maquinas: 'Máquinas',
+    Cursos: 'Cursos',
+    Relatorios: 'Relatórios',
     CadastroNavbar: 'Cadastros'
   }); // Estado para armazenar os nomes dos botões
 
@@ -31,23 +33,23 @@ function PaginaHome() {
           <FaHome />
         </button>
         <button
-          onClick={() => handleOptionClick('maquinas')}
+          onClick={() => handleOptionClick('MenuMaq')}
           className="icon-button"
-          title={tooltips.MenuFunc} // Tooltip editável
+          title={tooltips.Maquinas} // Tooltip editável
         >
           <FaRoute />
         </button>
         <button
-          onClick={() => handleOptionClick('option3')}
+          onClick={() => handleOptionClick('MenuCurso')}
           className="icon-button"
-          title={tooltips.option3} // Tooltip editável
+          title={tooltips.Cursos} // Tooltip editável
         >
           <FaBook />
         </button>
         <button
           onClick={() => handleOptionClick('option4')}
           className="icon-button"
-          title={tooltips.option4} // Tooltip editável
+          title={tooltips.Relatorios} // Tooltip editável
         >
           <FaFile />
         </button>
@@ -62,24 +64,14 @@ function PaginaHome() {
 
       {/* Conteúdo principal, que muda com base na página selecionada */}
       <div className="main-content">
-        {currentPage === 'maquinas' && (
-          <div>
-            <h1>Máquinas</h1>
-            <p>Em construção...</p>
-          </div>
-        )}
 
-        {currentPage === 'MenuFunc' && <MenuFunc />} {/* Renderiza o MenuFunc */}
+        {currentPage === 'MenuFunc' && <MenuFunc />} 
 
-        {currentPage === 'CadastroNavbar' && <NavbarPage />} {/* Renderiza o CadastroNavbar */}
+        {currentPage === 'MenuMaq' && <MenuMaq />} 
 
-        {/* Outras opções de páginas */}
-        {currentPage === 'option3' && (
-          <div>
-            <h1>Cursos</h1>
-            <p>Em construção</p>
-          </div>
-        )}
+        {currentPage === 'MenuCurso' && <MenuCurso />}
+
+        {currentPage === 'CadastroNavbar' && <NavbarPage />} 
 
         {currentPage === 'option4' && (
           <div>
