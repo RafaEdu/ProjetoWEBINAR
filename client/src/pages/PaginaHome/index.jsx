@@ -3,6 +3,8 @@ import NavbarPage from '../CadastrosNavbar';
 import MenuFunc from '../MenuFunc';
 import MenuCurso from '../MenuCurso';
 import MenuMaq from '../MenuMaq';
+import ConsultaFuncs from '../ConsultaFuncs'; 
+import ConsultaMaquinas from '../ConsultaMaquinas';
 import './styles.css';
 import { FaHome, FaBook, FaRoute, FaFile, FaCog } from 'react-icons/fa';
 
@@ -13,7 +15,9 @@ function PaginaHome() {
     Maquinas: 'Máquinas',
     Cursos: 'Cursos',
     Relatorios: 'Relatórios',
-    CadastroNavbar: 'Cadastros'
+    CadastroNavbar: 'Cadastros',
+    Funcs: 'Funcionários',  
+    ConsMaqs: 'Consulta Máquinas'
   }); // Estado para armazenar os nomes dos botões
 
   // Função que altera a página com base na opção clicada
@@ -33,9 +37,23 @@ function PaginaHome() {
           <FaHome />
         </button>
         <button
+          onClick={() => handleOptionClick('ConsultaFuncs')}
+          className="icon-button"
+          title={tooltips.Funcs}
+        >        
+          <FaHome />
+        </button>
+        <button
           onClick={() => handleOptionClick('MenuMaq')}
           className="icon-button"
           title={tooltips.Maquinas} // Tooltip editável
+        >
+          <FaUsers />
+        </button>
+        <button
+          onClick={() => handleOptionClick('ConsultaMaquinas')} 
+          className="icon-button"
+          title={tooltips.Maqs}
         >
           <FaRoute />
         </button>
@@ -67,7 +85,11 @@ function PaginaHome() {
 
         {currentPage === 'MenuFunc' && <MenuFunc />} 
 
+        {currentPage === 'ConsultaFuncs' && <ConsultaFuncs />}
+
         {currentPage === 'MenuMaq' && <MenuMaq />} 
+
+        {currentPage === 'ConsultaMaquinas' && <ConsultaMaquinas />}
 
         {currentPage === 'MenuCurso' && <MenuCurso />}
 
