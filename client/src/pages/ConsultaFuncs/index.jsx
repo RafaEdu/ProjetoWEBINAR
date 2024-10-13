@@ -30,6 +30,31 @@ function ListaUsuarios() {
     usuario.email.toLowerCase().includes(busca.toLowerCase())
   );
 
+  // Função para redirecionar para a tela de edição
+  const handleEdit = (id) => {
+    // Redirecionar para a tela de edição do usuário
+    window.location.href = `/edita-funcionario/${id}`;
+  };
+
+  // Função para excluir um usuário
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/users/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Atualizar a lista de usuários após a exclusão
+        setUsuarios(usuarios.filter((usuario) => usuario.id !== id));
+        alert('Usuário excluído com sucesso.');
+      } else {
+        alert('Erro ao excluir o usuário.');
+      }
+    } catch (error) {
+      console.error('Erro ao tentar excluir o usuário:', error);
+    }
+  };
+
   return (
     <div className="container">
       <h1>Lista de Usuários Cadastrados</h1>
@@ -46,10 +71,24 @@ function ListaUsuarios() {
       <ul>
         {usuariosFiltrados.length > 0 ? (
           usuariosFiltrados.map((usuario, index) => (
-            <li key={index}>
+            <li key={index} className="usuario-item">
               <strong>Nome:</strong> {usuario.nome}<br />
               <strong>Email:</strong> {usuario.email}<br />
               <strong>Admin:</strong> {usuario.is_admin ? 'Sim' : 'Não'}
+              
+              {/* Botões de edição e exclusão */}
+              <button 
+                className="botao-editar" 
+                onClick={() => handleEdit(usuario.id)}
+              >
+                <i className="fa fa-cog"></i> {/* Ícone de engrenagem */}
+              </button>
+              <button 
+                className="botao-excluir" 
+                onClick={() => handleDelete(usuario.id)}
+              >
+                <i className="fa fa-times"></i> {/* Ícone de X */}
+              </button>
             </li>
           ))
         ) : (
