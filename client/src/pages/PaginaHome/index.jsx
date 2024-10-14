@@ -6,10 +6,10 @@ import MenuMaq from '../MenuMaq';
 import ConsultaFuncs from '../ConsultaFuncs'; 
 import ConsultaMaquinas from '../ConsultaMaquinas';
 import './styles.css';
-import { FaHome, FaBook, FaRoute, FaFile, FaCog } from 'react-icons/fa';
+import { FaHome, FaBook, FaRoute, FaFile, FaCog, FaUsers } from 'react-icons/fa'; 
 
 function PaginaHome() {
-  const [currentPage, setCurrentPage] = useState('MenuFunc'); // Estado para rastrear a página atual
+  const [currentPage, setCurrentPage] = useState('MenuFunc'); 
   const [tooltips, setTooltips] = useState({
     home: 'Página Inicial',
     Maquinas: 'Máquinas',
@@ -18,7 +18,7 @@ function PaginaHome() {
     CadastroNavbar: 'Cadastros',
     Funcs: 'Funcionários',  
     ConsMaqs: 'Consulta Máquinas'
-  }); // Estado para armazenar os nomes dos botões
+  }); 
 
   // Função que altera a página com base na opção clicada
   const handleOptionClick = (option) => {
@@ -41,40 +41,40 @@ function PaginaHome() {
           className="icon-button"
           title={tooltips.Funcs}
         >        
-          <FaHome />
+          <FaUsers />
         </button>
         <button
-          onClick={() => handleOptionClick('MenuMaq')}
+          onClick={() => handleOptionClick('ConsultaMaquinas')}
           className="icon-button"
-          title={tooltips.Maquinas} // Tooltip editável
+          title={tooltips.ConsMaqs} 
         >
           <FaUsers />
         </button>
         <button
-          onClick={() => handleOptionClick('ConsultaMaquinas')} 
+          onClick={() => handleOptionClick('MenuMaq')} 
           className="icon-button"
-          title={tooltips.Maqs}
+          title={tooltips.Maquinas}
         >
           <FaRoute />
         </button>
         <button
           onClick={() => handleOptionClick('MenuCurso')}
           className="icon-button"
-          title={tooltips.Cursos} // Tooltip editável
+          title={tooltips.Cursos} 
         >
           <FaBook />
         </button>
         <button
           onClick={() => handleOptionClick('option4')}
           className="icon-button"
-          title={tooltips.Relatorios} // Tooltip editável
+          title={tooltips.Relatorios} 
         >
           <FaFile />
         </button>
         <button
           onClick={() => handleOptionClick('CadastroNavbar')}
           className="icon-button"
-          title={tooltips.CadastroNavbar} // Tooltip editável
+          title={tooltips.CadastroNavbar}
         >
           <FaCog />
         </button>
