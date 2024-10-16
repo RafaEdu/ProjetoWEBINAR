@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { FaSwatchbook} from 'react-icons/fa'; // Importação dos ícones
+import { FaSwatchbook } from 'react-icons/fa'; // Importação dos ícones
 import { BsTools } from 'react-icons/bs'; // Importação dos ícones
 import './style.css';
 

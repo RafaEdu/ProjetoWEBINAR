@@ -1,61 +1,93 @@
-.dashboard-container {
-    display: flex;
-}
-
-.sidebar {
-    width: 60px;
-    background-color: #034638;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    height: 100%;
-    left: 0;
-    margin-top: 0;
-    align-items: center;
-}
-
-.icon-button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    font-size: 24px;
-    margin: 20px 0;
-    cursor: pointer;
-}
-
-.content {
+/* Estilos específicos para MenuCurso */
+.menu-curso-content {
     flex-grow: 1;
-    padding: 20px;
+    padding: 20px 10px 20px 2px; /* Diminui o padding à esquerda */
 }
 
-.courses-section {
+.menu-curso-section {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.courses-row {
-    margin-bottom: 20px;
-}
-
-.carousel {
+.menu-curso-grid {
     display: flex;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
-.carousel-content {
+.menu-curso-icon-container {
     display: flex;
-    gap: 15px;
+    justify-content: center;
+    margin-bottom: 10px;
 }
 
-.carousel-item {
-    min-width: 200px;
-    padding: 20px;
-    background-color: #f0f0f0;
+.menu-curso-icon-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #034638; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-curso-icon {
+    color: white; 
+    font-size: 70px;
+}
+
+.menu-curso-item {
+    width: 210px; /* Define a largura fixa */
+    height: 250px;
+    padding: 15px;
+    background-color: #b1b1b1;
     border-radius: 8px;
     text-align: center;
-    flex-shrink: 0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #333;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
+.menu-curso-nome {
+    font-size: 16px;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-clamp: 2; /* Compatibilidade para navegadores sem prefixo */
+    max-width: 100%; /* Limita a largura do texto ao tamanho do item */
+    line-height: 1.1;
+}
+
+.menu-curso-progress-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.menu-curso-progress-bar-container {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+
+.menu-curso-progress-bar {
+    height: 8px;
+    background-color: #41b02a;
+    border-radius: 5px;
+}
+
+.menu-curso-progress-text {
+    font-size: 12px;
+    color: #333;
+}

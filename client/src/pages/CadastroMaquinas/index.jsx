@@ -51,6 +51,7 @@ function CadastroMaquinas() {
           placeholder="Nome da Máquina"
           value={nomeMaquina}
           onChange={handleChange}
+          maxLength={30} // Limita o número de caracteres a 30
         />
         {erro && <p style={{ color: 'red' }}>{erro}</p>}
         {mensagem && <p style={{ color: 'green' }}>{mensagem}</p>}

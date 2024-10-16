@@ -109,9 +109,25 @@ function CadastroTreinamento() {
     <div className='container'>
       <form onSubmit={handleSubmit}>
         <h1>Cadastro De Novo Curso</h1>
-        <input name="titulo" type='text' placeholder='Dê um título' required />
-        <input name="descricao" type='text' placeholder='Descrição do curso' required />
-        <input name="dataCriacao" type='date' placeholder='Data de Criação do Curso' required />
+        <input
+          name="titulo"
+          type='text'
+          placeholder='Dê um título'
+          required
+          maxLength={30} // Limita o número de caracteres a 30
+        />
+        <input
+          name="descricao"
+          type='text'
+          placeholder='Descrição do curso'
+          required
+        />
+        <input
+          name="dataCriacao"
+          type='date'
+          placeholder='Data de Criação do Curso'
+          required
+        />
 
         <h2>Máquinas</h2>
         <select
@@ -129,7 +145,12 @@ function CadastroTreinamento() {
         </select>
 
         <h2>Área</h2> 
-        <select name="areas" value={selectedArea} onChange={handleSelecionarArea} required>
+        <select
+          name="areas"
+          value={selectedArea}
+          onChange={handleSelecionarArea}
+          required
+        >
           <option value="" disabled>Selecione uma área</option>
           {areas.map(area => (
             <option key={area.idarea} value={area.idarea}>
@@ -152,7 +173,6 @@ function CadastroTreinamento() {
             </option>
           ))}
         </select>
-
 
         {errorMessage && <p className="error-message">{errorMessage}</p>} 
 

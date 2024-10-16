@@ -2,7 +2,6 @@
     display: flex;
 }
 
-
 .sidebar {
     width: 60px;
     background-color: #034638;
@@ -16,7 +15,6 @@
     align-items: center;
 }
 
-
 .content {
     flex-grow: 1;
     padding: 20px;
@@ -27,7 +25,6 @@ h2 {
     margin-top: 0px; /* Reduz o espaço acima da mensagem */
     margin-bottom: 20px; /* Ajusta o espaço abaixo */
     color: #034638; /* Torna o título mais destacado com a cor primária */
-   
 }
 
 .courses-section {
@@ -35,8 +32,6 @@ h2 {
     flex-direction: column;
     gap: 20px;
     padding-top: 50px;
-    
-   
 }
 
 .courses-row {
@@ -57,7 +52,6 @@ h2 {
     gap: 15px;
 }
 
-
 .courses-section .carousel-item {
     background-color: #b1b1b1;
 }
@@ -67,15 +61,6 @@ h2 {
     display: flex;
     align-items: center;
 }
-
-
-
-.carousel-content {
-    display: flex;
-    gap: 15px;
-}
-
-
 
 .carousel-arrow {
     background-color: #034638;
@@ -109,27 +94,28 @@ h2 {
 }
 
 .carousel-item {
-    min-width: 200px;
-    height: 220px;
-    margin-left: 60px;
-    padding: 20px;
+    width: 210px;
+    height: 250px; /* Altura fixa para o item */
+    margin-left: 50px;
+    padding: 15px;
     border-radius: 8px;
-    text-align: center;
     flex-shrink: 0;
-    background-color: rgb(236, 226, 226); 
+    background-color: rgb(236, 226, 226);
+    overflow: hidden; /* Oculta qualquer conteúdo que exceda o limite */
     display: flex;
     flex-direction: column;
     align-items: center;
     color: #333;
 }
 
+
 .icon-container {
     margin-bottom: 10px; 
 }
 
 .icon-circle {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     background-color: #034638; 
     display: flex;
@@ -139,16 +125,15 @@ h2 {
 
 .icon {
     color: white; 
-    font-size: 60px; 
+    font-size: 70px;
 }
-
 
 .progress-container {
     display: flex;
     align-items: center; 
     width: 100%; 
     gap: 10px; 
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 .progress-bar-container {
@@ -169,6 +154,20 @@ h2 {
 .progress-text {
     font-size: 14px; 
     color: #333; 
+}
+
+.maquina-nome, .curso-nome {
+    font-size: 16px;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-clamp: 2; /* Compatibilidade para navegadores sem prefixo */
+    max-width: 100%; /* Limita a largura do texto ao tamanho do item */
+    line-height: 1.1;
 }
 
 
