@@ -4,6 +4,7 @@ import './styles.css';
 
 function MenuCurso() {
     const [cursosEmProgresso, setCursosEmProgresso] = useState([]); // Estado para armazenar cursos
+    const [searchTerm, setSearchTerm] = useState(''); // Estado para armazenar a busca
 
     useEffect(() => {
         const fetchCursos = async () => {
@@ -19,12 +20,32 @@ function MenuCurso() {
         fetchCursos(); // Puxa os cursos ao carregar o componente
     }, []);
 
+    // Função que atualiza o estado da busca conforme o usuário digita
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    // Filtra os cursos com base no título
+    const filteredCursos = cursosEmProgresso.filter((curso) =>
+        curso.titulo.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <main className="menu-curso-content">
             <section className="menu-curso-section">
-                <h2>Cursos</h2>
+                <h2 className="cursos-text">Cursos</h2>
+
+                {/* Barra de pesquisa */}
+                <input
+                    type="text"
+                    placeholder="Pesquisar cursos..."
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    className="menu-curso-search-bar"
+                />
+
                 <div className="menu-curso-grid">
-                    {cursosEmProgresso.map((curso) => {
+                    {filteredCursos.map((curso) => {
                         const progressPercent = 70; // Progresso estático
                         return (
                             <div key={curso.id} className="menu-curso-item">

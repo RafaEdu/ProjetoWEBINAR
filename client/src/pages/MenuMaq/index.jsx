@@ -4,6 +4,7 @@ import './styles.css'; // Estilos
 
 function MenuMaq() {
     const [maquinasAtrib, setMaquinasAtrib] = useState([]); // Estado para armazenar as máquinas
+    const [searchTerm, setSearchTerm] = useState(''); // Estado para armazenar a busca
 
     useEffect(() => {
         const fetchMaquinas = async () => {
@@ -19,12 +20,35 @@ function MenuMaq() {
         fetchMaquinas(); // Faz a chamada para buscar as máquinas
     }, []);
 
+      // Função que atualiza o estado da busca conforme o usuário digita
+      const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    // Filtra os cursos com base no título
+    const filteredMaq = maquinasAtrib.filter((maquina) =>
+        maquina.nomeMaquina.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+
+
     return (
         <main className="menu-maq-content">
             <section className="menu-maq-section">
-                <h2>Máquinas</h2>
+                <h2 className="maquinas-text">Máquinas</h2>
+
+                   {/* Barra de pesquisa */}
+                   <input
+                    type="text"
+                    placeholder="Pesquisar máquinas..."
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    className="menu-maquina-search-bar"
+                />
+
+
                 <div className="menu-maq-grid">
-                    {maquinasAtrib.map((maquina) => {
+                    {filteredMaq.map((maquina) => {
                         const progressPercent = 70; // Progresso estático
                         return (
                             <div key={maquina.id} className="menu-maq-item">
