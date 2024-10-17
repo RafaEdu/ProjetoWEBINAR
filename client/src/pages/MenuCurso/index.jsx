@@ -28,12 +28,12 @@ function MenuCurso() {
                         const progressPercent = 70; // Progresso estático
                         return (
                             <div key={curso.id} className="menu-curso-item">
+                                <div className="menu-curso-nome">{curso.titulo}</div> {/* Nome do curso no topo */}
                                 <div className="menu-curso-icon-container">
                                     <div className="menu-curso-icon-circle">
                                         <FaSwatchbook className="menu-curso-icon" />
                                     </div>
                                 </div>
-                                <div className="menu-curso-nome">{curso.titulo}</div>
                                 <div className="menu-curso-progress-container">
                                     <div className="menu-curso-progress-bar-container">
                                         <div className="menu-curso-progress-bar" style={{ width: `${progressPercent}%` }}></div>

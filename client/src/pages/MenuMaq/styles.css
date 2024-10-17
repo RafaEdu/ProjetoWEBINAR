@@ -1,61 +1,95 @@
-.dashboard-container {
-    display: flex;
-}
-
-.sidebar {
-    width: 60px;
-    background-color: #034638;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    height: 100%;
-    left: 0;
-    margin-top: 0;
-    align-items: center;
-}
-
-.icon-button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    font-size: 24px;
-    margin: 20px 0;
-    cursor: pointer;
-}
-
-.content {
+/* Estilos específicos para MenuMaq */
+.menu-maq-content {
     flex-grow: 1;
-    padding: 20px;
+    padding: 20px 10px 20px 2px; /* Padding à esquerda reduzido */
 }
 
-.courses-section {
+.menu-maq-section {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.courses-row {
-    margin-bottom: 20px;
-}
-
-.carousel {
+.menu-maq-grid {
     display: flex;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
-.carousel-content {
-    display: flex;
-    gap: 15px;
-}
-
-.carousel-item {
-    min-width: 200px;
-    padding: 20px;
-    background-color: #f0f0f0;
+.menu-maq-item {
+    width: 210px; /* Largura fixa */
+    height: 250px;
+    padding: 15px;
+    background-color: #b1b1b1;
     border-radius: 8px;
     text-align: center;
-    flex-shrink: 0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
+/* Nome da máquina */
+.menu-maq-nome {
+    font-size: 16px;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-clamp: 2; /* Compatibilidade com navegadores sem prefixo */
+    max-width: 100%;
+    line-height: 1.1;
+}
+
+/* Estilos do ícone */
+.menu-maq-icon-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.menu-maq-icon-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #034638; /* Cor de fundo do círculo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-maq-icon {
+    color: white; 
+    font-size: 70px; /* Tamanho do ícone */
+}
+
+/* Barra de progresso */
+.menu-maq-progress-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.menu-maq-progress-bar-container {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+
+.menu-maq-progress-bar {
+    height: 8px;
+    background-color: #41b02a;
+    border-radius: 5px;
+}
+
+.menu-maq-progress-text {
+    font-size: 14px;
+    color: #333;
+}

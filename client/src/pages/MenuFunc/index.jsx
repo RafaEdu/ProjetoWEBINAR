@@ -59,12 +59,12 @@ function MenuFunc() {
                                     const progressPercent = 40; // Exemplo de valor estático para progresso
                                     return (
                                         <div key={maquina.id} className="carousel-item">
+                                            <div className="maquina-nome">{maquina.nomeMaquina}</div>
                                             <div className="icon-container">
                                                 <div className="icon-circle">
                                                     <BsTools className="icon" />  {/* Ícone de ferramenta para máquinas */}
                                                 </div>
                                             </div>
-                                            <div className="maquina-nome">{maquina.nomeMaquina}</div>
                                             <div className="progress-container">
                                                 <div className="progress-bar-container">
                                                     <div className="progress-bar" style={{ width: `${progressPercent}%` }}></div>
@@ -90,12 +90,12 @@ function MenuFunc() {
                                     const progressPercent = 70; // Exemplo de valor estático para progresso
                                     return (
                                         <div key={curso.id} className="carousel-item">
+                                            <div className="curso-nome">{curso.titulo}</div>
                                             <div className="icon-container">
                                                 <div className="icon-circle">
                                                     <FaSwatchbook className="icon" />  {/* Ícone de livro para cursos */}
                                                 </div>
                                             </div>
-                                            <div className="curso-nome">{curso.titulo}</div>
                                             <div className="progress-container">
                                                 <div className="progress-bar-container">
                                                     <div className="progress-bar" style={{ width: `${progressPercent}%` }}></div>
