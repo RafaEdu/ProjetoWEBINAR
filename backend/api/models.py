@@ -32,6 +32,9 @@ class Maquina(models.Model):
     idmaquina = models.AutoField(primary_key=True)
     nomeMaquina = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.nomeMaquina
+
 class Curso(models.Model):
     idcurso = models.AutoField(primary_key=True)
     titulo = models.CharField(max_length=255)
@@ -39,7 +42,7 @@ class Curso(models.Model):
     idquestionario = models.ForeignKey('Questionario', on_delete=models.CASCADE)
     idarea = models.ForeignKey('Area', on_delete=models.CASCADE)
     dataCriacao = models.DateField()
-    maquina = models.ForeignKey(Maquina, on_delete=models.CASCADE)
+    maquina = models.ManyToManyField(Maquina)
 
 
 

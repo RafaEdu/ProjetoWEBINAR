@@ -3,7 +3,7 @@ import './style.css';
 
 function CadastroTreinamento() {
   const [opcoesDisponiveis, setOpcoesDisponiveis] = useState([]);
-  const [selectedMaquina, setSelectedMaquina] = useState(null);
+  const [selectedMaquinas, setSelectedMaquinas] = useState([]); // Altere para armazenar múltiplas máquinas
   const [areas, setAreas] = useState([]);
   const [questionarios, setQuestionarios] = useState([]);
   const [selectedQuestionario, setSelectedQuestionario] = useState("");
@@ -41,19 +41,15 @@ function CadastroTreinamento() {
     fetchData();
   }, []);
 
-  const handleSelecionarOpcao = (event) => {
-    const selectedValue = event.target.value;
-    const opcaoSelecionada = opcoesDisponiveis.find(opcao => opcao.idmaquina === parseInt(selectedValue, 10));
-
-    if (opcaoSelecionada) {
-      setSelectedMaquina(opcaoSelecionada);
-    }
+  // Função para gerenciar a seleção de múltiplas máquinas
+  const handleSelecionarMaquinas = (event) => {
+    const selectedValues = Array.from(event.target.selectedOptions, option => option.value);
+    setSelectedMaquinas(selectedValues); // Atualiza a lista de IDs de máquinas selecionadas
   };
 
   const handleSelecionarQuestionario = (event) => {
     const selectedValue = event.target.value;
-    setSelectedQuestionario(selectedValue); // Mantenha como string para comparação
-    console.log('Questionário selecionado:', selectedValue); // Log para verificação
+    setSelectedQuestionario(selectedValue);
   };
 
   const handleSelecionarArea = (event) => {
@@ -68,12 +64,12 @@ function CadastroTreinamento() {
       titulo: event.target.titulo.value,
       descricao: event.target.descricao.value,
       dataCriacao: event.target.dataCriacao.value,
-      idquestionario: selectedQuestionario, // String ID do questionário
+      idquestionario: selectedQuestionario,
       idarea: selectedArea,
-      maquina: selectedMaquina ? selectedMaquina.idmaquina : null,
+      maquina: selectedMaquinas, // Envia a lista de máquinas selecionadas
     };
 
-    console.log('Dados do curso a serem enviados:', cursoData); // Log dos dados do curso
+    console.log('Dados do curso a serem enviados:', cursoData);
 
     try {
       const response = await fetch('http://localhost:8000/api/cursos/', {
@@ -86,18 +82,18 @@ function CadastroTreinamento() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Erro ao cadastrar o curso:', errorData); // Log do erro
+        console.error('Erro ao cadastrar o curso:', errorData);
         throw new Error(`Erro ao cadastrar o curso: ${errorData.detail || 'Erro desconhecido'}`);
       }
 
       event.target.reset();
-      setSelectedMaquina(null);
+      setSelectedMaquinas([]);
       setSelectedQuestionario("");
       setSelectedArea("");
-      setErrorMessage(""); // Limpa mensagens de erro
+      setErrorMessage(""); 
     } catch (error) {
       console.error('Erro ao cadastrar o curso:', error);
-      setErrorMessage(error.message); // Atualiza a mensagem de erro
+      setErrorMessage(error.message);
     }
   };
 
@@ -114,7 +110,7 @@ function CadastroTreinamento() {
           type='text'
           placeholder='Dê um título'
           required
-          maxLength={30} // Limita o número de caracteres a 30
+          maxLength={30}
         />
         <input
           name="descricao"
@@ -132,11 +128,12 @@ function CadastroTreinamento() {
         <h2>Máquinas</h2>
         <select
           name="maquinas"
-          value={selectedMaquina ? selectedMaquina.idmaquina : ""}
-          onChange={handleSelecionarOpcao}
+          value={selectedMaquinas}
+          onChange={handleSelecionarMaquinas}
+          multiple // Adiciona suporte a múltipla seleção
           required
         >
-          <option value="" disabled>Selecione uma máquina</option>
+          <option value="" disabled>Selecione uma ou mais máquinas</option>
           {opcoesDisponiveis.map(opcao => (
             <option key={opcao.idmaquina} value={opcao.idmaquina}>
               {opcao.nomeMaquina}
@@ -154,7 +151,7 @@ function CadastroTreinamento() {
           <option value="" disabled>Selecione uma área</option>
           {areas.map(area => (
             <option key={area.idarea} value={area.idarea}>
-              {area.nome} 
+              {area.nome}
             </option>
           ))}
         </select>
@@ -162,7 +159,7 @@ function CadastroTreinamento() {
         <h2>Questionário</h2>
         <select
           name="questionarios"
-          value={selectedQuestionario} 
+          value={selectedQuestionario}
           onChange={handleSelecionarQuestionario}
           required
         >
@@ -174,7 +171,7 @@ function CadastroTreinamento() {
           ))}
         </select>
 
-        {errorMessage && <p className="error-message">{errorMessage}</p>} 
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         <button type='submit'>Cadastrar</button>
       </form>

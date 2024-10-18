@@ -58,6 +58,7 @@ class QuestionarioSerializer(serializers.ModelSerializer):
 
 
 class CursoSerializer(serializers.ModelSerializer):
+    maquina = serializers.PrimaryKeyRelatedField(queryset=Maquina.objects.all(), many=True)
     class Meta:
         model = Curso
         fields = '__all__'
