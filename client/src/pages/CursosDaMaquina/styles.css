@@ -1,0 +1,67 @@
+/* Estilos específicos para CursosDaMaquina */
+.cursos-da-maquina-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.cursos-da-maquina-header {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #034638; /* Cor primária */
+}
+
+.curso-item {
+    background-color: #f5f5f5; /* Cor de fundo dos itens do curso */
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s; /* Transições suaves */
+}
+
+.curso-item:hover {
+    background-color: #eaeaea; /* Cor de fundo ao passar o mouse */
+    transform: scale(1.02); /* Aumenta um pouco o tamanho no hover */
+}
+
+.curso-titulo {
+    font-size: 20px;
+    color: #333; /* Cor do texto do título */
+    margin: 0;
+}
+
+.curso-descricao {
+    font-size: 14px;
+    color: #666; /* Cor do texto da descrição */
+    margin-top: 5px;
+}
+
+.curso-sem-cursos {
+    font-size: 18px;
+    color: #666; /* Cor para mensagem de nenhum curso encontrado */
+    text-align: center;
+    margin-top: 20px;
+}
+
+.curso-progress-container {
+    margin-top: 10px;
+}
+
+.curso-progress-bar-container {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.curso-progress-bar {
+    height: 8px;
+    background-color: #41b02a; /* Cor da barra de progresso */
+    border-radius: 5px;
+}
+
+.curso-progress-text {
+    font-size: 14px;
+    color: #333;
+}

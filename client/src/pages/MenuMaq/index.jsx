@@ -1,61 +1,65 @@
+// src/MenuMaq.jsx
 import React, { useEffect, useState } from 'react';
-import { FaTools } from 'react-icons/fa'; // Ícone para as máquinas
-import './styles.css'; // Estilos
+import { FaTools } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import './styles.css';
 
 function MenuMaq() {
-    const [maquinasAtrib, setMaquinasAtrib] = useState([]); // Estado para armazenar as máquinas
-    const [searchTerm, setSearchTerm] = useState(''); // Estado para armazenar a busca
+    const [maquinasAtrib, setMaquinasAtrib] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchMaquinas = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/maquinas'); // Substituir pelo seu endpoint da API
+                const response = await fetch('http://localhost:8000/api/maquinas');
                 const data = await response.json();
-                setMaquinasAtrib(data); // Atualiza o estado com as máquinas
+                setMaquinasAtrib(data);
             } catch (error) {
                 console.error('Erro ao buscar máquinas:', error);
             }
         };
 
-        fetchMaquinas(); // Faz a chamada para buscar as máquinas
+        fetchMaquinas();
     }, []);
 
-      // Função que atualiza o estado da busca conforme o usuário digita
-      const handleSearchChange = (event) => {
+    const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
 
-    // Filtra os cursos com base no título
     const filteredMaq = maquinasAtrib.filter((maquina) =>
         maquina.nomeMaquina.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-
+    // Função para navegar para a tela dos cursos da máquina
+    const handleMaqClick = (idmaquina) => {
+        navigate(`/cursos-da-maquina/${idmaquina}`); // Navega para a tela de cursos usando o idmaquina
+    };
 
     return (
         <main className="menu-maq-content">
             <section className="menu-maq-section">
                 <h2 className="maquinas-text">Máquinas</h2>
-
-                   {/* Barra de pesquisa */}
-                   <input
+                <input
                     type="text"
                     placeholder="Pesquisar máquinas..."
                     value={searchTerm}
                     onChange={handleSearchChange}
                     className="menu-maquina-search-bar"
                 />
-
-
                 <div className="menu-maq-grid">
                     {filteredMaq.map((maquina) => {
                         const progressPercent = 70; // Progresso estático
                         return (
-                            <div key={maquina.id} className="menu-maq-item">
-                                <div className="menu-maq-nome">{maquina.nomeMaquina}</div> {/* Nome da máquina no topo */}
+                            <div 
+                                key={maquina.idmaquina}
+                                className="menu-maq-item"
+                                onClick={() => handleMaqClick(maquina.idmaquina)} // Aqui estamos passando idmaquina
+                            >
+                                <div className="menu-maq-nome">{maquina.nomeMaquina}</div>
                                 <div className="menu-maq-icon-container">
                                     <div className="menu-maq-icon-circle">
-                                        <FaTools className="menu-maq-icon" /> {/* Ícone da máquina */}
+                                        <FaTools className="menu-maq-icon" />
                                     </div>
                                 </div>
                                 <div className="menu-maq-progress-container">

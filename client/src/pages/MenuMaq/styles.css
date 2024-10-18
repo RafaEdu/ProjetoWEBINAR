@@ -28,6 +28,15 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    cursor: pointer; /* Cursor em forma de ponteiro para indicar que é clicável */
+    transition: background-color 0.3s, transform 0.3s; /* Transições suaves */
+}
+
+/* Efeito hover */
+.menu-maq-item:hover {
+    background-color: #41b02a; /* Muda a cor de fundo no hover */
+    color: white; /* Muda a cor do texto para branco */
+    transform: scale(1.05); /* Aumenta um pouco o tamanho no hover */
 }
 
 /* Nome da máquina */
@@ -104,6 +113,6 @@
     border-radius: 4px;
 }
 
-.maquinas-text{
+.maquinas-text {
     font-size: 24px;
 }

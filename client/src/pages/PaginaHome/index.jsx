@@ -1,108 +1,68 @@
-import React, { useState } from 'react';
+// src/PaginaHome.jsx
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import NavbarPage from '../CadastrosNavbar';
 import MenuFunc from '../MenuFunc';
 import MenuCurso from '../MenuCurso';
 import MenuMaq from '../MenuMaq';
 import ConsultaFuncs from '../ConsultaFuncs'; 
 import ConsultaMaquinas from '../ConsultaMaquinas';
+import CursosDaMaquina from '../CursosDaMaquina'; // Componente para cursos por máquina
 import './styles.css';
 import { FaHome, FaBook, FaRoute, FaFile, FaCog, FaUsers } from 'react-icons/fa'; 
 
-function PaginaHome() {
-  const [currentPage, setCurrentPage] = useState('MenuFunc'); 
-  const [tooltips, setTooltips] = useState({
-    home: 'Página Inicial',
-    Maquinas: 'Máquinas',
-    Cursos: 'Cursos',
-    Relatorios: 'Relatórios',
-    CadastroNavbar: 'Cadastros',
-    Funcs: 'Funcionários',  
-    ConsMaqs: 'Consulta Máquinas'
-  }); 
-
-  // Função que altera a página com base na opção clicada
-  const handleOptionClick = (option) => {
-    setCurrentPage(option);
-  };
+function Sidebar() {
+  const navigate = useNavigate(); // Inicializa o hook useNavigate
 
   return (
-    <div className="home-container">
-      {/* Sidebar fixa */}
-      <aside className="sidebar">
-        <button
-          onClick={() => handleOptionClick('MenuFunc')}
-          className="icon-button"
-          title={tooltips.home} // Tooltip editável
-        >
-          <FaHome />
-        </button>
-        <button
-          onClick={() => handleOptionClick('ConsultaFuncs')}
-          className="icon-button"
-          title={tooltips.Funcs}
-        >        
-          <FaUsers />
-        </button>
-        <button
-          onClick={() => handleOptionClick('ConsultaMaquinas')}
-          className="icon-button"
-          title={tooltips.ConsMaqs} 
-        >
-          <FaUsers />
-        </button>
-        <button
-          onClick={() => handleOptionClick('MenuMaq')} 
-          className="icon-button"
-          title={tooltips.Maquinas}
-        >
-          <FaRoute />
-        </button>
-        <button
-          onClick={() => handleOptionClick('MenuCurso')}
-          className="icon-button"
-          title={tooltips.Cursos} 
-        >
-          <FaBook />
-        </button>
-        <button
-          onClick={() => handleOptionClick('option4')}
-          className="icon-button"
-          title={tooltips.Relatorios} 
-        >
-          <FaFile />
-        </button>
-        <button
-          onClick={() => handleOptionClick('CadastroNavbar')}
-          className="icon-button"
-          title={tooltips.CadastroNavbar}
-        >
-          <FaCog />
-        </button>
-      </aside>
+    <aside className="sidebar">
+      <button onClick={() => navigate('/')} className="icon-button" title="Página Inicial">
+        <FaHome />
+      </button>
+      <button onClick={() => navigate('/consulta-funcs')} className="icon-button" title="Funcionários">
+        <FaUsers />
+      </button>
+      <button onClick={() => navigate('/consulta-maquinas')} className="icon-button" title="Consulta Máquinas">
+        <FaUsers />
+      </button>
+      <button onClick={() => navigate('/menu-maq')} className="icon-button" title="Máquinas">
+        <FaRoute />
+      </button>
+      <button onClick={() => navigate('/menu-curso')} className="icon-button" title="Cursos">
+        <FaBook />
+      </button>
+      <button onClick={() => navigate('/relatorios')} className="icon-button" title="Relatórios">
+        <FaFile />
+      </button>
+      <button onClick={() => navigate('/cadastro-navbar')} className="icon-button" title="Cadastros">
+        <FaCog />
+      </button>
+    </aside>
+  );
+}
 
-      {/* Conteúdo principal, que muda com base na página selecionada */}
-      <div className="main-content">
+function PaginaHome() {
+  return (
+    <Router>
+      <div className="home-container">
+        <Sidebar /> {/* Adicionando a sidebar como um componente separado */}
 
-        {currentPage === 'MenuFunc' && <MenuFunc />} 
-
-        {currentPage === 'ConsultaFuncs' && <ConsultaFuncs />}
-
-        {currentPage === 'MenuMaq' && <MenuMaq />} 
-
-        {currentPage === 'ConsultaMaquinas' && <ConsultaMaquinas />}
-
-        {currentPage === 'MenuCurso' && <MenuCurso />}
-
-        {currentPage === 'CadastroNavbar' && <NavbarPage />} 
-
-        {currentPage === 'option4' && (
-          <div>
-            <h1>Relatórios</h1>
-            <p>Em construção</p>
-          </div>
-        )}
+        {/* Conteúdo principal */}
+        <div className="main-content">
+          <Routes>
+            <Route path="/" element={<MenuFunc />} />
+            <Route path="/consulta-funcs" element={<ConsultaFuncs />} />
+            <Route path="/menu-maq" element={<MenuMaq />} />
+            <Route path="/consulta-maquinas" element={<ConsultaMaquinas />} />
+            <Route path="/menu-curso" element={<MenuCurso />} />
+            <Route path="/cadastro-navbar" element={<NavbarPage />} />
+            <Route path="/cursos-da-maquina/:id" element={<CursosDaMaquina />} />
+            <Route path="/relatorios" element={<div><h1>Relatórios</h1><p>Em construção</p></div>} />
+            <Route path="*" element={<Navigate to="/" />} /> {/* Redireciona para a home se a rota não existir */}
+          </Routes>
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 
