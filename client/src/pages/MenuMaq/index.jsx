@@ -40,6 +40,7 @@ function MenuMaq() {
         <main className="menu-maq-content">
             <section className="menu-maq-section">
                 <h2 className="maquinas-text">Máquinas</h2>
+                <hr className="separador" />
                 <input
                     type="text"
                     placeholder="Pesquisar máquinas..."

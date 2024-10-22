@@ -107,3 +107,10 @@
 .cursos-text{
     font-size: 24px;
 }
+
+.separador {
+    margin: 20px 0;
+    border: none;
+    border-top: 2px solid #ccc;
+    width: 100%;
+}

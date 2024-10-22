@@ -57,6 +57,9 @@ function MenuFunc() {
             <section className="courses-section">
                 <div className="courses-row">
                     <h2>Máquinas Pendentes</h2>
+
+                    <hr className="separador" /> 
+
                     <div className="carousel-container">
                         <button className="carousel-arrow left-arrow" onClick={() => handleScroll(maquinasCarousel, 'left')}>‹</button>
                         <div className="carousel" ref={maquinasCarousel}>
@@ -88,6 +91,9 @@ function MenuFunc() {
 
                 <div className="courses-row">
                     <h2>Cursos Pendentes</h2>
+
+                    <hr className="separador" />                 
+
                     <div className="carousel-container">
                         <button className="carousel-arrow left-arrow" onClick={() => handleScroll(cursosCarousel, 'left')}>‹</button>
                         <div className="carousel" ref={cursosCarousel}>

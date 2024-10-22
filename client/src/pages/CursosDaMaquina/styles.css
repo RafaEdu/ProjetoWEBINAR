@@ -47,6 +47,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s, transform 0.3s;
     position: relative;
+    cursor: pointer;
 }
 
 .curso-item:hover {
@@ -112,3 +113,11 @@
     font-size: 11px;
     color: #333;
 }
+
+.separador {
+    margin: 20px 0;
+    border: none;
+    border-top: 2px solid #ccc;
+    width: 100%;
+}
+

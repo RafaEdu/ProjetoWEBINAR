@@ -41,6 +41,9 @@ function CursosDaMaquina() {
                     <span className="cdm-progress-value">{progressoMaquina}%</span>
                 </div>
             </div>
+
+            <hr className="separador" /> 
+
             {cursos.length > 0 ? (
                 cursos.map(curso => {
                     const progressPercent = curso.progresso || 0; // Supondo que 'progresso' seja um campo do curso

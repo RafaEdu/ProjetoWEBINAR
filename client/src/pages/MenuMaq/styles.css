@@ -114,4 +114,14 @@
 
 .maquinas-text {
     font-size: 24px;
+    color: #034638;
+    margin-bottom: 0; /* Remove o espaçamento inferior do título */
+}
+
+.separador {
+    border: none;
+    border-top: 2px solid #ccc;
+    width: 100%;
+    margin-top: 0; /* Remove o espaçamento superior do separador */
+    margin-bottom: 20px; /* Mantém espaço abaixo do separador */
 }

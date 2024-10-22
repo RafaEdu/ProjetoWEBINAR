@@ -34,6 +34,8 @@ function MenuCurso() {
         <main className="menu-curso-content">
             <section className="menu-curso-section">
                 <h2 className="cursos-text">Cursos</h2>
+                
+                <hr className="separador" />
 
                 {/* Barra de pesquisa */}
                 <input
@@ -45,7 +47,7 @@ function MenuCurso() {
                 />
 
                 <div className="menu-curso-grid">
-                    {filteredCursos.map((curso) => {
+                    {filteredCursos.map((curso, index) => {
                         const progressPercent = 70; // Progresso estático
                         return (
                             <div key={curso.id} className="menu-curso-item">

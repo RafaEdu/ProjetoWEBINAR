@@ -22,11 +22,7 @@
     margin-bottom: 5px;
 }
 
-h2 {
-    margin-top: 0px; /* Reduz o espaço acima da mensagem */
-    margin-bottom: 20px; /* Ajusta o espaço abaixo */
-    color: #034638; /* Torna o título mais destacado com a cor primária */
-}
+
 
 .courses-section {
     display: flex;
@@ -179,4 +175,19 @@ h2 {
     font-size: 14px;
     color: #333;
     text-align: center; /* Centraliza o texto abaixo da barra */
+}
+
+
+.cursos-text {
+    font-size: 24px;
+    color: #034638;
+    margin-bottom: 0; /* Remove o espaçamento inferior do título */
+}
+
+.separador {
+    border: none;
+    border-top: 2px solid #ccc;
+    width: 100%;
+    margin-top: 0; /* Remove o espaçamento superior do separador */
+    margin-bottom: 20px; /* Mantém espaço abaixo do separador */
 }
