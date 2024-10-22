@@ -56,6 +56,17 @@ class AulaViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    def list_by_curso(self, request, idcurso=None):
+        """
+        Retrieve a list of all aulas related to a specific curso.
+        """
+        if idcurso is None:
+            return Response({"error": "idcurso is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        aulas = Aula.objects.filter(idcurso=idcurso)
+        serializer = self.get_serializer(aulas, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class VideoViewSet(viewsets.ModelViewSet):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer

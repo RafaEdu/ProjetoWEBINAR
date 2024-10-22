@@ -8,6 +8,7 @@ import MenuMaq from '../MenuMaq';
 import ConsultaFuncs from '../ConsultaFuncs'; 
 import ConsultaMaquinas from '../ConsultaMaquinas';
 import CursosDaMaquina from '../CursosDaMaquina'; // Componente para cursos por máquina
+import AulasDoCurso from '../AulasDoCurso'; // Componente para cursos por máquina
 import './styles.css';
 import { FaHome, FaBook, FaRoute, FaFile, FaCog, FaUsers } from 'react-icons/fa'; 
 
@@ -55,6 +56,7 @@ function PaginaHome() {
             <Route path="/menu-maq" element={<MenuMaq />} />
             <Route path="/consulta-maquinas" element={<ConsultaMaquinas />} />
             <Route path="/menu-curso" element={<MenuCurso />} />
+            <Route path="/curso/:idcurso" element={<AulasDoCurso />} />
             <Route path="/cadastro-navbar" element={<NavbarPage />} />
             <Route path="/cursos-da-maquina/:id" element={<CursosDaMaquina />} />
             <Route path="/relatorios" element={<div><h1>Relatórios</h1><p>Em construção</p></div>} />

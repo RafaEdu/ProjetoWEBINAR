@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { FaSwatchbook } from 'react-icons/fa'; 
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import './styles.css'; 
 
 function MenuCurso() {
     const [cursosEmProgresso, setCursosEmProgresso] = useState([]); // Estado para armazenar cursos
     const [searchTerm, setSearchTerm] = useState(''); // Estado para armazenar a busca
+    const navigate = useNavigate(); // Hook para navegação
 
     useEffect(() => {
         const fetchCursos = async () => {
@@ -30,6 +32,11 @@ function MenuCurso() {
         curso.titulo.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    // Função para redirecionar ao clicar em um curso
+    const handleCursoClick = (idcurso) => {
+        navigate(`/curso/${idcurso}`); // Redireciona para a página do curso
+    };
+
     return (
         <main className="menu-curso-content">
             <section className="menu-curso-section">
@@ -47,10 +54,10 @@ function MenuCurso() {
                 />
 
                 <div className="menu-curso-grid">
-                    {filteredCursos.map((curso, index) => {
+                    {filteredCursos.map((curso) => {
                         const progressPercent = 70; // Progresso estático
                         return (
-                            <div key={curso.id} className="menu-curso-item">
+                            <div key={curso.idcurso} className="menu-curso-item" onClick={() => handleCursoClick(curso.idcurso)}> {/* Adicionado onClick */}
                                 <div className="menu-curso-nome">{curso.titulo}</div> {/* Nome do curso no topo */}
                                 <div className="menu-curso-icon-container">
                                     <div className="menu-curso-icon-circle">

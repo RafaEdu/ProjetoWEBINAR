@@ -1,0 +1,107 @@
+/* styles.css */
+
+.aulas-curso-content {
+    padding: 20px;
+    background-color: #f5f5f5; /* Cor de fundo clara */
+}
+
+.aulas-curso-section {
+    margin-bottom: 20px;
+}
+
+.aulas-text {
+    font-size: 24px;
+    color: #034638; /* Cor primária */
+    margin-bottom: 15px;
+}
+
+.aulas-curso-list {
+    display: flex; /* Usar flexbox para alinhar as aulas */
+    flex-direction: column; /* Colocar itens em uma coluna */
+    gap: 10px; /* Espaçamento reduzido entre os itens */
+}
+
+.aulas-curso-item {
+    display: flex; /* Usar flexbox para alinhar conteúdo no item */
+    align-items: center; /* Alinhar itens verticalmente ao centro */
+    width: 100%; /* Ocupa metade da tela */
+    background-color: white; /* Fundo branco para cada item */
+    border: 1px solid #ddd; /* Borda leve */
+    border-radius: 8px; /* Bordas arredondadas */
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    position: relative; /* Para o posicionamento do botão */
+    justify-content: space-between; /* Espaçamento entre itens */
+}
+
+.aulas-curso-item h3 {
+    font-size: 18px; /* Tamanho do título da aula */
+    color: #034638; /* Cor primária */
+    margin: 0; /* Remove margens padrão */
+    flex: 1; /* Permite que o título ocupe o espaço restante */
+    text-align: center; /* Centraliza o texto do título horizontalmente */
+}
+
+.aulas-curso-item p {
+    color: #555; /* Cor do texto da descrição */
+    margin: 0; /* Remove margens padrão */
+}
+
+.duracao-aula {
+    min-width: 100px; /* Largura mínima para a duração */
+    display: flex; /* Usar flexbox para alinhar o ícone e o texto */
+    align-items: center; /* Alinhar verticalmente o ícone e o texto */
+}
+
+.aulas-curso-button {
+    margin: 0;
+    background-color: #41b02a; /* Cor do botão */
+    color: white; /* Cor do texto do botão */
+    border: none; /* Remove borda */
+    border-radius: 5px; /* Bordas arredondadas do botão */
+    padding: 8px 12px; /* Espaçamento interno do botão */
+    cursor: pointer; /* Mão ao passar o mouse */
+    margin-right: 10px; /* Espaçamento à direita do botão */
+}
+
+.aulas-curso-button:hover {
+    background-color: #36a525; /* Cor do botão ao passar o mouse */
+}
+
+.separador {
+    margin: 20px 0;
+    border: none;
+    border-top: 2px solid #ccc;
+    width: 100%;
+}
+
+.adc-progress-bar-container {
+    display: flex;
+    align-items: center;
+    width: 500px;
+    height: 12px;
+    background-color: #ddd;
+    border-radius: 5px;
+    position: relative;
+}
+
+.adc-progress-bar {
+    height: 12px;
+    background-color: #41b02a; /* Cor da barra de progresso */
+    border-radius: 5px;
+}
+
+.adc-progress-value {
+    position: absolute;
+    right: 5px;
+    font-size: 12px;
+    color: #333;
+    margin-left: 10px;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}

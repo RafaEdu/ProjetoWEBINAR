@@ -52,7 +52,8 @@
 }
 
 .courses-section .carousel-item {
-    background-color: #b1b1b1;
+    background-color: white; /* Fundo branco para cada item */
+    border: 1px solid #ddd; /* Borda leve */
 }
 
 .carousel-container {
@@ -101,6 +102,7 @@
     border-radius: 8px;
     flex-shrink: 0;
     background-color: rgb(236, 226, 226);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden; /* Oculta qualquer conteúdo que exceda o limite */
     display: flex;
     flex-direction: column;
@@ -110,7 +112,7 @@
 }
 
 .carousel-item:hover {
-    color: #034638;
+    color: #41b02a;
     transform: scale(1.05); /* Aumenta um pouco o tamanho no hover */
 }
 

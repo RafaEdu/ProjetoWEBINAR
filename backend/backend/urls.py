@@ -15,9 +15,9 @@ router.register(r'aulas', AulaViewSet)
 router.register(r'videos', VideoViewSet)
 router.register(r'slides', SlideViewSet)
 
-
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('api/aulas/curso/<int:idcurso>/', AulaViewSet.as_view({'get': 'list_by_curso'}), name='aula-by-curso'),  # Nova rota
 ]
 
 if settings.DEBUG:

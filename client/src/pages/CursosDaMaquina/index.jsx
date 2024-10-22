@@ -6,8 +6,8 @@ import './styles.css';
 function CursosDaMaquina() {
     const { id } = useParams(); // Obtém o ID da máquina da URL
     const [cursos, setCursos] = useState([]);
-    const [nomeMaquina, setNomeMaquina] = useState(''); // Estado para armazenar o nome da máquina
-    const [progressoMaquina, setProgressoMaquina] = useState(62); // Valor fixo de progresso da máquina (ajustável no código)
+    const [nomeMaquina, setNomeMaquina] = useState(''); 
+    const [progressoMaquina, setProgressoMaquina] = useState(62); 
 
     useEffect(() => {
         const fetchData = async () => {
@@ -35,7 +35,7 @@ function CursosDaMaquina() {
     return (
         <div className="cursos-da-maquina-content">
             <div className="header-container">
-                <h2 className="cursos-da-maquina-header">Cursos da {nomeMaquina}</h2>
+                <h2 className="cursos-da-maquina-header">Cursos da Máquina: {nomeMaquina}</h2>
                 <div className="cdm-progress-bar-container">
                     <div className="cdm-progress-bar" style={{ width: `${progressoMaquina}%` }}></div>
                     <span className="cdm-progress-value">{progressoMaquina}%</span>

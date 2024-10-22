@@ -50,6 +50,11 @@ function MenuFunc() {
         navigate(`/cursos-da-maquina/${idmaquina}`);
     };
 
+    // Função para lidar com o clique em um curso e redirecionar para a página AulasDoCurso
+    const handleCursoClick = (idcurso) => {
+        navigate(`/curso/${idcurso}`);
+    };
+
     return (
         <main className="content">
             <h2>Olá, (NOME DO USUÁRIO)</h2>
@@ -101,7 +106,7 @@ function MenuFunc() {
                                 {cursosEmProgresso.map((curso) => {
                                     const progressPercent = 70; // Exemplo de valor estático para progresso
                                     return (
-                                        <div key={curso.id} className="carousel-item">
+                                        <div key={curso.id} className="carousel-item" onClick={() => handleCursoClick(curso.idcurso)}> {/* Adiciona o evento de clique */}
                                             <div className="curso-nome">{curso.titulo}</div>
                                             <div className="icon-container">
                                                 <div className="icon-circle">

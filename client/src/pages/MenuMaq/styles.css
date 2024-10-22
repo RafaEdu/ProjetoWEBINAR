@@ -20,7 +20,8 @@
     width: 210px; /* Largura fixa */
     height: 250px;
     padding: 15px;
-    background-color: #b1b1b1;
+    background-color: white; /* Fundo branco para cada item */
+    border: 1px solid #ddd; /* Borda leve */
     border-radius: 8px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -34,7 +35,7 @@
 
 /* Efeito hover */
 .menu-maq-item:hover {
-    color: #034638;
+    color: #41b02a;
     transform: scale(1.05); /* Aumenta um pouco o tamanho no hover */
 }
 
