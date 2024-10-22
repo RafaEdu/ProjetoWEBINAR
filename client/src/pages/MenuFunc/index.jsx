@@ -37,7 +37,7 @@ function MenuFunc() {
     }, []);
 
     const handleScroll = (carouselRef, direction) => {
-        const itemWidth = carouselRef.current.querySelector('.carousel-item').offsetWidth + 75;
+        const itemWidth = carouselRef.current.querySelector('.carousel-item').offsetWidth + 70;
         if (direction === 'left') {
             carouselRef.current.scrollBy({ left: -itemWidth, behavior: 'smooth' });
         } else {
