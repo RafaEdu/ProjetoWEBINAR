@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Importação do useNavigate
 import { FaDesktop } from 'react-icons/fa'; 
 import './styles.css';
 
@@ -8,6 +8,7 @@ function CursosDaMaquina() {
     const [cursos, setCursos] = useState([]);
     const [nomeMaquina, setNomeMaquina] = useState(''); 
     const [progressoMaquina, setProgressoMaquina] = useState(62); 
+    const navigate = useNavigate(); // Hook de navegação
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,6 +33,11 @@ function CursosDaMaquina() {
         fetchData(); // Faz a chamada para buscar os dados
     }, [id]);
 
+    // Função para lidar com o clique em um curso
+    const handleCursoClick = (idcurso) => {
+        navigate(`/curso/${idcurso}`); // Redireciona para a página de aulas do curso
+    };
+
     return (
         <div className="cursos-da-maquina-content">
             <div className="header-container">
@@ -48,7 +54,7 @@ function CursosDaMaquina() {
                 cursos.map(curso => {
                     const progressPercent = curso.progresso || 0; // Supondo que 'progresso' seja um campo do curso
                     return (
-                        <div key={curso.idcurso} className="curso-item">
+                        <div key={curso.idcurso} className="curso-item" onClick={() => handleCursoClick(curso.idcurso)}> {/* Adiciona o evento de clique */}
                             <h3 className="curso-titulo">{curso.titulo}</h3>
                             <p className="curso-descricao">{curso.descricao}</p>
                             <div className="curso-duracao-container">
