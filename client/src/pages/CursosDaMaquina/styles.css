@@ -1,44 +1,73 @@
-/* Estilos específicos para CursosDaMaquina */
 .cursos-da-maquina-content {
     flex-grow: 1;
     padding: 20px;
 }
 
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
 .cursos-da-maquina-header {
     font-size: 24px;
-    margin-bottom: 20px;
     color: #034638; /* Cor primária */
 }
 
+.cdm-progress-bar-container {
+    display: flex;
+    align-items: center;
+    width: 500px;
+    height: 12px;
+    background-color: #ddd;
+    border-radius: 5px;
+    position: relative;
+}
+
+.cdm-progress-bar {
+    height: 12px;
+    background-color: #41b02a; /* Cor da barra de progresso */
+    border-radius: 5px;
+}
+
+.cdm-progress-value {
+    position: absolute;
+    right: 5px;
+    font-size: 12px;
+    color: #333;
+    margin-left: 10px;
+}
+
 .curso-item {
-    background-color: #f5f5f5; /* Cor de fundo dos itens do curso */
+    background-color: #b1b1b1;;
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, transform 0.3s; /* Transições suaves */
+    transition: background-color 0.3s, transform 0.3s;
+    position: relative;
 }
 
 .curso-item:hover {
-    background-color: #eaeaea; /* Cor de fundo ao passar o mouse */
-    transform: scale(1.02); /* Aumenta um pouco o tamanho no hover */
+    transform: scale(1.02);
 }
 
 .curso-titulo {
     font-size: 20px;
-    color: #333; /* Cor do texto do título */
+    color: #333;
     margin: 0;
 }
 
 .curso-descricao {
     font-size: 14px;
-    color: #666; /* Cor do texto da descrição */
+    color: #666;
     margin-top: 5px;
 }
 
 .curso-sem-cursos {
     font-size: 18px;
-    color: #666; /* Cor para mensagem de nenhum curso encontrado */
+    color: #666;
     text-align: center;
     margin-top: 20px;
 }
@@ -57,11 +86,29 @@
 
 .curso-progress-bar {
     height: 8px;
-    background-color: #41b02a; /* Cor da barra de progresso */
+    background-color: #41b02a;
     border-radius: 5px;
 }
 
 .curso-progress-text {
     font-size: 14px;
+    color: #333;
+}
+
+.curso-duracao-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.curso-icon {
+    color: blue;
+    margin-right: 5px;
+}
+
+.curso-duracao-text {
+    font-size: 11px;
     color: #333;
 }

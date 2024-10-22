@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { FaSwatchbook } from 'react-icons/fa'; // Importação dos ícones
-import { BsTools } from 'react-icons/bs'; // Importação dos ícones
+import { useNavigate } from 'react-router-dom'; // Importação para navegação
+import { FaSwatchbook, FaTools } from 'react-icons/fa'; // Importação dos ícones
 import './style.css';
 
 function MenuFunc() {
@@ -9,6 +9,7 @@ function MenuFunc() {
 
     const maquinasCarousel = useRef(null);
     const cursosCarousel = useRef(null);
+    const navigate = useNavigate(); // Hook de navegação
 
     useEffect(() => {
         const fetchMaquinas = async () => {
@@ -44,6 +45,11 @@ function MenuFunc() {
         }
     };
 
+    // Função para lidar com o clique em uma máquina e redirecionar para a página CursosDaMaquina
+    const handleMaquinaClick = (idmaquina) => {
+        navigate(`/cursos-da-maquina/${idmaquina}`);
+    };
+
     return (
         <main className="content">
             <h2>Olá, (NOME DO USUÁRIO)</h2>
@@ -58,11 +64,11 @@ function MenuFunc() {
                                 {maquinasEmProgresso.map((maquina) => {
                                     const progressPercent = 40; // Exemplo de valor estático para progresso
                                     return (
-                                        <div key={maquina.id} className="carousel-item">
+                                        <div key={maquina.idmaquina} className="carousel-item" onClick={() => handleMaquinaClick(maquina.idmaquina)}> {/* Adiciona o evento de clique */}
                                             <div className="maquina-nome">{maquina.nomeMaquina}</div>
                                             <div className="icon-container">
                                                 <div className="icon-circle">
-                                                    <BsTools className="icon" />  {/* Ícone de ferramenta para máquinas */}
+                                                    <FaTools className="icon" />  {/* Ícone de ferramenta para máquinas */}
                                                 </div>
                                             </div>
                                             <div className="progress-container">

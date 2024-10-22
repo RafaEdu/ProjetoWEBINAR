@@ -34,8 +34,7 @@
 
 /* Efeito hover */
 .menu-maq-item:hover {
-    background-color: #41b02a; /* Muda a cor de fundo no hover */
-    color: white; /* Muda a cor do texto para branco */
+    color: #034638;
     transform: scale(1.05); /* Aumenta um pouco o tamanho no hover */
 }
 

@@ -19,6 +19,7 @@
     flex-grow: 1;
     padding: 20px;
     padding-top: 30px;
+    margin-bottom: 5px;
 }
 
 h2 {
@@ -35,7 +36,7 @@ h2 {
 }
 
 .courses-row {
-    margin-bottom: 20px;
+    margin-top: 2px;
 }
 
 .carousel {
@@ -50,6 +51,8 @@ h2 {
 .carousel-content {
     display: flex;
     gap: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .courses-section .carousel-item {
@@ -106,11 +109,17 @@ h2 {
     flex-direction: column;
     align-items: center;
     color: #333;
+    cursor: pointer;
+}
+
+.carousel-item:hover {
+    color: #034638;
+    transform: scale(1.05); /* Aumenta um pouco o tamanho no hover */
 }
 
 .maquina-nome, .curso-nome {
     font-size: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     word-wrap: break-word;
     white-space: normal;
     overflow: hidden;
