@@ -9,7 +9,7 @@ nav {
   display: flex;
   justify-content: center; /* Centraliza horizontalmente */
   align-items: center; /* Centraliza verticalmente */
-  height: 80px; /* Define uma altura para alinhar os botões */
+  height: 50px; /* Define uma altura para alinhar os botões */
 }
 
 nav button {
