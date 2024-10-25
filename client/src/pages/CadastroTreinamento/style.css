@@ -1,6 +1,6 @@
 /* style.css */
 .container {
-  max-width: 700px;
+  width: 500px;
   margin: 50px auto; /* Centraliza a container */
   padding: 20px;
   background-color: white;
