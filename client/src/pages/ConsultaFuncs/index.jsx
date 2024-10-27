@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './style.css';
 
 function ListaUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
-  const [busca, setBusca] = useState('');  // Estado para armazenar o termo de busca
+  const [busca, setBusca] = useState('');
+  const navigate = useNavigate(); // Para redirecionar o usuário
 
   // Função para buscar os usuários do sistema
   const fetchUsuarios = async () => {
@@ -21,22 +23,19 @@ function ListaUsuarios() {
   };
 
   useEffect(() => {
-    fetchUsuarios();  // Buscar usuários ao carregar o componente
+    fetchUsuarios();
   }, []);
 
-  // Função para filtrar usuários com base no termo de busca
-  const usuariosFiltrados = usuarios.filter((usuario) => 
-    usuario.nome.toLowerCase().includes(busca.toLowerCase()) || 
+  const usuariosFiltrados = usuarios.filter((usuario) =>
+    usuario.nome.toLowerCase().includes(busca.toLowerCase()) ||
     usuario.email.toLowerCase().includes(busca.toLowerCase())
   );
 
-  // Função para redirecionar para a tela de edição
-  const handleEdit = (id) => {
-    // Redirecionar para a tela de edição do usuário
-    window.location.href = `/edita-funcionario/${id}`;
+  // Função para redirecionar para a tela de edição com os dados do usuário
+  const handleEdit = (usuario) => {
+    navigate('/CadastroUsuarios', { state: { usuario } }); // Envia o usuário para edição
   };
 
-  // Função para excluir um usuário
   const handleDelete = async (id) => {
     try {
       const response = await fetch(`http://localhost:8000/api/users/${id}`, {
@@ -44,7 +43,6 @@ function ListaUsuarios() {
       });
 
       if (response.ok) {
-        // Atualizar a lista de usuários após a exclusão
         setUsuarios(usuarios.filter((usuario) => usuario.id !== id));
         alert('Usuário excluído com sucesso.');
       } else {
@@ -58,8 +56,6 @@ function ListaUsuarios() {
   return (
     <div className="container">
       <h1>Lista de Usuários Cadastrados</h1>
-
-      {/* Barra de busca */}
       <input 
         type="text"
         placeholder="Buscar por nome ou email..."
@@ -76,18 +72,17 @@ function ListaUsuarios() {
               <strong>Email:</strong> {usuario.email}<br />
               <strong>Admin:</strong> {usuario.is_admin ? 'Sim' : 'Não'}
               
-              {/* Botões de edição e exclusão */}
               <button 
                 className="botao-editar" 
-                onClick={() => handleEdit(usuario.id)}
+                onClick={() => handleEdit(usuario)}
               >
-                <i className="fa fa-cog"></i> {/* Ícone de engrenagem */}
+                <i className="fa fa-cog"></i>
               </button>
               <button 
                 className="botao-excluir" 
                 onClick={() => handleDelete(usuario.id)}
               >
-                <i className="fa fa-times"></i> {/* Ícone de X */}
+                <i className="fa fa-times"></i>
               </button>
             </li>
           ))
