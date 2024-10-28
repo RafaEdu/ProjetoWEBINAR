@@ -4,10 +4,10 @@ import NavbarPage from '../CadastrosNavbar';
 import MenuFunc from '../MenuFunc';
 import MenuCurso from '../MenuCurso';
 import MenuMaq from '../MenuMaq';
-import ConsultaFuncs from '../ConsultaFuncs'; 
+import ConsultaFuncs from '../ConsultaFuncs';
 import ConsultaMaquinas from '../ConsultaMaquinas';
 import CursosDaMaquina from '../CursosDaMaquina';
-import AulasDoCurso from '../AulasDoCurso'; 
+import AulasDoCurso from '../AulasDoCurso';
 import CadastroTreinamento from '../CadastroTreinamento';
 import CadastroAulas from '../CadastroAulas';
 import CadastroMaquinas from '../CadastroMaquinas';
@@ -15,7 +15,7 @@ import CadastroUsuarios from '../CadastroUsuarios';
 import CadastroArea from '../CadastroAreas';
 import CadastroQuestionario from '../CadastroQuestionario';
 import './styles.css';
-import { FaHome, FaBook, FaRoute, FaFile, FaCog, FaUsers } from 'react-icons/fa'; 
+import { FaHome, FaBook, FaRoute, FaFile, FaCog, FaUsers, FaTools } from 'react-icons/fa';
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ function Sidebar() {
         <FaUsers />
       </button>
       <button onClick={() => navigate('/consulta-maquinas')} className="icon-button" title="Consulta Máquinas">
-        <FaUsers />
+        <FaTools />
       </button>
       <button onClick={() => navigate('/menu-maq')} className="icon-button" title="Máquinas">
         <FaRoute />
@@ -54,7 +54,7 @@ function PaginaHome() {
         <Sidebar />
 
         <div className="main-content">
-          
+
           <Routes>
             <Route path="/" element={<MenuFunc />} />
             <Route path="/consulta-funcs" element={<ConsultaFuncs />} />
@@ -63,7 +63,7 @@ function PaginaHome() {
             <Route path="/menu-curso" element={<MenuCurso />} />
             <Route path="/curso/:idcurso" element={<AulasDoCurso />} />
             <Route path="/cursos-da-maquina/:id" element={<CursosDaMaquina />} />
-            
+
 
             <Route path="/cadastro-navbar" element={<NavbarPage />} />
             <Route path="/cadastro-treinamento" element={<CadastroTreinamento />} />
@@ -72,7 +72,7 @@ function PaginaHome() {
             <Route path="/cadastro-usuarios" element={<CadastroUsuarios />} />
             <Route path="/cadastro-area" element={<CadastroArea />} />
             <Route path="/cadastro-questionario" element={<CadastroQuestionario />} />
-            
+
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>
