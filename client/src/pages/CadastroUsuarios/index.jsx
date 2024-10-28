@@ -10,7 +10,7 @@ function CadastroUsuarios() {
   const [opcoesMaquinas, setOpcoesMaquinas] = useState([]);
   const [maquinasSelecionadas, setMaquinasSelecionadas] = useState([]);
   const [selectedMachine, setSelectedMachine] = useState('');
-  
+
   const [nomeFuncionario, setNomeFuncionario] = useState(usuarioParaEditar ? usuarioParaEditar.nome : '');
   const [emailFuncionario, setEmailFuncionario] = useState(usuarioParaEditar ? usuarioParaEditar.email : '');
   const [senhaFuncionario, setSenhaFuncionario] = useState('');
@@ -18,6 +18,7 @@ function CadastroUsuarios() {
   const [erro, setErro] = useState('');
   const [mensagem, setMensagem] = useState('');
 
+  // Função para carregar todas as máquinas e máquinas do usuário
   useEffect(() => {
     const fetchMaquinas = async () => {
       try {
@@ -28,12 +29,43 @@ function CadastroUsuarios() {
           label: maquina.nomeMaquina,
         }));
         setOpcoesMaquinas(maquinas);
+
+        // Se o usuário estiver sendo editado, filtra as máquinas dele
+        if (usuarioParaEditar && usuarioParaEditar.maquinas) {
+          const maquinasDoUsuario = maquinas.filter(maquina => 
+            usuarioParaEditar.maquinas.includes(maquina.value)
+          );
+          setMaquinasSelecionadas(maquinasDoUsuario);
+
+          // Remove máquinas do usuário da lista de opções
+          setOpcoesMaquinas(maquinas.filter(maquina =>
+            !usuarioParaEditar.maquinas.includes(maquina.value)
+          ));
+        }
       } catch (error) {
         console.error('Erro ao buscar máquinas:', error);
       }
     };
     fetchMaquinas();
-  }, []);
+  }, [usuarioParaEditar]);
+
+  const handleSelecionarMaquina = (event) => {
+    const selectedValue = event.target.value;
+    const maquinaSelecionada = opcoesMaquinas.find(maquina => maquina.value.toString() === selectedValue);
+    if (maquinaSelecionada) {
+      setMaquinasSelecionadas([...maquinasSelecionadas, maquinaSelecionada]);
+      setOpcoesMaquinas(opcoesMaquinas.filter(maquina => maquina.value.toString() !== selectedValue));
+      setSelectedMachine('');
+    }
+  };
+
+  const handleRemoverMaquina = (valor) => {
+    const maquinaRemovida = maquinasSelecionadas.find(maquina => maquina.value === valor);
+    if (maquinaRemovida) {
+      setMaquinasSelecionadas(maquinasSelecionadas.filter(maquina => maquina.value !== valor));
+      setOpcoesMaquinas([...opcoesMaquinas, maquinaRemovida]);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -111,6 +143,34 @@ function CadastroUsuarios() {
           />
           Admin
         </label>
+
+        <select
+          name="maquinas"
+          value={selectedMachine}
+          onChange={handleSelecionarMaquina}
+        >
+          <option value="" disabled>Selecione uma máquina</option>
+          {opcoesMaquinas.map(maquina => (
+            <option key={maquina.value} value={maquina.value}>
+              {maquina.label}
+            </option>
+          ))}
+        </select>
+        <div>
+          <h2>Máquinas Selecionadas</h2>
+          {maquinasSelecionadas.length > 0 ? (
+            <ul>
+              {maquinasSelecionadas.map(maquina => (
+                <li key={maquina.value}>
+                  {maquina.label}
+                  <button type="button" onClick={() => handleRemoverMaquina(maquina.value)}>Remover</button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>Nenhuma máquina selecionada.</p>
+          )}
+        </div>
         
         <button type="submit">{usuarioParaEditar ? 'Atualizar Usuário' : 'Cadastrar Usuário'}</button>
         {erro && <p style={{ color: 'red' }}>{erro}</p>}
