@@ -62,6 +62,7 @@ function PaginaHome() {
             <Route path="/consulta-maquinas" element={<ConsultaMaquinas />} />
             <Route path="/menu-curso" element={<MenuCurso />} />
             <Route path="/curso/:idcurso" element={<AulasDoCurso />} />
+            <Route path="/cursos-da-maquina/:id" element={<CursosDaMaquina />} />
             
 
             <Route path="/cadastro-navbar" element={<NavbarPage />} />
