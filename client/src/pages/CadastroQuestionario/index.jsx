@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import NavbarPage from '../CadastrosNavbar';
 import './styles.css';
 
 function CriarQuestionario() {
@@ -96,6 +97,7 @@ function CriarQuestionario() {
 
   return (
     <div className="container">
+      <NavbarPage />
       <h1>Criar Questionário</h1>
       <form onSubmit={handleSubmit}>
         <input

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './styles.css';
+import NavbarPage from '../CadastrosNavbar';
 
 function CadastroMaquinas() {
   const [nomeMaquina, setNomeMaquina] = useState('');
@@ -44,6 +45,7 @@ function CadastroMaquinas() {
 
   return (
     <div className="container">
+      <NavbarPage />
       <h1>Cadastro de Máquinas</h1>
       <form onSubmit={handleSubmit}>
         <input

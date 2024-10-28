@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './styles.css';
+import NavbarPage from '../CadastrosNavbar';
 const CadastroArea = () => {
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
@@ -37,6 +38,7 @@ const CadastroArea = () => {
 
     return (
         <div className="container">
+            <NavbarPage />
             <h1>Cadastro de Área</h1>
             <form onSubmit={handleSubmit}>
                 <input 

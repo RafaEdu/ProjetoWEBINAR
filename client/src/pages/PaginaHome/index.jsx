@@ -1,4 +1,3 @@
-// src/PaginaHome.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import NavbarPage from '../CadastrosNavbar';
@@ -7,13 +6,19 @@ import MenuCurso from '../MenuCurso';
 import MenuMaq from '../MenuMaq';
 import ConsultaFuncs from '../ConsultaFuncs'; 
 import ConsultaMaquinas from '../ConsultaMaquinas';
-import CursosDaMaquina from '../CursosDaMaquina'; // Componente para cursos por máquina
-import AulasDoCurso from '../AulasDoCurso'; // Componente para cursos por máquina
+import CursosDaMaquina from '../CursosDaMaquina';
+import AulasDoCurso from '../AulasDoCurso'; 
+import CadastroTreinamento from '../CadastroTreinamento';
+import CadastroAulas from '../CadastroAulas';
+import CadastroMaquinas from '../CadastroMaquinas';
+import CadastroUsuarios from '../CadastroUsuarios';
+import CadastroArea from '../CadastroAreas';
+import CadastroQuestionario from '../CadastroQuestionario';
 import './styles.css';
 import { FaHome, FaBook, FaRoute, FaFile, FaCog, FaUsers } from 'react-icons/fa'; 
 
 function Sidebar() {
-  const navigate = useNavigate(); // Inicializa o hook useNavigate
+  const navigate = useNavigate();
 
   return (
     <aside className="sidebar">
@@ -46,10 +51,10 @@ function PaginaHome() {
   return (
     <Router>
       <div className="home-container">
-        <Sidebar /> {/* Adicionando a sidebar como um componente separado */}
+        <Sidebar />
 
-        {/* Conteúdo principal */}
         <div className="main-content">
+          
           <Routes>
             <Route path="/" element={<MenuFunc />} />
             <Route path="/consulta-funcs" element={<ConsultaFuncs />} />
@@ -57,15 +62,23 @@ function PaginaHome() {
             <Route path="/consulta-maquinas" element={<ConsultaMaquinas />} />
             <Route path="/menu-curso" element={<MenuCurso />} />
             <Route path="/curso/:idcurso" element={<AulasDoCurso />} />
+            
+
             <Route path="/cadastro-navbar" element={<NavbarPage />} />
-            <Route path="/cursos-da-maquina/:id" element={<CursosDaMaquina />} />
-            <Route path="/relatorios" element={<div><h1>Relatórios</h1><p>Em construção</p></div>} />
-            <Route path="*" element={<Navigate to="/" />} /> {/* Redireciona para a home se a rota não existir */}
+            <Route path="/cadastro-treinamento" element={<CadastroTreinamento />} />
+            <Route path="/cadastro-aulas" element={<CadastroAulas />} />
+            <Route path="/cadastro-maquinas" element={<CadastroMaquinas />} />
+            <Route path="/cadastro-usuarios" element={<CadastroUsuarios />} />
+            <Route path="/cadastro-area" element={<CadastroArea />} />
+            <Route path="/cadastro-questionario" element={<CadastroQuestionario />} />
+            
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>
       </div>
     </Router>
   );
 }
+
 
 export default PaginaHome;

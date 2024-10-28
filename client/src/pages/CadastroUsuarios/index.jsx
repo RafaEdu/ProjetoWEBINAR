@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import NavbarPage from '../CadastrosNavbar';
 import './style.css';
 
 function CadastroUsuarios() {
@@ -81,6 +82,7 @@ function CadastroUsuarios() {
 
   return (
     <div className="container">
+      <NavbarPage />
       <h1>{usuarioParaEditar ? 'Editar Usuário' : 'Cadastro de Usuários'}</h1>
       <form onSubmit={handleSubmit}>
         <input

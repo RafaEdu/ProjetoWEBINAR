@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './style.css'; // Mantendo o estilo igual aos outros
+import NavbarPage from '../CadastrosNavbar';
 
 function CadastroAula() {
   const [titulo, setTitulo] = useState('');
@@ -127,6 +128,7 @@ function CadastroAula() {
 
   return (
     <div className="container">
+      <NavbarPage />
       <h1>Cadastro de Aula</h1>
       {isLoading ? (
         <p>Carregando cursos...</p>

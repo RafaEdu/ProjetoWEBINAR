@@ -33,7 +33,7 @@ function ListaUsuarios() {
 
   // Função para redirecionar para a tela de edição com os dados do usuário
   const handleEdit = (usuario) => {
-    navigate('/CadastroUsuarios', { state: { usuario } }); // Envia o usuário para edição
+    navigate('/cadastro-usuarios', { state: { usuario } }); // Envia o usuário para edição
   };
 
   const handleDelete = async (id) => {

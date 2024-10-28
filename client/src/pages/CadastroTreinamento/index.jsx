@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import NavbarPage from '../CadastrosNavbar'; // Ajuste o caminho conforme necessário
 import './style.css';
 
 function CadastroTreinamento() {
@@ -103,6 +104,7 @@ function CadastroTreinamento() {
 
   return (
     <div className='container'>
+      <NavbarPage />
       <form onSubmit={handleSubmit}>
         <h1>Cadastro De Novo Curso</h1>
         <input
