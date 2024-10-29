@@ -33,7 +33,6 @@ class CursoViewSet(viewsets.ModelViewSet):
     serializer_class = CursoSerializer  
 
 
-
 class AulaViewSet(viewsets.ModelViewSet):
     queryset = Aula.objects.all()
     serializer_class = AulaSerializer
@@ -52,16 +51,17 @@ class AulaViewSet(viewsets.ModelViewSet):
             slide = Slide.objects.create(arquivo_pdf=slide_data)
             serializer.save(idslide=slide)
         else:
-            return Response({"error": "You must attach a video or a slide."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Você deve anexar um vídeo ou um slide."}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Retorna a resposta do serializer, que já deve incluir os ids
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list_by_curso(self, request, idcurso=None):
         """
-        Retrieve a list of all aulas related to a specific curso.
+        Recupera uma lista de todas as aulas relacionadas a um curso específico.
         """
         if idcurso is None:
-            return Response({"error": "idcurso is required."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "idcurso é obrigatório."}, status=status.HTTP_400_BAD_REQUEST)
 
         aulas = Aula.objects.filter(idcurso=idcurso)
         serializer = self.get_serializer(aulas, many=True)

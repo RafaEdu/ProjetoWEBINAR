@@ -102,6 +102,7 @@ function CadastroUsuarios() {
         setSenhaFuncionario('');
         setMaquinasSelecionadas([]);
         setErro('');
+        setIsAdmin (false);
         setMensagem(usuarioParaEditar ? 'Funcionário atualizado com sucesso!' : 'Funcionário cadastrado com sucesso!');
       } else {
         setErro(usuarioParaEditar ? 'Erro ao atualizar o funcionário.' : 'Erro ao cadastrar o funcionário.');

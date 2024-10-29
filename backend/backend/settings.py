@@ -48,6 +48,10 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+
+X_FRAME_OPTIONS = 'ALLOWALL'
+
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,6 +63,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+
+
 
 ROOT_URLCONF = 'backend.urls'
 

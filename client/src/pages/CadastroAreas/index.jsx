@@ -4,6 +4,13 @@ import NavbarPage from '../CadastrosNavbar';
 const CadastroArea = () => {
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
+    const [erro, setErro] = useState('');
+    const [mensagem, setMensagem] = useState('');
+
+    const handleChange = (event) => {
+        setErro(''); // Limpa o erro ao digitar um novo nome
+        setMensagem(''); // Limpa a mensagem ao alterar os dados
+      };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -23,18 +30,17 @@ const CadastroArea = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                alert('Área cadastrada com sucesso!');
-                setNome('');
+                setNome(''); // Reseta o campo de input
                 setDescricao('');
-            } else {
-                alert('Erro ao cadastrar a área.');
+                setMensagem('Área cadastrada com sucesso!');
+              } else {
+                setErro('Erro ao cadastrar a área.');
+              }
+            } catch (error) {
+              console.error('Erro ao cadastrar área:', error);
+              setErro('Erro na conexão com o servidor.');
             }
-        } catch (error) {
-            console.error('Erro:', error);
-            alert('Erro na conexão com o servidor.');
-        }
-    };
+          };
 
     return (
         <div className="container">
@@ -54,6 +60,8 @@ const CadastroArea = () => {
                     onChange={(e) => setDescricao(e.target.value)}
                     required
                 />
+                 {erro && <p style={{ color: 'red' }}>{erro}</p>}
+                 {mensagem && <p style={{ color: 'green' }}>{mensagem}</p>}
                 <button type="submit">Cadastrar Área</button>
             </form>
         </div>

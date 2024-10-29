@@ -13,6 +13,7 @@ function CadastroAula() {
   const [curso, setCurso] = useState([]); // Para armazenar os cursos
   const [selectedCurso, setSelectedCurso] = useState(''); // Para armazenar o curso selecionado
   const [erro, setErro] = useState('');
+  const [mensagem, setMensagem] = useState('');
   const [sucesso, setSucesso] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -99,18 +100,17 @@ function CadastroAula() {
             body: formData,
         });
 
-        if (!response.ok) {
-            throw new Error('Erro ao cadastrar a aula');
+        if (response.ok) {
+          resetForm(); 
+          setMensagem('Aula cadastrada com sucesso!');
+        } else {
+          setErro('Erro ao cadastrar a aula.');
         }
-
-        setSucesso('Aula cadastrada com sucesso!');
-        setErro('');
-        resetForm();
-    } catch (error) {
+      } catch (error) {
         console.error('Erro ao cadastrar aula:', error);
-        setErro('Erro ao cadastrar a aula. Tente novamente mais tarde.');
-    }
-};
+        setErro('Erro na conexão com o servidor.');
+      }
+    };
 
 
   const resetForm = () => {
@@ -124,6 +124,7 @@ function CadastroAula() {
     setSelectedCurso('');
     setErro('');
     setSucesso('');
+    setMensagem('');
   };
 
   return (
@@ -226,7 +227,7 @@ function CadastroAula() {
           )}
 
           {erro && <p style={{ color: 'red' }}>{erro}</p>}
-          {sucesso && <p style={{ color: 'green' }}>{sucesso}</p>}
+          {mensagem && <p style={{ color: 'green' }}>{mensagem}</p>}
 
           <button type="submit">Cadastrar Aula</button>
         </form>

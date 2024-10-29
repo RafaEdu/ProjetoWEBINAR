@@ -8,6 +8,7 @@ import ConsultaFuncs from '../ConsultaFuncs';
 import ConsultaMaquinas from '../ConsultaMaquinas';
 import CursosDaMaquina from '../CursosDaMaquina';
 import AulasDoCurso from '../AulasDoCurso';
+import VisualizarAula from '../VisualizarAula';
 import CadastroTreinamento from '../CadastroTreinamento';
 import CadastroAulas from '../CadastroAulas';
 import CadastroMaquinas from '../CadastroMaquinas';
@@ -63,8 +64,7 @@ function PaginaHome() {
             <Route path="/menu-curso" element={<MenuCurso />} />
             <Route path="/curso/:idcurso" element={<AulasDoCurso />} />
             <Route path="/cursos-da-maquina/:id" element={<CursosDaMaquina />} />
-
-
+            <Route path="/aula/:idaula" element={<VisualizarAula />} />
             <Route path="/cadastro-navbar" element={<NavbarPage />} />
             <Route path="/cadastro-treinamento" element={<CadastroTreinamento />} />
             <Route path="/cadastro-aulas" element={<CadastroAulas />} />

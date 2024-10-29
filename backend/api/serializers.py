@@ -75,12 +75,14 @@ class SlideSerializer(serializers.ModelSerializer):
         fields = ['idslide', 'arquivo_pdf']
 
 class AulaSerializer(serializers.ModelSerializer):
-    video = VideoSerializer(required=False)  # Relacionamento opcional com Video
-    slide = SlideSerializer(required=False)  # Relacionamento opcional com Slide
+    video = VideoSerializer(required=False)
+    slide = SlideSerializer(required=False)
+    idvideo_id = serializers.IntegerField(source='idvideo.idvideo', read_only=True)  # Adicione este campo
+    idslide_id = serializers.IntegerField(source='idslide.idslide', read_only=True)  # E este campo
 
     class Meta:
         model = Aula
-        fields = ['idaula', 'titulo', 'duracao', 'idcurso', 'video', 'slide']
+        fields = ['idaula', 'titulo', 'duracao', 'idcurso', 'video', 'slide', 'idvideo_id', 'idslide_id']  # Inclua os IDs aqui
 
     def create(self, validated_data):
         video_data = validated_data.pop('video', None)

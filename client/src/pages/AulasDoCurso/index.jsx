@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FaRegClock } from 'react-icons/fa'; 
 import './styles.css';
 
 function AulasDoCurso() {
     const { idcurso } = useParams();
+    const navigate = useNavigate();
     const [aulas, setAulas] = useState([]);
     const [tituloCurso, setTituloCurso] = useState('');
     const [progressoCurso, setProgressoCurso] = useState(55);
-    const [showHelpMessage, setShowHelpMessage] = useState(false);
 
     useEffect(() => {
         const fetchAulas = async () => {
@@ -35,14 +35,14 @@ function AulasDoCurso() {
         fetchTituloCurso();
     }, [idcurso]);
 
-    const toggleHelpMessage = () => {
-        setShowHelpMessage(!showHelpMessage);
+    const handleAssistirClick = (idaula) => {
+        navigate(`/aula/${idaula}`);
     };
 
     return (
         <div className="aulas-curso-content">
             <div className="curso-container">
-            <div className="aulas-container">
+                <div className="aulas-container">
                     <div className="header-container">
                         <h2 className="aulas-text">Aulas do Curso: {tituloCurso}</h2>
                         <div className="adc-progress-bar-container">
@@ -54,7 +54,7 @@ function AulasDoCurso() {
                     <div className="aulas-curso-list">
                         {aulas.map(aula => (
                             <div key={aula.idaula} className="aulas-curso-item">
-                                <button className="aulas-curso-button">Assistir</button>
+                                <button className="aulas-curso-button" onClick={() => handleAssistirClick(aula.idaula)}>Assistir</button>
                                 <h3 className="aulas-text">{aula.titulo}</h3>
                                 <p className="duracao-aula">
                                     <FaRegClock style={{ marginRight: '5px', color: 'blue' }} />
@@ -70,7 +70,6 @@ function AulasDoCurso() {
                         <p>Assista as aulas em ordem para liberar as próximas.</p>
                     </div>
                 </div>
-                
             </div>
         </div>
     );

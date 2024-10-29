@@ -11,6 +11,7 @@ function CadastroTreinamento() {
   const [selectedArea, setSelectedArea] = useState("");
   const [errorMessage, setErrorMessage] = useState(""); 
   const [isLoading, setIsLoading] = useState(true); 
+  const [mensagem, setMensagem] = useState('');
 
   // Fetch de máquinas, áreas e questionários
   useEffect(() => {
@@ -81,20 +82,19 @@ function CadastroTreinamento() {
         body: JSON.stringify(cursoData),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Erro ao cadastrar o curso:', errorData);
-        throw new Error(`Erro ao cadastrar o curso: ${errorData.detail || 'Erro desconhecido'}`);
+      if (response.ok) {
+        event.target.reset();
+        setSelectedMaquinas([]);
+        setSelectedQuestionario("");
+        setSelectedArea("");
+        setErrorMessage(""); 
+              setMensagem('Curso cadastrado com sucesso!');
+      } else {
+        setErro('Erro ao cadastrar o curso.');
       }
-
-      event.target.reset();
-      setSelectedMaquinas([]);
-      setSelectedQuestionario("");
-      setSelectedArea("");
-      setErrorMessage(""); 
     } catch (error) {
-      console.error('Erro ao cadastrar o curso:', error);
-      setErrorMessage(error.message);
+      console.error('Erro ao cadastrar curso:', error);
+      setErro('Erro na conexão com o servidor.');
     }
   };
 
@@ -174,7 +174,7 @@ function CadastroTreinamento() {
         </select>
 
         {errorMessage && <p className="error-message">{errorMessage}</p>}
-
+        {mensagem && <p style={{ color: 'green' }}>{mensagem}</p>}
         <button type='submit'>Cadastrar</button>
       </form>
     </div>

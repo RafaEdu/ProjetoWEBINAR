@@ -4,6 +4,8 @@ import './styles.css';
 
 function CriarQuestionario() {
   const [titulo, setTitulo] = useState('');
+  const [erro, setErro] = useState('');
+  const [mensagem, setMensagem] = useState('');
   const [perguntas, setPerguntas] = useState([
     { texto: '', alternativas: [{ texto: '', is_correta: false }] }
   ]);
@@ -79,17 +81,15 @@ function CriarQuestionario() {
         });
     
         if (response.ok) {
-          console.log('Questionário cadastrado com sucesso!');
-          
-          // Limpar campos após o cadastro bem-sucedido
-          setTitulo('');  // Limpar o campo título
-          setPerguntas([{ texto: '', alternativas: [{ texto: '', is_correta: false }] }]);  // Resetar perguntas e alternativas
-    
+          setTitulo('');  
+          setPerguntas([{ texto: '', alternativas: [{ texto: '', is_correta: false }] }]);
+          setMensagem('Questionário cadastrado com sucesso!');
         } else {
-          console.error('Erro ao cadastrar o questionário.');
+          setErro('Erro ao cadastrar o questionário.');
         }
       } catch (error) {
-        console.error('Erro na conexão com o servidor:', error);
+        console.error('Erro ao cadastrar questionário:', error);
+        setErro('Erro na conexão com o servidor.');
       }
     };
     
@@ -143,6 +143,8 @@ function CriarQuestionario() {
           </div>
         ))}
 
+          {erro && <p style={{ color: 'red' }}>{erro}</p>}
+          {mensagem && <p style={{ color: 'green' }}>{mensagem}</p>}
         <button type="button" onClick={adicionarPergunta}>Nova Pergunta</button>
         <button type="submit">Salvar Questionário</button>
       </form>
