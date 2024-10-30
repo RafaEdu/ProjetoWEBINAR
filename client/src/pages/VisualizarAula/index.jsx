@@ -31,8 +31,6 @@ function VisualizarAula() {
                     if (!slideResponse.ok) throw new Error('Erro ao buscar slide');
                     
                     const slideData = await slideResponse.json();
-                    console.log('Dados do slide:', slideData); // Para debug
-                    
                     if (slideData && slideData.arquivo_pdf) {
                         setConteudo({ tipo: 'slide', url: slideData.arquivo_pdf });
                     } else {
@@ -50,35 +48,49 @@ function VisualizarAula() {
     if (!aula) return <p>Carregando...</p>;
 
     return (
-        <div className="aula-viewer">
-            <h2>{aula.titulo}</h2>
-            {conteudo ? (
-                conteudo.tipo === 'video' ? (
-                    <div>
-                        <h3>Vídeo</h3>
-                        <video controls width="600">
-                            <source src={conteudo.url} type="video/mp4" />
-                            Seu navegador não suporta a exibição de vídeos.
-                        </video>
-                    </div>
-                ) : (
-                    <div>
-                        <h3>Slides</h3>
-                        <iframe
-                            src={conteudo.url}
-                            width="600"
-                            height="500"
-                            title="Slides PDF"
-                            frameBorder="0"
-                        >
-                            Este navegador não suporta iframes.
-                        </iframe>
-                    </div>
-                )
-            ) : (
-                <p>Conteúdo da aula não disponível.</p>
-            )}
-        </div>
+        <main className="aula-content">
+            {/* Avisos */}
+            <div className="alert alert-info">
+                <i className="icon-info"></i> Visualize todo o conteúdo e após finalizar, clique em Concluir Aula.
+            </div>
+            <div className="alert alert-warning">
+                <i className="icon-warning"></i> Se o conteúdo for vídeo, é necessário assistir todo o vídeo sem pular partes. Caso contrário, não será possível Concluir Aula.
+            </div>
+
+            {/* Seção da Aula */}
+            <section className="aula-section">
+                <h2 className="aula-title">{aula.titulo}</h2>
+                <hr className="aula-separator" />
+                
+                <div className="aula-content-display">
+                    {conteudo ? (
+                        conteudo.tipo === 'video' ? (
+                            <div className="aula-video-container">
+                                <h3>Vídeo</h3>
+                                <video controls width="900">
+                                    <source src={conteudo.url} type="video/mp4" />
+                                    Seu navegador não suporta a exibição de vídeos.
+                                </video>
+                            </div>
+                        ) : (
+                            <div className="aula-slide-container">
+                                <h3>Slides</h3>
+                                <iframe
+                                    src={conteudo.url}
+                                    title="Slides PDF"
+                                    className="aula-slide"
+                                    frameBorder="0"
+                                >
+                                    Este navegador não suporta iframes.
+                                </iframe>
+                            </div>
+                        )
+                    ) : (
+                        <p className="aula-content-empty">Conteúdo da aula não disponível.</p>
+                    )}
+                </div>
+            </section>
+        </main>
     );
 }
 
