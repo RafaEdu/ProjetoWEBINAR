@@ -7,8 +7,9 @@ function ConsultaGeral() {
   const [usuarios, setUsuarios] = useState([]);
   const [maquinas, setMaquinas] = useState([]);
   const [cursos, setCursos] = useState([]);
-  const [areas, setAreas] = useState([]);
-  const [aulas, setAulas] = useState([]); // Novo estado para aulas
+  const [aulas, setAulas] = useState([]);
+  const [questionarios, setQuestionarios] = useState([]);
+  const [treinamentos, setTreinamentos] = useState([]);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('pessoas');
   const [busca, setBusca] = useState('');
 
@@ -54,21 +55,6 @@ function ConsultaGeral() {
     }
   };
 
-  const fetchAreas = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/api/areas/');
-      if (response.ok) {
-        const data = await response.json();
-        setAreas(data);
-      } else {
-        console.error('Erro ao buscar áreas.');
-      }
-    } catch (error) {
-      console.error('Erro na conexão com o servidor:', error);
-    }
-  };
-
-  // Função para buscar aulas
   const fetchAulas = async () => {
     try {
       const response = await fetch('http://localhost:8000/api/aulas/');
@@ -83,29 +69,61 @@ function ConsultaGeral() {
     }
   };
 
+  const fetchQuestionarios = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/questionarios/');
+      if (response.ok) {
+        const data = await response.json();
+        setQuestionarios(data);
+      } else {
+        console.error('Erro ao buscar questionários.');
+      }
+    } catch (error) {
+      console.error('Erro na conexão com o servidor:', error);
+    }
+  };
+
+  const fetchTreinamentos = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/cursos/');
+      if (response.ok) {
+        const data = await response.json();
+        setTreinamentos(data);
+      } else {
+        console.error('Erro ao buscar treinamentos.');
+      }
+    } catch (error) {
+      console.error('Erro na conexão com o servidor:', error);
+    }
+  };
+
   useEffect(() => {
     if (categoriaSelecionada === 'pessoas') fetchUsuarios();
     else if (categoriaSelecionada === 'maquinas') fetchMaquinas();
     else if (categoriaSelecionada === 'cursos') fetchCursos();
-    else if (categoriaSelecionada === 'areas') fetchAreas();
-    else if (categoriaSelecionada === 'aulas') fetchAulas(); // Adiciona a condição para aulas
+    else if (categoriaSelecionada === 'aulas') fetchAulas();
+    else if (categoriaSelecionada === 'questionarios') fetchQuestionarios();
+    else if (categoriaSelecionada === 'treinamentos') fetchTreinamentos();
   }, [categoriaSelecionada]);
 
-  const itensFiltrados = (categoriaSelecionada === 'pessoas' ? usuarios :
-                          categoriaSelecionada === 'maquinas' ? maquinas :
-                          categoriaSelecionada === 'cursos' ? cursos :
-                          categoriaSelecionada === 'areas' ? areas : aulas)
-                          .filter(item => 
-                            item.nome?.toLowerCase().includes(busca.toLowerCase()) || 
-                            item.titulo?.toLowerCase().includes(busca.toLowerCase()) // Filtra por título em aulas
-                          );
+  const itensFiltrados = (
+    categoriaSelecionada === 'pessoas' ? usuarios :
+    categoriaSelecionada === 'maquinas' ? maquinas :
+    categoriaSelecionada === 'cursos' ? cursos :
+    categoriaSelecionada === 'aulas' ? aulas :
+    categoriaSelecionada === 'questionarios' ? questionarios : treinamentos
+  ).filter(item => 
+    (item.nome || item.nomeMaquina || item.nomeCurso || item.titulo)
+      .toLowerCase()
+      .includes(busca.toLowerCase())
+  );
 
   const handleEditar = (item) => {
     const path = categoriaSelecionada === 'pessoas' ? '/cadastro-usuarios' :
                  categoriaSelecionada === 'maquinas' ? '/cadastro-maquinas' :
                  categoriaSelecionada === 'cursos' ? '/cadastro-cursos' :
-                 categoriaSelecionada === 'areas' ? '/cadastro-areas' :
-                 '/cadastro-aulas';
+                 categoriaSelecionada === 'aulas' ? '/cadastro-aulas' :
+                 categoriaSelecionada === 'questionarios' ? '/cadastro-questionarios' : '/cadastro-treinamentos';
     navigate(path, { state: { item } });
   };
 
@@ -114,11 +132,13 @@ function ConsultaGeral() {
       ? `http://localhost:8000/api/users/${id}/`
       : categoriaSelecionada === 'maquinas' 
       ? `http://localhost:8000/api/maquinas/${id}/`
-      : categoriaSelecionada === 'cursos' 
+      : categoriaSelecionada === 'cursos'
       ? `http://localhost:8000/api/cursos/${id}/`
-      : categoriaSelecionada === 'areas' 
-      ? `http://localhost:8000/api/areas/${id}/`
-      : `http://localhost:8000/api/aulas/${id}/`;
+      : categoriaSelecionada === 'aulas'
+      ? `http://localhost:8000/api/aulas/${id}/`
+      : categoriaSelecionada === 'questionarios'
+      ? `http://localhost:8000/api/questionarios/${id}/`
+      : `http://localhost:8000/api/cursos/${id}/`;
 
     if (window.confirm("Tem certeza que deseja excluir este item?")) {
       try {
@@ -128,8 +148,9 @@ function ConsultaGeral() {
           if (categoriaSelecionada === 'pessoas') fetchUsuarios();
           else if (categoriaSelecionada === 'maquinas') fetchMaquinas();
           else if (categoriaSelecionada === 'cursos') fetchCursos();
-          else if (categoriaSelecionada === 'areas') fetchAreas();
-          else fetchAulas();
+          else if (categoriaSelecionada === 'aulas') fetchAulas();
+          else if (categoriaSelecionada === 'questionarios') fetchQuestionarios();
+          else fetchTreinamentos();
         } else {
           alert('Erro ao excluir o item.');
         }
@@ -147,8 +168,9 @@ function ConsultaGeral() {
         <button onClick={() => setCategoriaSelecionada('pessoas')}>Pessoas</button>
         <button onClick={() => setCategoriaSelecionada('maquinas')}>Máquinas</button>
         <button onClick={() => setCategoriaSelecionada('cursos')}>Cursos</button>
-        <button onClick={() => setCategoriaSelecionada('areas')}>Áreas</button>
-        <button onClick={() => setCategoriaSelecionada('aulas')}>Aulas</button> {/* Botão de aulas */}
+        <button onClick={() => setCategoriaSelecionada('aulas')}>Aulas</button>
+        <button onClick={() => setCategoriaSelecionada('questionarios')}>Questionários</button>
+        <button onClick={() => setCategoriaSelecionada('treinamentos')}>Treinamentos</button>
       </div>
       
       <input 
@@ -163,12 +185,13 @@ function ConsultaGeral() {
         {itensFiltrados.length > 0 ? (
           itensFiltrados.map((item, index) => (
             <li key={index} className="item-lista">
-              <strong>{categoriaSelecionada === 'pessoas' ? 'Nome:' : 'Título:'}</strong> {item.nome || item.titulo}<br />
+              <strong>Nome:</strong> {item.nome || item.nomeMaquina || item.nomeCurso || item.titulo}<br />
               {categoriaSelecionada === 'pessoas' && <><strong>Email:</strong> {item.email}</>}
               {categoriaSelecionada === 'maquinas' && <><strong>Modelo:</strong> {item.modelo}</>}
               {categoriaSelecionada === 'cursos' && <><strong>Descrição:</strong> {item.descricao}</>}
-              {categoriaSelecionada === 'areas' && <><strong>Descrição:</strong> {item.descricao}</>}
               {categoriaSelecionada === 'aulas' && <><strong>Duração:</strong> {item.duracao}</>}
+              {categoriaSelecionada === 'questionarios' && <><strong>Título:</strong> {item.titulo}</>}
+              {categoriaSelecionada === 'treinamentos' && <><strong>Descrição:</strong> {item.descricao}</>}
               
               <button onClick={() => handleEditar(item)}>Editar</button>
               <button onClick={() => handleExcluir(item.id)}>Excluir</button>
