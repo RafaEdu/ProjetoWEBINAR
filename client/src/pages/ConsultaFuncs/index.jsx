@@ -124,7 +124,7 @@ function ConsultaGeral() {
       categoriaSelecionada === 'maquinas' ? '/cadastro-maquinas' :
         categoriaSelecionada === 'cursos' ? '/cadastro-treinamento' :
           categoriaSelecionada === 'aulas' ? '/cadastro-aulas' :
-            categoriaSelecionada === 'questionarios' ? '/cadastro-questionarios' : '/cadastro-area';
+            categoriaSelecionada === 'questionarios' ? '/cadastro-questionario' : '/cadastro-area';
     navigate(path, { state: { dadosEdicao: item } });
   };
 

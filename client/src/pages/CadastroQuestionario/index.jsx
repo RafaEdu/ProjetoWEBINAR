@@ -1,14 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import NavbarPage from '../CadastrosNavbar';
 import './styles.css';
 
 function CriarQuestionario() {
+  const location = useLocation();
+  const questionarioParaEditar = location.state?.dadosEdicao; // Recebe os dados do item para edição
   const [titulo, setTitulo] = useState('');
   const [erro, setErro] = useState('');
   const [mensagem, setMensagem] = useState('');
   const [perguntas, setPerguntas] = useState([
     { texto: '', alternativas: [{ texto: '', is_correta: false }] }
   ]);
+
+  useEffect(() => {
+    if (questionarioParaEditar) {
+      setTitulo(questionarioParaEditar.titulo);
+      setPerguntas(questionarioParaEditar.perguntas);
+    }
+  }, [questionarioParaEditar]);
 
   const adicionarPergunta = () => {
     setPerguntas([...perguntas, { texto: '', alternativas: [{ texto: '', is_correta: false }] }]);
@@ -56,49 +66,51 @@ function CriarQuestionario() {
     setPerguntas(novasPerguntas);
   };
 
-
-    const handleSubmit = async (event) => {
-      event.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     
-      const novoQuestionario = {
-        titulo: titulo,
-        perguntas: perguntas.map((pergunta) => ({
-          texto: pergunta.texto,
-          alternativas: pergunta.alternativas.map((alt) => ({
-            texto: alt.texto,
-            is_correta: alt.is_correta
-          }))
+    const novoQuestionario = {
+      titulo: titulo,
+      perguntas: perguntas.map((pergunta) => ({
+        texto: pergunta.texto,
+        alternativas: pergunta.alternativas.map((alt) => ({
+          texto: alt.texto,
+          is_correta: alt.is_correta
         }))
-      };
-    
-      try {
-        const response = await fetch('http://localhost:8000/api/questionarios/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(novoQuestionario),
-        });
-    
-        if (response.ok) {
-          setTitulo('');  
-          setPerguntas([{ texto: '', alternativas: [{ texto: '', is_correta: false }] }]);
-          setMensagem('Questionário cadastrado com sucesso!');
-        } else {
-          setErro('Erro ao cadastrar o questionário.');
-        }
-      } catch (error) {
-        console.error('Erro ao cadastrar questionário:', error);
-        setErro('Erro na conexão com o servidor.');
-      }
+      }))
     };
-    
 
+    try {
+      const method = questionarioParaEditar ? 'PUT' : 'POST'; // Se está editando, use PUT
+      const endpoint = questionarioParaEditar
+        ? `http://localhost:8000/api/questionarios/${questionarioParaEditar.id}/`
+        : 'http://localhost:8000/api/questionarios/';
+
+      const response = await fetch(endpoint, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(novoQuestionario),
+      });
+
+      if (response.ok) {
+        setTitulo('');  
+        setPerguntas([{ texto: '', alternativas: [{ texto: '', is_correta: false }] }]);
+        setMensagem('Questionário salvo com sucesso!');
+      } else {
+        setErro('Erro ao salvar o questionário.');
+      }
+    } catch (error) {
+      console.error('Erro ao salvar questionário:', error);
+      setErro('Erro na conexão com o servidor.');
+    }
+  };
 
   return (
     <div className="container">
       <NavbarPage />
-      <h1>Criar Questionário</h1>
+      <h1>{questionarioParaEditar ? 'Editar Questionário' : 'Criar Questionário'}</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -143,10 +155,10 @@ function CriarQuestionario() {
           </div>
         ))}
 
-          {erro && <p style={{ color: 'red' }}>{erro}</p>}
-          {mensagem && <p style={{ color: 'green' }}>{mensagem}</p>}
+        {erro && <p style={{ color: 'red' }}>{erro}</p>}
+        {mensagem && <p style={{ color: 'green' }}>{mensagem}</p>}
         <button type="button" onClick={adicionarPergunta}>Nova Pergunta</button>
-        <button type="submit">Salvar Questionário</button>
+        <button type="submit">{questionarioParaEditar ? 'Atualizar Questionário' : 'Salvar Questionário'}</button>
       </form>
     </div>
   );
