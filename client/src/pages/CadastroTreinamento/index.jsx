@@ -1,26 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import NavbarPage from '../CadastrosNavbar'; // Ajuste o caminho conforme necessário
+import NavbarPage from '../CadastrosNavbar';
+import { useLocation } from 'react-router-dom';
 import './style.css';
 
 function CadastroTreinamento() {
   const [opcoesDisponiveis, setOpcoesDisponiveis] = useState([]);
-  const [selectedMaquinas, setSelectedMaquinas] = useState([]); // Altere para armazenar múltiplas máquinas
+  const [selectedMaquinas, setSelectedMaquinas] = useState([]);
   const [areas, setAreas] = useState([]);
   const [questionarios, setQuestionarios] = useState([]);
   const [selectedQuestionario, setSelectedQuestionario] = useState("");
   const [selectedArea, setSelectedArea] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); 
-  const [isLoading, setIsLoading] = useState(true); 
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [mensagem, setMensagem] = useState('');
 
-  // Fetch de máquinas, áreas e questionários
+  // Estado para os campos do formulário
+  const [titulo, setTitulo] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [dataCriacao, setDataCriacao] = useState("");
+
+  const location = useLocation();
+  const treinamentoParaEditar = location.state?.dadosEdicao || null;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const maquinasResponse = await fetch('http://localhost:8000/api/maquinas/');
         const areasResponse = await fetch('http://localhost:8000/api/areas/');
         const questionariosResponse = await fetch('http://localhost:8000/api/questionarios/');
-        
+
         if (!maquinasResponse.ok || !areasResponse.ok || !questionariosResponse.ok) {
           throw new Error('Erro ao buscar dados das APIs');
         }
@@ -28,10 +36,20 @@ function CadastroTreinamento() {
         const maquinasData = await maquinasResponse.json();
         const areasData = await areasResponse.json();
         const questionariosData = await questionariosResponse.json();
-        
+
         setOpcoesDisponiveis(maquinasData);
         setAreas(areasData);
         setQuestionarios(questionariosData);
+
+        // Preenche os campos com os dados do treinamento a ser editado, se houver
+        if (treinamentoParaEditar) {
+          setTitulo(treinamentoParaEditar.titulo);
+          setDescricao(treinamentoParaEditar.descricao);
+          setDataCriacao(treinamentoParaEditar.dataCriacao);
+          setSelectedMaquinas(treinamentoParaEditar.maquina || []);
+          setSelectedQuestionario(treinamentoParaEditar.idquestionario || "");
+          setSelectedArea(treinamentoParaEditar.idarea || "");
+        }
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
         setErrorMessage('Erro ao carregar dados. Tente novamente mais tarde.');
@@ -43,58 +61,59 @@ function CadastroTreinamento() {
     fetchData();
   }, []);
 
-  // Função para gerenciar a seleção de múltiplas máquinas
   const handleSelecionarMaquinas = (event) => {
     const selectedValues = Array.from(event.target.selectedOptions, option => option.value);
-    setSelectedMaquinas(selectedValues); // Atualiza a lista de IDs de máquinas selecionadas
+    setSelectedMaquinas(selectedValues);
   };
 
   const handleSelecionarQuestionario = (event) => {
-    const selectedValue = event.target.value;
-    setSelectedQuestionario(selectedValue);
+    setSelectedQuestionario(event.target.value);
   };
 
   const handleSelecionarArea = (event) => {
-    const selectedValue = event.target.value;
-    setSelectedArea(selectedValue);
+    setSelectedArea(event.target.value);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const cursoData = {
-      titulo: event.target.titulo.value,
-      descricao: event.target.descricao.value,
-      dataCriacao: event.target.dataCriacao.value,
+      titulo,
+      descricao,
+      dataCriacao,
       idquestionario: selectedQuestionario,
       idarea: selectedArea,
-      maquina: selectedMaquinas, // Envia a lista de máquinas selecionadas
+      maquina: selectedMaquinas,
     };
 
-    console.log('Dados do curso a serem enviados:', cursoData);
-
     try {
-      const response = await fetch('http://localhost:8000/api/cursos/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(cursoData),
-      });
+      const response = await fetch(
+        `http://localhost:8000/api/cursos/${treinamentoParaEditar ? treinamentoParaEditar.id : ''}`,
+        {
+          method: treinamentoParaEditar ? 'PUT' : 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(cursoData),
+        }
+      );
 
       if (response.ok) {
-        event.target.reset();
-        setSelectedMaquinas([]);
-        setSelectedQuestionario("");
-        setSelectedArea("");
-        setErrorMessage(""); 
-              setMensagem('Curso cadastrado com sucesso!');
+        setMensagem(treinamentoParaEditar ? 'Curso atualizado com sucesso!' : 'Curso cadastrado com sucesso!');
+        if (!treinamentoParaEditar) {
+          setTitulo("");
+          setDescricao("");
+          setDataCriacao("");
+          setSelectedMaquinas([]);
+          setSelectedQuestionario("");
+          setSelectedArea("");
+        }
       } else {
-        setErro('Erro ao cadastrar o curso.');
+        setErrorMessage('Erro ao cadastrar ou atualizar o curso.');
       }
     } catch (error) {
-      console.error('Erro ao cadastrar curso:', error);
-      setErro('Erro na conexão com o servidor.');
+      console.error('Erro ao cadastrar ou atualizar curso:', error);
+      setErrorMessage('Erro na conexão com o servidor.');
     }
   };
 
@@ -106,25 +125,31 @@ function CadastroTreinamento() {
     <div className='container'>
       <NavbarPage />
       <form onSubmit={handleSubmit}>
-        <h1>Cadastro De Novo Curso</h1>
+        <h1>{treinamentoParaEditar ? 'Editar Curso' : 'Cadastro De Novo Curso'}</h1>
         <input
           name="titulo"
           type='text'
           placeholder='Dê um título'
           required
           maxLength={30}
+          value={titulo}
+          onChange={(e) => setTitulo(e.target.value)}
         />
         <input
           name="descricao"
           type='text'
           placeholder='Descrição do curso'
           required
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
         />
         <input
           name="dataCriacao"
           type='date'
           placeholder='Data de Criação do Curso'
           required
+          value={dataCriacao}
+          onChange={(e) => setDataCriacao(e.target.value)}
         />
 
         <h2>Máquinas</h2>
@@ -132,7 +157,7 @@ function CadastroTreinamento() {
           name="maquinas"
           value={selectedMaquinas}
           onChange={handleSelecionarMaquinas}
-          multiple // Adiciona suporte a múltipla seleção
+          multiple
           required
         >
           <option value="" disabled>Selecione uma ou mais máquinas</option>
@@ -143,7 +168,7 @@ function CadastroTreinamento() {
           ))}
         </select>
 
-        <h2>Área</h2> 
+        <h2>Área</h2>
         <select
           name="areas"
           value={selectedArea}
@@ -175,7 +200,7 @@ function CadastroTreinamento() {
 
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         {mensagem && <p style={{ color: 'green' }}>{mensagem}</p>}
-        <button type='submit'>Cadastrar</button>
+        <button type='submit'>{treinamentoParaEditar ? 'Atualizar Curso' : 'Cadastrar'}</button>
       </form>
     </div>
   );
