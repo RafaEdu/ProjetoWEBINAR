@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './style.css'; // Mantendo o estilo igual aos outros
+import { useLocation } from 'react-router-dom';
 import NavbarPage from '../CadastrosNavbar';
 
 function CadastroAula() {
@@ -16,6 +17,7 @@ function CadastroAula() {
   const [mensagem, setMensagem] = useState('');
   const [sucesso, setSucesso] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
   const aulaParaEditar = location.state?.dadosEdicao; // Recebe os dados do item para edição
 
   useEffect(() => {
@@ -30,6 +32,17 @@ function CadastroAula() {
 
         const cursosData = await cursosResponse.json();
         setCurso(cursosData); // Define os cursos recebidos da API
+
+        // Se estamos editando uma aula, preencher os campos com os dados da aula
+        if (aulaParaEditar) {
+          setTitulo(aulaParaEditar.titulo);
+          const [horas, minutos, segundos] = aulaParaEditar.duracao.split(':');
+          setHoras(horas);
+          setMinutos(minutos);
+          setSegundos(segundos);
+          setSelectedCurso(aulaParaEditar.idcurso);
+          setTipo(aulaParaEditar.video ? 'video' : 'slide'); // Define o tipo baseado no que está editando
+        }
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
         setErro('Erro ao carregar os cursos. Tente novamente mais tarde.');
@@ -39,7 +52,7 @@ function CadastroAula() {
     };
 
     fetchData();
-  }, []);
+  }, [aulaParaEditar]);
 
   const handleSelecionarCurso = (event) => {
     const selectedValue = event.target.value;
@@ -71,16 +84,16 @@ function CadastroAula() {
 
     // Validação dos campos obrigatórios
     if (!titulo || !horas || !minutos || !segundos || !tipo || !selectedCurso) {
-        setErro('Todos os campos são obrigatórios.');
-        return;
+      setErro('Todos os campos são obrigatórios.');
+      return;
     }
 
     if (tipo === 'video' && !video) {
-        setErro('Por favor, anexe um vídeo.');
-        return;
+      setErro('Por favor, anexe um vídeo.');
+      return;
     } else if (tipo === 'slide' && !slide) {
-        setErro('Por favor, anexe um arquivo PDF.');
-        return;
+      setErro('Por favor, anexe um arquivo PDF.');
+      return;
     }
 
     const formData = new FormData();
@@ -90,29 +103,31 @@ function CadastroAula() {
 
     // Adiciona o arquivo de vídeo ou slide dependendo do tipo selecionado
     if (tipo === 'video') {
-        formData.append('video', video);  // Envia o arquivo de vídeo
+      formData.append('video', video);  // Envia o arquivo de vídeo
     } else if (tipo === 'slide') {
-        formData.append('slide', slide);  // Envia o arquivo de slide (PDF)
+      formData.append('slide', slide);  // Envia o arquivo de slide (PDF)
     }
 
     try {
-        const response = await fetch('http://localhost:8000/api/aulas/', {
-            method: 'POST',
-            body: formData,
-        });
+      const url = aulaParaEditar ? `http://localhost:8000/api/aulas/${aulaParaEditar.id}/` : 'http://localhost:8000/api/aulas/';
+      const method = aulaParaEditar ? 'PUT' : 'POST'; // Altera o método para PUT se estiver editando
 
-        if (response.ok) {
-          resetForm(); 
-          setMensagem('Aula cadastrada com sucesso!');
-        } else {
-          setErro('Erro ao cadastrar a aula.');
-        }
-      } catch (error) {
-        console.error('Erro ao cadastrar aula:', error);
-        setErro('Erro na conexão com o servidor.');
+      const response = await fetch(url, {
+        method: method,
+        body: formData,
+      });
+
+      if (response.ok) {
+        resetForm(); 
+        setMensagem(aulaParaEditar ? 'Aula atualizada com sucesso!' : 'Aula cadastrada com sucesso!');
+      } else {
+        setErro('Erro ao cadastrar a aula.');
       }
-    };
-
+    } catch (error) {
+      console.error('Erro ao cadastrar aula:', error);
+      setErro('Erro na conexão com o servidor.');
+    }
+  };
 
   const resetForm = () => {
     setTitulo('');
@@ -131,7 +146,7 @@ function CadastroAula() {
   return (
     <div className="container">
       <NavbarPage />
-      <h1>Cadastro de Aula</h1>
+      <h1>{aulaParaEditar ? 'Editar Aula' : 'Cadastro de Aula'}</h1>
       {isLoading ? (
         <p>Carregando cursos...</p>
       ) : (
@@ -230,7 +245,7 @@ function CadastroAula() {
           {erro && <p style={{ color: 'red' }}>{erro}</p>}
           {mensagem && <p style={{ color: 'green' }}>{mensagem}</p>}
 
-          <button type="submit">Cadastrar Aula</button>
+          <button type="submit">{aulaParaEditar ? 'Atualizar Aula' : 'Cadastrar Aula'}</button>
         </form>
       )}
     </div>
