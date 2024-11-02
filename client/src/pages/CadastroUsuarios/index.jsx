@@ -5,7 +5,7 @@ import './style.css';
 
 function CadastroUsuarios() {
   const location = useLocation();
-  const usuarioParaEditar = location.state?.usuario || null;
+  const usuarioParaEditar = location.state?.dadosEdicao || null;
 
   const [opcoesMaquinas, setOpcoesMaquinas] = useState([]);
   const [maquinasSelecionadas, setMaquinasSelecionadas] = useState([]);

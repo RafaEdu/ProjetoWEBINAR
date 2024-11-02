@@ -16,6 +16,7 @@ function CadastroAula() {
   const [mensagem, setMensagem] = useState('');
   const [sucesso, setSucesso] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const aulaParaEditar = location.state?.dadosEdicao; // Recebe os dados do item para edição
 
   useEffect(() => {
     const fetchData = async () => {

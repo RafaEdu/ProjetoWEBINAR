@@ -5,7 +5,7 @@ import NavbarPage from '../CadastrosNavbar';
 
 function CadastroMaquinas() {
   const location = useLocation();
-  const maquinaParaEditar = location.state?.usuario; // Recebe os dados do item para edição
+  const maquinaParaEditar = location.state?.dadosEdicao; // Recebe os dados do item para edição
   const [nomeMaquina, setNomeMaquina] = useState(maquinaParaEditar?.nomeMaquina || '');
   const [erro, setErro] = useState('');
   const [mensagem, setMensagem] = useState('');

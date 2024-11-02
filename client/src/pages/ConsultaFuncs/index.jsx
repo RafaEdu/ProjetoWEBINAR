@@ -9,7 +9,7 @@ function ConsultaGeral() {
   const [cursos, setCursos] = useState([]);
   const [aulas, setAulas] = useState([]);
   const [questionarios, setQuestionarios] = useState([]);
-  const [treinamentos, setTreinamentos] = useState([]);
+  const [treinamentos, setarea] = useState([]);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('pessoas');
   const [busca, setBusca] = useState('');
 
@@ -83,14 +83,14 @@ function ConsultaGeral() {
     }
   };
 
-  const fetchTreinamentos = async () => {
+  const fetchAreas = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/cursos/');
+      const response = await fetch('http://localhost:8000/api/areas/');
       if (response.ok) {
         const data = await response.json();
-        setTreinamentos(data);
+        setarea(data);
       } else {
-        console.error('Erro ao buscar treinamentos.');
+        console.error('Erro ao buscar area.');
       }
     } catch (error) {
       console.error('Erro na conexão com o servidor:', error);
@@ -103,16 +103,16 @@ function ConsultaGeral() {
     else if (categoriaSelecionada === 'cursos') fetchCursos();
     else if (categoriaSelecionada === 'aulas') fetchAulas();
     else if (categoriaSelecionada === 'questionarios') fetchQuestionarios();
-    else if (categoriaSelecionada === 'treinamentos') fetchTreinamentos();
+    else if (categoriaSelecionada === 'area') fetchAreas();
   }, [categoriaSelecionada]);
 
   const itensFiltrados = (
     categoriaSelecionada === 'pessoas' ? usuarios :
-    categoriaSelecionada === 'maquinas' ? maquinas :
-    categoriaSelecionada === 'cursos' ? cursos :
-    categoriaSelecionada === 'aulas' ? aulas :
-    categoriaSelecionada === 'questionarios' ? questionarios : treinamentos
-  ).filter(item => 
+      categoriaSelecionada === 'maquinas' ? maquinas :
+        categoriaSelecionada === 'cursos' ? cursos :
+          categoriaSelecionada === 'aulas' ? aulas :
+            categoriaSelecionada === 'questionarios' ? questionarios : treinamentos
+  ).filter(item =>
     (item.nome || item.nomeMaquina || item.nomeCurso || item.titulo)
       .toLowerCase()
       .includes(busca.toLowerCase())
@@ -121,25 +121,27 @@ function ConsultaGeral() {
   // Função de edição
   const handleEditar = (item) => {
     const path = categoriaSelecionada === 'pessoas' ? '/cadastro-usuarios' :
-                 categoriaSelecionada === 'maquinas' ? '/cadastro-maquinas' :
-                 categoriaSelecionada === 'cursos' ? '/cadastro-cursos' :
-                 categoriaSelecionada === 'aulas' ? '/cadastro-aulas' :
-                 categoriaSelecionada === 'questionarios' ? '/cadastro-questionarios' : '/cadastro-treinamentos';
-    navigate(path, { state: { usuario: item } });
+      categoriaSelecionada === 'maquinas' ? '/cadastro-maquinas' :
+        categoriaSelecionada === 'cursos' ? '/cadastro-treinamento' :
+          categoriaSelecionada === 'aulas' ? '/cadastro-aulas' :
+            categoriaSelecionada === 'questionarios' ? '/cadastro-questionarios' : '/cadastro-area';
+    navigate(path, { state: { dadosEdicao: item } });
   };
 
   const handleExcluir = async (id) => {
-    const url = categoriaSelecionada === 'pessoas' 
+    const url = categoriaSelecionada === 'pessoas'
       ? `http://localhost:8000/api/users/${id}/`
-      : categoriaSelecionada === 'maquinas' 
-      ? `http://localhost:8000/api/maquinas/${id}/`
-      : categoriaSelecionada === 'cursos'
-      ? `http://localhost:8000/api/cursos/${id}/`
-      : categoriaSelecionada === 'aulas'
-      ? `http://localhost:8000/api/aulas/${id}/`
-      : categoriaSelecionada === 'questionarios'
-      ? `http://localhost:8000/api/questionarios/${id}/`
-      : `http://localhost:8000/api/cursos/${id}/`;
+      : categoriaSelecionada === 'maquinas'
+        ? `http://localhost:8000/api/maquinas/${id}/`
+        : categoriaSelecionada === 'cursos'
+          ? `http://localhost:8000/api/cursos/${id}/`
+          : categoriaSelecionada === 'aulas'
+            ? `http://localhost:8000/api/aulas/${id}/`
+            : categoriaSelecionada === 'questionarios'
+              ? `http://localhost:8000/api/questionarios/${id}/`
+              : `http://localhost:8000/api/cursos/${id}/`
+                ? `http://localhost:8000/api/areas/${id}`
+                : categoriaSelecionada === 'area';
 
     if (window.confirm("Tem certeza que deseja excluir este item?")) {
       try {
@@ -151,7 +153,7 @@ function ConsultaGeral() {
           else if (categoriaSelecionada === 'cursos') fetchCursos();
           else if (categoriaSelecionada === 'aulas') fetchAulas();
           else if (categoriaSelecionada === 'questionarios') fetchQuestionarios();
-          else fetchTreinamentos();
+          else fetchAreas();
         } else {
           alert('Erro ao excluir o item.');
         }
@@ -171,10 +173,10 @@ function ConsultaGeral() {
         <button onClick={() => setCategoriaSelecionada('cursos')}>Cursos</button>
         <button onClick={() => setCategoriaSelecionada('aulas')}>Aulas</button>
         <button onClick={() => setCategoriaSelecionada('questionarios')}>Questionários</button>
-        <button onClick={() => setCategoriaSelecionada('treinamentos')}>Treinamentos</button>
+        <button onClick={() => setCategoriaSelecionada('area')}>areas</button>
       </div>
-      
-      <input 
+
+      <input
         type="text"
         placeholder="Buscar..."
         value={busca}
@@ -192,8 +194,8 @@ function ConsultaGeral() {
               {categoriaSelecionada === 'cursos' && <><strong>Descrição:</strong> {item.descricao}</>}
               {categoriaSelecionada === 'aulas' && <><strong>Duração:</strong> {item.duracao}</>}
               {categoriaSelecionada === 'questionarios' && <><strong>Título:</strong> {item.titulo}</>}
-              {categoriaSelecionada === 'treinamentos' && <><strong>Descrição:</strong> {item.descricao}</>}
-              
+              {categoriaSelecionada === 'area' && <><strong>Descrição:</strong> {item.descricao}</>}
+
               <button onClick={() => handleEditar(item)}>Editar</button>
               <button onClick={() => handleExcluir(item.id)}>Excluir</button>
             </li>
