@@ -118,13 +118,14 @@ function ConsultaGeral() {
       .includes(busca.toLowerCase())
   );
 
+  // Função de edição
   const handleEditar = (item) => {
     const path = categoriaSelecionada === 'pessoas' ? '/cadastro-usuarios' :
                  categoriaSelecionada === 'maquinas' ? '/cadastro-maquinas' :
                  categoriaSelecionada === 'cursos' ? '/cadastro-cursos' :
                  categoriaSelecionada === 'aulas' ? '/cadastro-aulas' :
                  categoriaSelecionada === 'questionarios' ? '/cadastro-questionarios' : '/cadastro-treinamentos';
-    navigate(path, { state: { item } });
+    navigate(path, { state: { usuario: item } });
   };
 
   const handleExcluir = async (id) => {
