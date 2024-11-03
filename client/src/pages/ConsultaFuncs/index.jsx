@@ -129,13 +129,6 @@ function ConsultaGeral() {
             categoriaSelecionada === 'questionarios' ? '/cadastro-questionario' : '/cadastro-area';
     navigate(path, { state: { dadosEdicao: item } });
   };
-  useEffect(() => {
-    if (maquinaParaEditar) {
-      setNomeMaquina(maquinaParaEditar.nomeMaquina); // Preenche o campo nome caso esteja editando
-      console.log("Dados da máquina para editar:", maquinaParaEditar); // Log para verificar
-      console.log("ID da máquina para editar:", maquinaParaEditar.id); // Verifica o ID
-    }
-  }, [maquinaParaEditar]);
 
   const handleExcluir = async (id) => {
     const url = categoriaSelecionada === 'pessoas'
