@@ -5,7 +5,6 @@ import MenuFunc from '../MenuFunc';
 import MenuCurso from '../MenuCurso';
 import MenuMaq from '../MenuMaq';
 import ConsultaFuncs from '../ConsultaFuncs';
-import ConsultaMaquinas from '../ConsultaMaquinas';
 import CursosDaMaquina from '../CursosDaMaquina';
 import AulasDoCurso from '../AulasDoCurso';
 import VisualizarAula from '../VisualizarAula';
@@ -28,9 +27,6 @@ function Sidebar() {
       </button>
       <button onClick={() => navigate('/consulta-funcs')} className="icon-button" title="Funcionários">
         <FaUsers />
-      </button>
-      <button onClick={() => navigate('/consulta-maquinas')} className="icon-button" title="Consulta Máquinas">
-        <FaTools />
       </button>
       <button onClick={() => navigate('/menu-maq')} className="icon-button" title="Máquinas">
         <FaRoute />
@@ -60,7 +56,6 @@ function PaginaHome() {
             <Route path="/" element={<MenuFunc />} />
             <Route path="/consulta-funcs" element={<ConsultaFuncs />} />
             <Route path="/menu-maq" element={<MenuMaq />} />
-            <Route path="/consulta-maquinas" element={<ConsultaMaquinas />} />
             <Route path="/menu-curso" element={<MenuCurso />} />
             <Route path="/curso/:idcurso" element={<AulasDoCurso />} />
             <Route path="/cursos-da-maquina/:id" element={<CursosDaMaquina />} />
