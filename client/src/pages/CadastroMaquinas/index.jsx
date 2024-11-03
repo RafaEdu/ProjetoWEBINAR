@@ -10,6 +10,10 @@ function CadastroMaquinas() {
   const [erro, setErro] = useState('');
   const [mensagem, setMensagem] = useState('');
 
+  console.log("Dados da máquina para editar:", maquinaParaEditar);
+  console.log("ID da máquina para editar:", maquinaParaEditar?.id);
+
+
   useEffect(() => {
     if (maquinaParaEditar) {
       setNomeMaquina(maquinaParaEditar.nomeMaquina); // Preenche o campo nome caso esteja editando
@@ -21,32 +25,37 @@ function CadastroMaquinas() {
     setErro('');
     setMensagem('');
   };
-
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     if (nomeMaquina.trim() === '') {
       setErro('O nome da máquina não pode estar vazio.');
       return;
     }
-
+  
     try {
       const url = maquinaParaEditar 
-        ? `http://localhost:8000/api/maquinas/${maquinaParaEditar.id}/` 
+        ? `http://localhost:8000/api/maquinas/${maquinaParaEditar.id}/`
         : 'http://localhost:8000/api/maquinas/';
-
       const method = maquinaParaEditar ? 'PUT' : 'POST';
-
+  
+      console.log("URL da requisição:", url);
+      console.log("Método da requisição:", method);
+      console.log("Dados enviados:", { nomeMaquina });
+  
       const response = await fetch(url, {
         method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nomeMaquina }),
       });
-
+  
       if (response.ok) {
         setNomeMaquina('');
         setMensagem(maquinaParaEditar ? 'Máquina atualizada com sucesso!' : 'Máquina cadastrada com sucesso!');
       } else {
+        const errorText = await response.text();
+        console.error("Erro na resposta:", errorText);
         setErro('Erro ao cadastrar a máquina.');
       }
     } catch (error) {
@@ -54,6 +63,7 @@ function CadastroMaquinas() {
       setErro('Erro na conexão com o servidor.');
     }
   };
+  
 
   return (
     <div className="container">

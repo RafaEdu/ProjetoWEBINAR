@@ -32,6 +32,7 @@ function ConsultaGeral() {
       const response = await fetch('http://localhost:8000/api/maquinas/');
       if (response.ok) {
         const data = await response.json();
+        console.log("Máquinas retornadas:", data);
         setMaquinas(data);
       } else {
         console.error('Erro ao buscar máquinas.');
@@ -120,6 +121,7 @@ function ConsultaGeral() {
 
   // Função de edição
   const handleEditar = (item) => {
+    console.log("Item para edição:", item);
     const path = categoriaSelecionada === 'pessoas' ? '/cadastro-usuarios' :
       categoriaSelecionada === 'maquinas' ? '/cadastro-maquinas' :
         categoriaSelecionada === 'cursos' ? '/cadastro-treinamento' :
@@ -127,6 +129,13 @@ function ConsultaGeral() {
             categoriaSelecionada === 'questionarios' ? '/cadastro-questionario' : '/cadastro-area';
     navigate(path, { state: { dadosEdicao: item } });
   };
+  useEffect(() => {
+    if (maquinaParaEditar) {
+      setNomeMaquina(maquinaParaEditar.nomeMaquina); // Preenche o campo nome caso esteja editando
+      console.log("Dados da máquina para editar:", maquinaParaEditar); // Log para verificar
+      console.log("ID da máquina para editar:", maquinaParaEditar.id); // Verifica o ID
+    }
+  }, [maquinaParaEditar]);
 
   const handleExcluir = async (id) => {
     const url = categoriaSelecionada === 'pessoas'
@@ -139,10 +148,8 @@ function ConsultaGeral() {
             ? `http://localhost:8000/api/aulas/${id}/`
             : categoriaSelecionada === 'questionarios'
               ? `http://localhost:8000/api/questionarios/${id}/`
-              : `http://localhost:8000/api/cursos/${id}/`
-                ? `http://localhost:8000/api/areas/${id}`
-                : categoriaSelecionada === 'area';
-
+              : `http://localhost:8000/api/areas/${id}/`; 
+  
     if (window.confirm("Tem certeza que deseja excluir este item?")) {
       try {
         const response = await fetch(url, { method: 'DELETE' });
