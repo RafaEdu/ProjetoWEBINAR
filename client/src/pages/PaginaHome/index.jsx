@@ -15,7 +15,7 @@ import CadastroUsuarios from '../CadastroUsuarios';
 import CadastroArea from '../CadastroAreas';
 import CadastroQuestionario from '../CadastroQuestionario';
 import './styles.css';
-import { FaHome, FaBook, FaRoute, FaFile, FaCog, FaUsers, FaTools } from 'react-icons/fa';
+import { FaHome, FaBook, FaRoute, FaFile, FaCog, FaSearch, FaTools } from 'react-icons/fa';
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -25,9 +25,6 @@ function Sidebar() {
       <button onClick={() => navigate('/')} className="icon-button" title="Página Inicial">
         <FaHome />
       </button>
-      <button onClick={() => navigate('/consulta-funcs')} className="icon-button" title="Funcionários">
-        <FaUsers />
-      </button>
       <button onClick={() => navigate('/menu-maq')} className="icon-button" title="Máquinas">
         <FaRoute />
       </button>
@@ -36,6 +33,9 @@ function Sidebar() {
       </button>
       <button onClick={() => navigate('/relatorios')} className="icon-button" title="Relatórios">
         <FaFile />
+      </button>
+      <button onClick={() => navigate('/consulta-geral')} className="icon-button" title="Consultas">
+        <FaSearch />
       </button>
       <button onClick={() => navigate('/cadastro-navbar')} className="icon-button" title="Cadastros">
         <FaCog />
@@ -54,7 +54,7 @@ function PaginaHome() {
 
           <Routes>
             <Route path="/" element={<MenuFunc />} />
-            <Route path="/consulta-funcs" element={<ConsultaFuncs />} />
+            <Route path="/consulta-geral" element={<ConsultaFuncs />} />
             <Route path="/menu-maq" element={<MenuMaq />} />
             <Route path="/menu-curso" element={<MenuCurso />} />
             <Route path="/curso/:idcurso" element={<AulasDoCurso />} />

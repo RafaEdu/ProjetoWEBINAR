@@ -5,28 +5,36 @@ import './styles.css';
 
 function CriarQuestionario() {
   const location = useLocation();
-  const questionarioParaEditar = location.state?.dadosEdicao; // Recebe os dados do item para edição
+  const questionarioParaEditar = location.state?.dadosEdicao;
   const [titulo, setTitulo] = useState('');
   const [erro, setErro] = useState('');
   const [mensagem, setMensagem] = useState('');
   const [perguntas, setPerguntas] = useState([
-    { texto: '', alternativas: [{ texto: '', is_correta: false }] }
+    { idpergunta: null, texto: '', alternativas: [{ idalternativa: null, texto: '', is_correta: false }] }
   ]);
 
   useEffect(() => {
     if (questionarioParaEditar) {
       setTitulo(questionarioParaEditar.titulo);
-      setPerguntas(questionarioParaEditar.perguntas);
+      setPerguntas(questionarioParaEditar.perguntas.map(pergunta => ({
+        idpergunta: pergunta.idpergunta || null,
+        texto: pergunta.texto,
+        alternativas: pergunta.alternativas.map(alt => ({
+          idalternativa: alt.idalternativa || null,
+          texto: alt.texto,
+          is_correta: alt.is_correta
+        }))
+      })));
     }
   }, [questionarioParaEditar]);
 
   const adicionarPergunta = () => {
-    setPerguntas([...perguntas, { texto: '', alternativas: [{ texto: '', is_correta: false }] }]);
+    setPerguntas([...perguntas, { idpergunta: null, texto: '', alternativas: [{ idalternativa: null, texto: '', is_correta: false }] }]);
   };
 
   const adicionarAlternativa = (perguntaIndex) => {
     const novasPerguntas = [...perguntas];
-    novasPerguntas[perguntaIndex].alternativas.push({ texto: '', is_correta: false });
+    novasPerguntas[perguntaIndex].alternativas.push({ idalternativa: null, texto: '', is_correta: false });
     setPerguntas(novasPerguntas);
   };
 
@@ -51,13 +59,11 @@ function CriarQuestionario() {
     setPerguntas(novasPerguntas);
   };
 
-  // New: Function to remove a question
   const removerPergunta = (perguntaIndex) => {
     const novasPerguntas = perguntas.filter((_, index) => index !== perguntaIndex);
     setPerguntas(novasPerguntas);
   };
 
-  // New: Function to remove an alternative from a question
   const removerAlternativa = (perguntaIndex, alternativaIndex) => {
     const novasPerguntas = [...perguntas];
     novasPerguntas[perguntaIndex].alternativas = novasPerguntas[perguntaIndex].alternativas.filter(
@@ -68,12 +74,14 @@ function CriarQuestionario() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     const novoQuestionario = {
       titulo: titulo,
       perguntas: perguntas.map((pergunta) => ({
+        idpergunta: pergunta.idpergunta, // Inclui o ID da pergunta se ela já existir
         texto: pergunta.texto,
         alternativas: pergunta.alternativas.map((alt) => ({
+          idalternativa: alt.idalternativa, // Inclui o ID da alternativa se ela já existir
           texto: alt.texto,
           is_correta: alt.is_correta
         }))
@@ -81,9 +89,9 @@ function CriarQuestionario() {
     };
 
     try {
-      const method = questionarioParaEditar ? 'PUT' : 'POST'; // Se está editando, use PUT
+      const method = questionarioParaEditar ? 'PUT' : 'POST';
       const endpoint = questionarioParaEditar
-        ? `http://localhost:8000/api/questionarios/${questionarioParaEditar.id}/`
+        ? `http://localhost:8000/api/questionarios/${questionarioParaEditar.idquestionario}/`
         : 'http://localhost:8000/api/questionarios/';
 
       const response = await fetch(endpoint, {
@@ -95,8 +103,8 @@ function CriarQuestionario() {
       });
 
       if (response.ok) {
-        setTitulo('');  
-        setPerguntas([{ texto: '', alternativas: [{ texto: '', is_correta: false }] }]);
+        setTitulo('');
+        setPerguntas([{ idpergunta: null, texto: '', alternativas: [{ idalternativa: null, texto: '', is_correta: false }] }]);
         setMensagem('Questionário salvo com sucesso!');
       } else {
         setErro('Erro ao salvar o questionário.');
@@ -120,7 +128,7 @@ function CriarQuestionario() {
         />
 
         {perguntas.map((pergunta, perguntaIndex) => (
-          <div key={perguntaIndex} className="pergunta-bloco">
+          <div key={pergunta.idpergunta || perguntaIndex} className="pergunta-bloco">
             <input
               type="text"
               placeholder="Pergunta"
@@ -128,7 +136,7 @@ function CriarQuestionario() {
               onChange={(e) => handlePerguntaChange(perguntaIndex, e.target.value)}
             />
             {pergunta.alternativas.map((alternativa, alternativaIndex) => (
-              <div key={alternativaIndex} className="alternativa-bloco">
+              <div key={alternativa.idalternativa || alternativaIndex} className="alternativa-bloco">
                 <input
                   type="text"
                   placeholder={`Alternativa ${String.fromCharCode(97 + alternativaIndex)}`}
@@ -143,14 +151,12 @@ function CriarQuestionario() {
                   />
                   Correta
                 </label>
-                {/* Button to remove an alternative */}
                 <button type="button" onClick={() => removerAlternativa(perguntaIndex, alternativaIndex)}>
                   Remover Alternativa
                 </button>
               </div>
             ))}
             <button type="button" onClick={() => adicionarAlternativa(perguntaIndex)}>Nova Alternativa</button>
-            {/* Button to remove the entire question */}
             <button type="button" onClick={() => removerPergunta(perguntaIndex)}>Remover Pergunta</button>
           </div>
         ))}

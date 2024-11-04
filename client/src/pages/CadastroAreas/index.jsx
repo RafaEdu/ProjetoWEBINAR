@@ -34,7 +34,7 @@ const CadastroArea = () => {
 
         try {
             const response = areaParaEditar 
-                ? await fetch(`http://localhost:8000/api/areas/${areaParaEditar.id}/`, { // Requisição PUT para edição
+                ? await fetch(`http://localhost:8000/api/areas/${areaParaEditar.idarea}/`, { // Requisição PUT para edição
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

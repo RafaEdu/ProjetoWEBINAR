@@ -9,10 +9,11 @@ function ConsultaGeral() {
   const [cursos, setCursos] = useState([]);
   const [aulas, setAulas] = useState([]);
   const [questionarios, setQuestionarios] = useState([]);
-  const [treinamentos, setarea] = useState([]);
+  const [treinamentos, setTreinamentos] = useState([]);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState('pessoas');
   const [busca, setBusca] = useState('');
 
+  // Funções para buscar dados
   const fetchUsuarios = async () => {
     try {
       const response = await fetch('http://localhost:8000/api/users/');
@@ -32,7 +33,6 @@ function ConsultaGeral() {
       const response = await fetch('http://localhost:8000/api/maquinas/');
       if (response.ok) {
         const data = await response.json();
-        console.log("Máquinas retornadas:", data);
         setMaquinas(data);
       } else {
         console.error('Erro ao buscar máquinas.');
@@ -89,9 +89,9 @@ function ConsultaGeral() {
       const response = await fetch('http://localhost:8000/api/areas/');
       if (response.ok) {
         const data = await response.json();
-        setarea(data);
+        setTreinamentos(data);
       } else {
-        console.error('Erro ao buscar area.');
+        console.error('Erro ao buscar áreas.');
       }
     } catch (error) {
       console.error('Erro na conexão com o servidor:', error);
@@ -121,7 +121,6 @@ function ConsultaGeral() {
 
   // Função de edição
   const handleEditar = (item) => {
-    console.log("Item para edição:", item);
     const path = categoriaSelecionada === 'pessoas' ? '/cadastro-usuarios' :
       categoriaSelecionada === 'maquinas' ? '/cadastro-maquinas' :
         categoriaSelecionada === 'cursos' ? '/cadastro-treinamento' :
@@ -148,6 +147,7 @@ function ConsultaGeral() {
         const response = await fetch(url, { method: 'DELETE' });
         if (response.ok) {
           alert('Item excluído com sucesso!');
+          // Recarregar a lista correspondente
           if (categoriaSelecionada === 'pessoas') fetchUsuarios();
           else if (categoriaSelecionada === 'maquinas') fetchMaquinas();
           else if (categoriaSelecionada === 'cursos') fetchCursos();
@@ -173,7 +173,7 @@ function ConsultaGeral() {
         <button onClick={() => setCategoriaSelecionada('cursos')}>Cursos</button>
         <button onClick={() => setCategoriaSelecionada('aulas')}>Aulas</button>
         <button onClick={() => setCategoriaSelecionada('questionarios')}>Questionários</button>
-        <button onClick={() => setCategoriaSelecionada('area')}>areas</button>
+        <button onClick={() => setCategoriaSelecionada('area')}>Áreas</button>
       </div>
 
       <input
@@ -195,9 +195,21 @@ function ConsultaGeral() {
               {categoriaSelecionada === 'aulas' && <><strong>Duração:</strong> {item.duracao}</>}
               {categoriaSelecionada === 'questionarios' && <><strong>Título:</strong> {item.titulo}</>}
               {categoriaSelecionada === 'area' && <><strong>Descrição:</strong> {item.descricao}</>}
-
-              <button onClick={() => handleEditar(item)}>Editar</button>
-              <button onClick={() => handleExcluir(item.id)}>Excluir</button>
+              <div className="botoes-acoes">
+                <button onClick={() => handleEditar(item)}>Editar</button>
+                <button 
+  onClick={() => handleExcluir(
+    categoriaSelecionada === 'pessoas' ? item.id :
+    categoriaSelecionada === 'maquinas' ? item.idmaquina :
+    categoriaSelecionada === 'cursos' ? item.idcurso :
+    categoriaSelecionada === 'aulas' ? item.idaula :
+    categoriaSelecionada === 'questionarios' ? item.idquestionario :
+    item.idarea
+  )}
+>
+  Excluir
+</button>
+              </div>
             </li>
           ))
         ) : (

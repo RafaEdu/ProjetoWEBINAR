@@ -41,7 +41,7 @@ class QuestionarioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Questionario
-        fields = ['idquestionario', 'titulo', 'perguntas']  # Adicione o campo idquestionario
+        fields = ['idquestionario', 'titulo', 'perguntas']
 
     def create(self, validated_data):
         perguntas_data = validated_data.pop('perguntas')
@@ -54,6 +54,40 @@ class QuestionarioSerializer(serializers.ModelSerializer):
                 Alternativa.objects.create(pergunta=pergunta, **alternativa_data)
                 
         return questionario
+
+    def update(self, instance, validated_data):
+        # Atualiza os dados do questionário
+        instance.titulo = validated_data.get('titulo', instance.titulo)
+        instance.save()
+
+        perguntas_data = validated_data.pop('perguntas', None)
+        if perguntas_data is not None:
+            # Atualiza perguntas
+            for pergunta_data in perguntas_data:
+                pergunta_id = pergunta_data.get('id')  # Assumindo que cada pergunta tem um campo 'id'
+                if pergunta_id:  # Se já existe uma pergunta
+                    pergunta = Pergunta.objects.get(id=pergunta_id)
+                    pergunta.texto = pergunta_data.get('texto', pergunta.texto)
+                    # Atualize alternativas, se necessário
+                    alternativas_data = pergunta_data.get('alternativas', [])
+                    for alternativa_data in alternativas_data:
+                        alternativa_id = alternativa_data.get('id')
+                        if alternativa_id:  # Atualizar alternativa existente
+                            alternativa = Alternativa.objects.get(id=alternativa_id)
+                            alternativa.texto = alternativa_data.get('texto', alternativa.texto)
+                            alternativa.is_correta = alternativa_data.get('is_correta', alternativa.is_correta)
+                            alternativa.save()
+                        else:  # Criar nova alternativa
+                            Alternativa.objects.create(pergunta=pergunta, **alternativa_data)
+                    pergunta.save()
+                else:  # Criar nova pergunta se não houver ID
+                    alternativas_data = pergunta_data.pop('alternativas', [])
+                    pergunta = Pergunta.objects.create(questionario=instance, **pergunta_data)
+                    for alternativa_data in alternativas_data:
+                        Alternativa.objects.create(pergunta=pergunta, **alternativa_data)
+
+        return instance
+
 
 
 

@@ -42,6 +42,13 @@ function CadastroAula() {
           setSegundos(segundos);
           setSelectedCurso(aulaParaEditar.idcurso);
           setTipo(aulaParaEditar.video ? 'video' : 'slide'); // Define o tipo baseado no que está editando
+          
+          // Carregar os anexo existentes
+          if (aulaParaEditar.video) {
+            setVideo(aulaParaEditar.video); // Se houver vídeo
+          } else if (aulaParaEditar.slide) {
+            setSlide(aulaParaEditar.slide); // Se houver slide
+          }
         }
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
@@ -88,28 +95,29 @@ function CadastroAula() {
       return;
     }
 
-    if (tipo === 'video' && !video) {
-      setErro('Por favor, anexe um vídeo.');
-      return;
-    } else if (tipo === 'slide' && !slide) {
-      setErro('Por favor, anexe um arquivo PDF.');
-      return;
-    }
-
+    // Verifica se um anexo deve ser enviado
     const formData = new FormData();
     formData.append('titulo', titulo);
     formData.append('duracao', `${horas}:${minutos}:${segundos}`);
     formData.append('idcurso', selectedCurso);
 
-    // Adiciona o arquivo de vídeo ou slide dependendo do tipo selecionado
+    // Define o vídeo ou slide a ser enviado
     if (tipo === 'video') {
-      formData.append('video', video);  // Envia o arquivo de vídeo
+      if (video) {
+        formData.append('video', video); // Adiciona novo vídeo se fornecido
+      } else if (aulaParaEditar?.video) {
+        formData.append('video', aulaParaEditar.video); // Mantém o vídeo existente
+      }
     } else if (tipo === 'slide') {
-      formData.append('slide', slide);  // Envia o arquivo de slide (PDF)
+      if (slide) {
+        formData.append('slide', slide); // Adiciona novo slide se fornecido
+      } else if (aulaParaEditar?.slide) {
+        formData.append('slide', aulaParaEditar.slide); // Mantém o slide existente
+      }
     }
 
     try {
-      const url = aulaParaEditar ? `http://localhost:8000/api/aulas/${aulaParaEditar.id}/` : 'http://localhost:8000/api/aulas/';
+      const url = aulaParaEditar ? `http://localhost:8000/api/aulas/${aulaParaEditar.idaula}/` : 'http://localhost:8000/api/aulas/';
       const method = aulaParaEditar ? 'PUT' : 'POST'; // Altera o método para PUT se estiver editando
 
       const response = await fetch(url, {
@@ -229,6 +237,9 @@ function CadastroAula() {
                 accept="video/*"
                 onChange={handleVideoChange} // Atualizado
               />
+              {aulaParaEditar && aulaParaEditar.video && (
+                <p>Anexo atual: {aulaParaEditar.video}</p> // Mostra o vídeo atual
+              )}
             </div>
           )}
 
@@ -239,13 +250,15 @@ function CadastroAula() {
                 accept=".pdf"
                 onChange={handleSlideChange} // Atualizado
               />
+              {aulaParaEditar && aulaParaEditar.slide && (
+                <p>Anexo atual: {aulaParaEditar.slide}</p> // Mostra o slide atual
+              )}
             </div>
           )}
 
           {erro && <p style={{ color: 'red' }}>{erro}</p>}
           {mensagem && <p style={{ color: 'green' }}>{mensagem}</p>}
-
-          <button type="submit">{aulaParaEditar ? 'Atualizar Aula' : 'Cadastrar Aula'}</button>
+          <button type="submit">{aulaParaEditar ? 'Atualizar' : 'Cadastrar'}</button>
         </form>
       )}
     </div>

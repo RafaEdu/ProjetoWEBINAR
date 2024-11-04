@@ -1,24 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import './styles.css';
 import NavbarPage from '../CadastrosNavbar';
 
 function CadastroMaquinas() {
+  const { idmaquina } = useParams(); // Obtém o ID da máquina a partir dos parâmetros da URL
   const location = useLocation();
-  const maquinaParaEditar = location.state?.dadosEdicao; // Recebe os dados do item para edição
+  const maquinaParaEditar = location.state?.dadosEdicao;
+
   const [nomeMaquina, setNomeMaquina] = useState(maquinaParaEditar?.nomeMaquina || '');
   const [erro, setErro] = useState('');
   const [mensagem, setMensagem] = useState('');
 
   console.log("Dados da máquina para editar:", maquinaParaEditar);
-  console.log("ID da máquina para editar:", maquinaParaEditar?.id);
-
+  console.log("ID da máquina para editar:", idmaquina || maquinaParaEditar?.idmaquina);
 
   useEffect(() => {
-    if (maquinaParaEditar) {
+    if (idmaquina && !maquinaParaEditar) {
+      // Fazer uma requisição para obter os dados da máquina pelo ID caso não tenha dados em location.state
+      fetch(`http://localhost:8000/api/maquinas/${idmaquina}/`)
+        .then(response => response.json())
+        .then(data => setNomeMaquina(data.nomeMaquina))
+        .catch(error => console.error("Erro ao buscar máquina:", error));
+    } else if (maquinaParaEditar) {
       setNomeMaquina(maquinaParaEditar.nomeMaquina); // Preenche o campo nome caso esteja editando
     }
-  }, [maquinaParaEditar]);
+  }, [idmaquina, maquinaParaEditar]);
 
   const handleChange = (event) => {
     setNomeMaquina(event.target.value);
@@ -35,10 +42,10 @@ function CadastroMaquinas() {
     }
   
     try {
-      const url = maquinaParaEditar 
-        ? `http://localhost:8000/api/maquinas/${maquinaParaEditar.id}/`
+      const url = idmaquina || maquinaParaEditar?.idmaquina
+        ? `http://localhost:8000/api/maquinas/${idmaquina || maquinaParaEditar.idmaquina}/`
         : 'http://localhost:8000/api/maquinas/';
-      const method = maquinaParaEditar ? 'PUT' : 'POST';
+      const method = idmaquina || maquinaParaEditar?.idmaquina ? 'PUT' : 'POST';
   
       console.log("URL da requisição:", url);
       console.log("Método da requisição:", method);
@@ -52,7 +59,7 @@ function CadastroMaquinas() {
   
       if (response.ok) {
         setNomeMaquina('');
-        setMensagem(maquinaParaEditar ? 'Máquina atualizada com sucesso!' : 'Máquina cadastrada com sucesso!');
+        setMensagem(idmaquina || maquinaParaEditar?.idmaquina ? 'Máquina atualizada com sucesso!' : 'Máquina cadastrada com sucesso!');
       } else {
         const errorText = await response.text();
         console.error("Erro na resposta:", errorText);
@@ -63,12 +70,11 @@ function CadastroMaquinas() {
       setErro('Erro na conexão com o servidor.');
     }
   };
-  
 
   return (
     <div className="container">
       <NavbarPage />
-      <h1>{maquinaParaEditar ? 'Editar Máquina' : 'Cadastro de Máquinas'}</h1>
+      <h1>{idmaquina || maquinaParaEditar?.idmaquina ? 'Editar Máquina' : 'Cadastro de Máquinas'}</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -79,7 +85,7 @@ function CadastroMaquinas() {
         />
         {erro && <p style={{ color: 'red' }}>{erro}</p>}
         {mensagem && <p style={{ color: 'green' }}>{mensagem}</p>}
-        <button type="submit">{maquinaParaEditar ? 'Atualizar Máquina' : 'Cadastrar Máquina'}</button>
+        <button type="submit">{idmaquina || maquinaParaEditar?.idmaquina ? 'Atualizar Máquina' : 'Cadastrar Máquina'}</button>
       </form>
     </div>
   );

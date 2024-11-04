@@ -88,7 +88,7 @@ function CadastroTreinamento() {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/cursos/${treinamentoParaEditar ? treinamentoParaEditar.id : ''}`,
+        `http://localhost:8000/api/cursos/${treinamentoParaEditar ? treinamentoParaEditar.idcurso + '/' : ''}`,
         {
           method: treinamentoParaEditar ? 'PUT' : 'POST',
           headers: {

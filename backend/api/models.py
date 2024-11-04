@@ -39,8 +39,8 @@ class Curso(models.Model):
     idcurso = models.AutoField(primary_key=True)
     titulo = models.CharField(max_length=255)
     descricao = models.CharField(max_length=255)
-    idquestionario = models.ForeignKey('Questionario', on_delete=models.CASCADE)
-    idarea = models.ForeignKey('Area', on_delete=models.CASCADE)
+    idquestionario = models.ForeignKey('Questionario', on_delete=models.SET_NULL, null=True)
+    idarea = models.ForeignKey('Area', on_delete=models.SET_NULL, null=True)
     dataCriacao = models.DateField()
     maquina = models.ManyToManyField(Maquina)
 
@@ -105,4 +105,4 @@ class Aula(models.Model):
     duracao = models.TimeField()
     idvideo = models.ForeignKey(Video, on_delete=models.CASCADE, null=True)
     idslide = models.ForeignKey(Slide, on_delete=models.CASCADE, null=True)
-    idcurso = models.ForeignKey(Curso, on_delete=models.CASCADE, null=False)
+    idcurso = models.ForeignKey(Curso, on_delete=models.SET_NULL, null=True)
