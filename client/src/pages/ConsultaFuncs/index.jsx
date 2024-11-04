@@ -168,7 +168,7 @@ function ConsultaGeral() {
     <div className="consulta-container">
       <h1>Consulta Geral</h1>
       <div className="botoes-categoria">
-        <button onClick={() => setCategoriaSelecionada('pessoas')}>Pessoas</button>
+        <button onClick={() => setCategoriaSelecionada('pessoas')}>Usuários</button>
         <button onClick={() => setCategoriaSelecionada('maquinas')}>Máquinas</button>
         <button onClick={() => setCategoriaSelecionada('cursos')}>Cursos</button>
         <button onClick={() => setCategoriaSelecionada('aulas')}>Aulas</button>
@@ -190,7 +190,6 @@ function ConsultaGeral() {
             <li key={index} className="item-lista">
               <strong>Nome:</strong> {item.nome || item.nomeMaquina || item.nomeCurso || item.titulo}<br />
               {categoriaSelecionada === 'pessoas' && <><strong>Email:</strong> {item.email}</>}
-              {categoriaSelecionada === 'maquinas' && <><strong>Modelo:</strong> {item.modelo}</>}
               {categoriaSelecionada === 'cursos' && <><strong>Descrição:</strong> {item.descricao}</>}
               {categoriaSelecionada === 'aulas' && <><strong>Duração:</strong> {item.duracao}</>}
               {categoriaSelecionada === 'questionarios' && <><strong>Título:</strong> {item.titulo}</>}

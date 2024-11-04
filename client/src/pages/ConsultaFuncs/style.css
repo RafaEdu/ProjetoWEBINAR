@@ -1,127 +1,122 @@
-.container {
-    max-width: 700px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: white;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+/* style.css */
+
+
+.consulta-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: #f5f5f5;
     border-radius: 8px;
-}
-
-h1 {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
     text-align: center;
-    color: #034638;
-    margin-bottom: 20px;
-}
+  }
+  
 
-.search-bar {
+  .consulta-container h1 {
+    font-size: 1.8rem;
+    color: #034638;
+    margin-bottom: 1rem;
+  }
+  
+
+  .botoes-categoria {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
-}
-
-input[type="search"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .botoes-categoria button {
+    background-color: #41b02a;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
     border-radius: 4px;
-    font-size: 16px;
-    max-width: 500px;
-}
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .botoes-categoria button:hover {
+    background-color: #34a024;
+  }
+  
 
-h2 {
-    font-size: 18px;
-    color: #034638;
-    margin-bottom: 10px;
-}
+  .barra-busca {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.8rem;
+    margin: 0 auto 1.5rem auto;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
 
-ul {
+  ul {
     list-style: none;
     padding: 0;
-}
+  }
+  
+  .item-lista {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: left;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .item-lista strong {
+    color: #333;
+  }
+  
+  .item-lista p {
+    color: #666;
+    margin-top: 0.3rem;
+  }
+  
 
-ul li {
-    padding: 8px;
-    background-color: #f4f4f4;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    font-size: 16px;
-}
-
-button {
-    padding: 10px;
-    background-color: #41b02a;
-    color: white;
-    font-size: 18px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #034638;
-}
-
-@media (max-width: 768px) {
-    .container {
-        max-width: 100%;
-        margin: 20px;
-        padding: 15px;
-    }
-
-    input[type="search"] {
-        font-size: 14px;
-    }
-
-    ul li {
-        font-size: 14px;
-    }
-
-    button {
-        font-size: 14px;
-    }
-}
-
-.usuario-item {
+  .botoes-acoes {
+    margin-top: 1rem;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #f4f4f4;
+    gap: 0.5rem;
+  }
+  
+  .botoes-acoes button {
+    flex: 1;
+    padding: 0.5rem 0.8rem;
+    border: none;
     border-radius: 4px;
-    margin-bottom: 10px;
-  }
-  
-  .botao-editar {
-    background-color: #41b02a;
-    color: white;
-    border: none;
-    padding: 8px;
-    border-radius: 50%;
     cursor: pointer;
-    font-size: 16px;
-    margin-right: 10px;
+    font-size: 0.9rem;
+    transition: all 0.3s;
   }
   
-  .botao-editar:hover {
+  .botoes-acoes button:first-child {
     background-color: #034638;
+    color: #fff;
   }
   
-  .botao-excluir {
+  .botoes-acoes button:first-child:hover {
+    background-color: #023a2e;
+  }
+  
+  .botoes-acoes button:last-child {
     background-color: #d9534f;
-    color: white;
-    border: none;
-    padding: 8px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 16px;
+    color: #fff;
   }
   
-  .botao-excluir:hover {
+  .botoes-acoes button:last-child:hover {
     background-color: #c9302c;
   }
   
-  .fa-cog, .fa-times {
-    font-size: 16px;
+
+  .consulta-container p {
+    font-size: 1rem;
+    color: #777;
+    margin-top: 1.5rem;
   }
   
