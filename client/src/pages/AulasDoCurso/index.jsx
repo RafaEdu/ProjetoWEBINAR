@@ -15,6 +15,8 @@ function AulasDoCurso() {
             try {
                 const response = await fetch(`http://localhost:8000/api/aulas/curso/${idcurso}/`);
                 const data = await response.json();
+                // Ordenar as aulas por título
+                data.sort((a, b) => a.titulo.localeCompare(b.titulo));
                 setAulas(data);
             } catch (error) {
                 console.error('Erro ao buscar aulas:', error);
@@ -36,8 +38,9 @@ function AulasDoCurso() {
     }, [idcurso]);
 
     const handleAssistirClick = (idaula) => {
-        navigate(`/aula/${idaula}`);
+        navigate(`/curso/${idcurso}/aula/${idaula}`);
     };
+    
 
     return (
         <div className="aulas-curso-content">
