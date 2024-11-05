@@ -126,3 +126,65 @@
 .navigation-buttons button:hover:not(:disabled) {
     background-color: #36a82a; 
 }
+
+.questionario-container {
+    background-color: #ffffff; /* Fundo branco */
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    padding: 20px; /* Espaçamento interno */
+    margin: 20px 0; /* Margem externa */
+    transition: box-shadow 0.3s ease; /* Transição suave para a sombra */
+}
+
+.questionario-container:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra mais intensa ao passar o mouse */
+}
+
+.questionario-container h3 {
+    font-size: 1.5em; /* Tamanho da fonte do título */
+    margin-bottom: 15px; /* Margem inferior */
+    color: #034638; /* Cor do título */
+    text-align: center; /* Centraliza o título */
+}
+
+.questionario-container h4 {
+    font-size: 1.2em; /* Tamanho da fonte das perguntas */
+    margin: 15px 0 5px; /* Margens para as perguntas */
+    color: #333; /* Cor das perguntas */
+    text-align: left; /* Alinha as perguntas à esquerda */
+}
+
+.questionario-container label {
+    display: block; /* Exibe cada alternativa em uma linha separada */
+    padding: 10px; /* Espaçamento interno */
+    margin: 5px 0; /* Margem entre alternativas */
+    border: 1px solid #ddd; /* Borda das alternativas */
+    border-radius: 4px; /* Bordas arredondadas */
+    background-color: #f9f9f9; /* Fundo das alternativas */
+    transition: background-color 0.3s; /* Transição suave para a cor de fundo */
+    text-align: left; /* Alinha o texto da alternativa à esquerda */
+}
+
+.questionario-container input[type="radio"] {
+    margin-right: 10px; /* Espaçamento entre o radio button e o texto */
+}
+
+.questionario-container label:hover {
+    background-color: #e9ecef; /* Cor de fundo ao passar o mouse */
+}
+
+.questionario-container button {
+    background-color: #41b02a; /* Cor de fundo do botão */
+    color: white; /* Cor do texto do botão */
+    border: none; /* Sem borda */
+    border-radius: 4px; /* Bordas arredondadas */
+    padding: 10px 20px; /* Espaçamento interno do botão */
+    cursor: pointer; /* Cursor de ponteiro */
+    font-size: 1em; /* Tamanho da fonte do botão */
+    transition: background-color 0.3s; /* Transição suave para a cor de fundo */
+}
+
+.questionario-container button:hover {
+    background-color: #34a629; /* Cor de fundo do botão ao passar o mouse */
+}
+

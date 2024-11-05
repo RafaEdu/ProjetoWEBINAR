@@ -3,16 +3,19 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './styles.css';
 
 function VisualizarAula() {
-    const { idcurso, idaula } = useParams(); 
+    const { idcurso, idaula } = useParams();
     const navigate = useNavigate();
     const [aula, setAula] = useState(null);
     const [conteudo, setConteudo] = useState(null);
     const [aulas, setAulas] = useState([]);
-    const [videoWatched, setVideoWatched] = useState(false); 
-    const [canProceed, setCanProceed] = useState(false); 
-    const [timer, setTimer] = useState(0); 
-    const [hasQuestionario, setHasQuestionario] = useState(false); 
-    const videoRef = useRef(null); 
+    const [videoWatched, setVideoWatched] = useState(false);
+    const [canProceed, setCanProceed] = useState(false);
+    const [timer, setTimer] = useState(0);
+    const [hasQuestionario, setHasQuestionario] = useState(false);
+    const [questionario, setQuestionario] = useState(null);
+    const [showQuestionario, setShowQuestionario] = useState(false);
+    const [respostas, setRespostas] = useState({});
+    const videoRef = useRef(null);
 
     useEffect(() => {
         const fetchAula = async () => {
@@ -61,6 +64,13 @@ function VisualizarAula() {
 
                 const cursoData = await response.json();
                 setHasQuestionario(!!cursoData.idquestionario);
+
+                if (cursoData.idquestionario) {
+                    const questionarioResponse = await fetch(`http://localhost:8000/api/questionarios/${cursoData.idquestionario}/`);
+                    if (!questionarioResponse.ok) throw new Error('Erro ao buscar questionário');
+                    const questionarioData = await questionarioResponse.json();
+                    setQuestionario(questionarioData);
+                }
             } catch (error) {
                 console.error('Erro ao buscar curso:', error);
             }
@@ -86,7 +96,7 @@ function VisualizarAula() {
             }, 1000);
             return () => clearInterval(intervalId);
         } else if (conteudo?.tipo === 'video') {
-            setCanProceed(false); 
+            setCanProceed(false);
         }
     }, [conteudo]);
 
@@ -103,20 +113,53 @@ function VisualizarAula() {
     const handleNextClick = () => {
         const nextAulaId = getNextAulaId();
         if (nextAulaId) {
-            navigate(`/curso/${idcurso}/aula/${nextAulaId}`); 
+            navigate(`/curso/${idcurso}/aula/${nextAulaId}`);
         }
     };
 
     const handlePrevClick = () => {
         const prevAulaId = getPrevAulaId();
         if (prevAulaId) {
-            navigate(`/curso/${idcurso}/aula/${prevAulaId}`); 
+            navigate(`/curso/${idcurso}/aula/${prevAulaId}`);
         }
     };
 
     const handleVideoEnded = () => {
         setVideoWatched(true);
         setCanProceed(true);
+    };
+
+    const handleShowQuestionario = () => {
+        setShowQuestionario(true);
+    };
+
+    const handleRespostaChange = (perguntaIndex, alternativaIndex) => {
+        const alternativaSelecionada = questionario.perguntas[perguntaIndex].alternativas[alternativaIndex];
+        if (alternativaSelecionada) {
+            setRespostas(prevRespostas => ({
+                ...prevRespostas,
+                [perguntaIndex]: {
+                    is_correta: alternativaSelecionada.is_correta
+                }
+            }));
+        }
+    };
+
+    const handleEnviarRespostas = () => {
+        const resultados = Object.values(respostas).map(resposta => resposta.is_correta);
+
+        // Verifica se todas as respostas estão corretas
+        const todasCorretas = resultados.every(isCorreta => isCorreta);
+        
+        if (todasCorretas) {
+            alert('Todas as respostas estão corretas! Você concluiu o questionário.');
+            // Aqui você pode enviar os resultados para a API
+            console.log('Resultados:', resultados);
+            navigate('/home');
+
+        } else {
+            alert('Alguma resposta está errada. Por favor, refaça o questionário.');
+        }
     };
 
     if (!aula) return <p>Carregando...</p>;
@@ -172,17 +215,38 @@ function VisualizarAula() {
                 <div className="navigation-buttons">
                     <button onClick={handlePrevClick} disabled={!getPrevAulaId()}>Voltar</button>
                     {isLastAula ? (
-                        hasQuestionario ? (
-                            <button onClick={() => navigate(`/curso/${idcurso}/questionario`)} disabled={!canProceed}>Responder Questionário</button>
+                        hasQuestionario && !showQuestionario ? (
+                            <button onClick={handleShowQuestionario} disabled={!canProceed}>Responder Questionário</button>
                         ) : (
-                            <button onClick={() => navigate(`/curso/${idcurso}/concluir`)} disabled={!canProceed}>Concluir Curso</button>
+                            <button disabled={!canProceed}>Concluir Aula</button>
                         )
                     ) : (
-                        <button onClick={handleNextClick} disabled={!canProceed}>Próximo</button>
+                        <button onClick={handleNextClick} disabled={!canProceed}>Próxima Aula</button>
                     )}
                 </div>
-                {conteudo?.tipo === 'slide' && !canProceed && (
-                    <p>Timer: {timer} / 15 segundos</p>
+
+                {showQuestionario && questionario && (
+                    <div className="questionario-container">
+                        <h3>Questionário</h3>
+                        {questionario.perguntas.map((pergunta, index) => (
+                            <div key={index}>
+                                <h4>{pergunta.texto}</h4>
+                                {pergunta.alternativas.map((alternativa, altIndex) => (
+                                    <div key={altIndex}>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name={`pergunta_${index}`}
+                                                onChange={() => handleRespostaChange(index, altIndex)}
+                                            />
+                                            {alternativa.texto}
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                        <button onClick={handleEnviarRespostas}>Enviar Respostas</button>
+                    </div>
                 )}
             </section>
         </main>
