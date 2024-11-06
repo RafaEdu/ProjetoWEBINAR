@@ -31,6 +31,7 @@ function enviaConsCad() {
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Verifica se o usuário está autenticado ao carregar o componente
   useEffect(() => {
     const authStatus = localStorage.getItem('isAuthenticated');
     if (authStatus === 'true') {
@@ -38,14 +39,19 @@ function App() {
     }
   }, []);
 
+  // Função chamada quando o login for bem-sucedido
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
     localStorage.setItem('isAuthenticated', 'true');
   };
 
+  // Função de logout
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('access'); // Remover o token de acesso
+    localStorage.removeItem('refresh'); // Remover o token de refresh
+    window.location.href = '/login'; // Redirecionar para a página de login
   };
 
   if (!isAuthenticated) {
@@ -82,5 +88,6 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>
 );
+
 // Exportando o App como componente principal
 export default enviaConsCad;

@@ -1,9 +1,43 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status 
-from rest_framework.response import Response  
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken  
 from rest_framework import serializers  
+from django.contrib.auth import authenticate
 from .models import Aula, Video, Slide, User, Maquina, Area, Questionario, Curso, Pergunta, Alternativa
 from .serializers import UserSerializer, MaquinaSerializer, AreaSerializer, QuestionarioSerializer, CursoSerializer, AulaSerializer, VideoSerializer, SlideSerializer
+
+
+class LoginView(APIView):
+    def post(self, request):
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        # Tenta autenticar o usuário usando o backend customizado
+        user = authenticate(email=email, password=password)
+        if user is not None:
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'nome': user.nome,
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            })
+        return Response({"error": "Credenciais inválidas"}, status=status.HTTP_401_UNAUTHORIZED)
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data.get("refresh")
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class MaquinaViewSet(viewsets.ModelViewSet):
