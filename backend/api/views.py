@@ -15,7 +15,7 @@ class LoginView(APIView):
         email = request.data.get("email")
         password = request.data.get("password")
 
-        # Tenta autenticar o usuário usando o backend customizado
+        # Tenta autenticar o usuário
         user = authenticate(email=email, password=password)
         if user is not None:
             refresh = RefreshToken.for_user(user)
@@ -23,8 +23,10 @@ class LoginView(APIView):
                 'nome': user.nome,
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
+                'is_admin': user.is_admin  # Inclui o valor de is_admin na resposta
             })
         return Response({"error": "Credenciais inválidas"}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
@@ -37,8 +39,6 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
 
 class MaquinaViewSet(viewsets.ModelViewSet):
     queryset = Maquina.objects.all()
