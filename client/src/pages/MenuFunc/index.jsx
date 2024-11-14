@@ -6,12 +6,19 @@ import './style.css';
 function MenuFunc() {
     const [maquinasEmProgresso, setMaquinasEmProgresso] = useState([]);
     const [cursosEmProgresso, setCursosEmProgresso] = useState([]);
+    const [userName, setUserName] = useState('');  // Estado para o nome do usuário
 
     const maquinasCarousel = useRef(null);
     const cursosCarousel = useRef(null);
     const navigate = useNavigate(); // Hook de navegação
 
     useEffect(() => {
+        // Recuperar o nome do usuário do localStorage
+        const storedUserName = localStorage.getItem('nome');
+        if (storedUserName) {
+            setUserName(storedUserName);  // Atualiza o estado com o nome do usuário
+        }
+
         const fetchMaquinas = async () => {
             try {
                 const response = await fetch('http://localhost:8000/api/maquinas'); 
@@ -34,7 +41,7 @@ function MenuFunc() {
 
         fetchMaquinas();
         fetchCursos();
-    }, []);
+    }, []);  // O array vazio significa que esse efeito será executado apenas uma vez quando o componente for montado.
 
     const handleScroll = (carouselRef, direction) => {
         const itemWidth = carouselRef.current.querySelector('.carousel-item').offsetWidth + 70;
@@ -57,7 +64,7 @@ function MenuFunc() {
 
     return (
         <main className="content">
-            <h2>Olá, (NOME DO USUÁRIO)</h2>
+            <h2>Olá, {userName}</h2>  {/* Exibe o nome do usuário logado */}
 
             <section className="courses-section">
                 <div className="courses-row">
@@ -97,7 +104,7 @@ function MenuFunc() {
                 <div className="courses-row">
                     <h2>Cursos Pendentes</h2>
 
-                    <hr className="separador" />                 
+                    <hr className="separador" />                  
 
                     <div className="carousel-container">
                         <button className="carousel-arrow left-arrow" onClick={() => handleScroll(cursosCarousel, 'left')}>‹</button>

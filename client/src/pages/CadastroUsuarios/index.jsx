@@ -69,33 +69,33 @@ function CadastroUsuarios() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     if (nomeFuncionario.trim() === '' || emailFuncionario.trim() === '' || (!usuarioParaEditar && senhaFuncionario.trim() === '')) {
       setErro('Todos os campos são obrigatórios.');
       return;
     }
-
+  
     const funcionario = {
       nome: nomeFuncionario,
       email: emailFuncionario,
-      senha: senhaFuncionario,
+      password: senhaFuncionario,  // Enviando a senha simples para o backend
       is_active: true,
       is_admin: isAdmin,
       maquinas: maquinasSelecionadas.map(maquina => maquina.value),
     };
-
+  
     try {
       const url = usuarioParaEditar 
         ? `http://localhost:8000/api/users/${usuarioParaEditar.id}/` 
         : 'http://localhost:8000/api/users/';
       const method = usuarioParaEditar ? 'PUT' : 'POST';
-
+  
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(funcionario),
       });
-
+  
       if (response.ok) {
         setNomeFuncionario('');
         setEmailFuncionario('');
@@ -112,6 +112,7 @@ function CadastroUsuarios() {
       setErro('Erro na conexão com o servidor.');
     }
   };
+  
 
   return (
     <div className="container">

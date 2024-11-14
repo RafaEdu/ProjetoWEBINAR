@@ -1,11 +1,52 @@
 from rest_framework import serializers
+from django.contrib.auth.hashers import make_password
 from .models import User, Maquina, Area, Questionario, Pergunta, Alternativa, Curso, Video, Slide, Aula
 
+
+from django.contrib.auth.hashers import make_password
+from rest_framework import serializers
+from .models import User
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+
+    def create(self, validated_data):
+        # Pega a lista de máquinas
+        maquinas = validated_data.pop('maquinas', [])
+        
+        # Cria o usuário com os dados validados, mas sem as máquinas
+        password = validated_data.pop('password', None)
+        if password:
+            validated_data['password'] = make_password(password)
+        
+        # Criação do usuário
+        user = User.objects.create(**validated_data)
+        
+        # Associa as máquinas após a criação do usuário
+        user.maquinas.set(maquinas)
+        
+        return user
+
+    def update(self, instance, validated_data):
+        # Pega as máquinas da requisição
+        maquinas = validated_data.pop('maquinas', [])
+        
+        # Se a senha foi alterada, faz a criptografia
+        if 'password' in validated_data:
+            password = validated_data.pop('password')
+            instance.password = make_password(password)
+        
+        # Atualiza os outros campos
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        # Atualiza as máquinas associadas ao usuário
+        instance.maquinas.set(maquinas)
+        instance.save()  # Salva o usuário atualizado
+        
+        return instance
 
 
 class MaquinaSerializer(serializers.ModelSerializer):
