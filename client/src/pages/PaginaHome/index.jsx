@@ -19,7 +19,7 @@ import { FaHome, FaBook, FaRoute, FaFile, FaCog, FaSearch } from 'react-icons/fa
 import axios from 'axios';
 
 function PaginaHome() {
-  const isAdmin = localStorage.getItem('is_admin') === 'true';
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
   return (
     <Router>
@@ -28,30 +28,24 @@ function PaginaHome() {
 
         <div className="main-content">
           <Routes>
-            {/* Rotas para Usuários Normais */}
-            {!isAdmin ? (
-              <>
-                <Route path="/" element={<MenuFunc />} />
-                <Route path="/menu-maq" element={<MenuMaq />} />
-                <Route path="/menu-curso" element={<MenuCurso />} />
-                <Route path="/cursos-da-maquina/:id" element={<CursosDaMaquina />} />
-                <Route path="/curso/:idcurso/aula/:idaula" element={<VisualizarAula />} />
-                <Route path="/cadastro-navbar" element={<NavbarPage />} />
-                <Route path="*" element={<Navigate to="/" />} /> {/* Redireciona para a página inicial */}
-              </>
-            ) : (
-              <>
-                <Route path="/consulta-geral" element={<ConsultaFuncs />} />
-                <Route path="/curso/:idcurso" element={<AulasDoCurso />} />
-                <Route path="/cadastro-treinamento" element={<CadastroTreinamento />} />
-                <Route path="/cadastro-aulas" element={<CadastroAulas />} />
-                <Route path="/cadastro-maquinas" element={<CadastroMaquinas />} />
-                <Route path="/cadastro-usuarios" element={<CadastroUsuarios />} />
-                <Route path="/cadastro-area" element={<CadastroArea />} />
-                <Route path="/cadastro-questionario" element={<CadastroQuestionario />} />
-                <Route path="*" element={<Navigate to="/consulta-geral" />} /> {/* Redireciona para consultas */}
-              </>
-            )}
+            <>
+              <Route path="/" element={<MenuFunc />} />
+              <Route path="/menu-maq" element={<MenuMaq />} />
+              <Route path="/menu-curso" element={<MenuCurso />} />
+              <Route path="/cursos-da-maquina/:id" element={<CursosDaMaquina />} />
+              <Route path="/curso/:idcurso/aula/:idaula" element={<VisualizarAula />} />
+              <Route path="/cadastro-navbar" element={<NavbarPage />} />
+              <Route path="*" element={<Navigate to="/" />} /> {/* Redireciona para a página inicial */}
+              <Route path="/consulta-geral" element={<ConsultaFuncs />} />
+              <Route path="/curso/:idcurso" element={<AulasDoCurso />} />
+              <Route path="/cadastro-treinamento" element={<CadastroTreinamento />} />
+              <Route path="/cadastro-aulas" element={<CadastroAulas />} />
+              <Route path="/cadastro-maquinas" element={<CadastroMaquinas />} />
+              <Route path="/cadastro-usuarios" element={<CadastroUsuarios />} />
+              <Route path="/cadastro-area" element={<CadastroArea />} />
+              <Route path="/cadastro-questionario" element={<CadastroQuestionario />} />
+              <Route path="*" element={<Navigate to="/consulta-geral" />} /> {/* Redireciona para consultas */}
+            </>
           </Routes>
         </div>
       </div>
@@ -61,7 +55,7 @@ function PaginaHome() {
 
 function Sidebar() {
   const navigate = useNavigate();
-  const isAdmin = localStorage.getItem('isAdmin') === 'true'; // Verificar se o usuário é admin
+  const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
 
   return (
     <aside className="sidebar">
