@@ -14,6 +14,7 @@ import CadastroMaquinas from '../CadastroMaquinas';
 import CadastroUsuarios from '../CadastroUsuarios';
 import CadastroArea from '../CadastroAreas';
 import CadastroQuestionario from '../CadastroQuestionario';
+import Relatorios from '../Relatorios';
 import './styles.css';
 import { FaHome, FaBook, FaRoute, FaFile, FaCog, FaSearch } from 'react-icons/fa';
 
@@ -36,6 +37,7 @@ function PaginaHome() {
               <Route path="/cadastro-navbar" element={<NavbarPage />} />
               <Route path="*" element={<Navigate to="/" />} /> {/* Redireciona para a página inicial */}
               <Route path="/consulta-geral" element={<ConsultaFuncs />} />
+              <Route path="/Relatorios" element={<Relatorios />} />
               <Route path="/curso/:idcurso" element={<AulasDoCurso />} />
               <Route path="/cadastro-treinamento" element={<CadastroTreinamento />} />
               <Route path="/cadastro-aulas" element={<CadastroAulas />} />
