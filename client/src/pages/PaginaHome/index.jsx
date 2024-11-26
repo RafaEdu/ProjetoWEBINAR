@@ -28,25 +28,41 @@ function PaginaHome() {
 
         <div className="main-content">
           <Routes>
-            <>
-              <Route path="/" element={<MenuFunc />} />
-              <Route path="/menu-maq" element={<MenuMaq />} />
-              <Route path="/menu-curso" element={<MenuCurso />} />
-              <Route path="/cursos-da-maquina/:id" element={<CursosDaMaquina />} />
-              <Route path="/curso/:idcurso/aula/:idaula" element={<VisualizarAula />} />
-              <Route path="/cadastro-navbar" element={<NavbarPage />} />
-              <Route path="*" element={<Navigate to="/" />} /> {/* Redireciona para a página inicial */}
-              <Route path="/consulta-geral" element={<ConsultaFuncs />} />
-              <Route path="/Relatorios" element={<Relatorios />} />
-              <Route path="/curso/:idcurso" element={<AulasDoCurso />} />
-              <Route path="/cadastro-treinamento" element={<CadastroTreinamento />} />
-              <Route path="/cadastro-aulas" element={<CadastroAulas />} />
-              <Route path="/cadastro-maquinas" element={<CadastroMaquinas />} />
-              <Route path="/cadastro-usuarios" element={<CadastroUsuarios />} />
-              <Route path="/cadastro-area" element={<CadastroArea />} />
-              <Route path="/cadastro-questionario" element={<CadastroQuestionario />} />
-              <Route path="*" element={<Navigate to="/consulta-geral" />} /> {/* Redireciona para consultas */}
-            </>
+            {/* Rotas para Usuários Normais */}
+            {!isAdmin && (
+              <>
+                <Route path="/" element={<MenuFunc />} />
+                <Route path="/menu-maq" element={<MenuMaq />} />
+                <Route path="/menu-curso" element={<MenuCurso />} />
+                <Route path="/cursos-da-maquina/:id" element={<CursosDaMaquina />} />
+                <Route path="/curso/:idcurso/aula/:idaula" element={<VisualizarAula />} />
+                <Route path="/cadastro-navbar" element={<NavbarPage />} />
+                <Route path="*" element={<Navigate to="/" />} /> {/* Redireciona para a página inicial */}
+              </>
+            )}
+
+            {/* Rotas para Administradores */}
+            {isAdmin && (
+              <>
+                <Route path="/" element={<MenuFunc />} />
+                <Route path="/menu-maq" element={<MenuMaq />} />
+                <Route path="/menu-curso" element={<MenuCurso />} />
+                <Route path="/cursos-da-maquina/:id" element={<CursosDaMaquina />} />
+                <Route path="/curso/:idcurso/aula/:idaula" element={<VisualizarAula />} />
+                <Route path="/cadastro-navbar" element={<NavbarPage />} />
+                <Route path="*" element={<Navigate to="/" />} /> {/* Redireciona para a página inicial */}
+                <Route path="/consulta-geral" element={<ConsultaFuncs />} />
+                <Route path="/Relatorios" element={<Relatorios />} />
+                <Route path="/curso/:idcurso" element={<AulasDoCurso />} />
+                <Route path="/cadastro-treinamento" element={<CadastroTreinamento />} />
+                <Route path="/cadastro-aulas" element={<CadastroAulas />} />
+                <Route path="/cadastro-maquinas" element={<CadastroMaquinas />} />
+                <Route path="/cadastro-usuarios" element={<CadastroUsuarios />} />
+                <Route path="/cadastro-area" element={<CadastroArea />} />
+                <Route path="/cadastro-questionario" element={<CadastroQuestionario />} />
+                <Route path="*" element={<Navigate to="/consulta-geral" />} /> {/* Redireciona para consultas */}
+              </>
+            )}
           </Routes>
         </div>
       </div>
@@ -62,7 +78,7 @@ function Sidebar() {
     <aside className="sidebar">
       {isAdmin ? (
         <>
-         <button onClick={() => navigate('/')} className="icon-button" title="Página Inicial">
+          <button onClick={() => navigate('/')} className="icon-button" title="Página Inicial">
             <FaHome />
           </button>
           <button onClick={() => navigate('/menu-maq')} className="icon-button" title="Máquinas">
