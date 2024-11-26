@@ -62,6 +62,15 @@ function Sidebar() {
     <aside className="sidebar">
       {isAdmin ? (
         <>
+         <button onClick={() => navigate('/')} className="icon-button" title="Página Inicial">
+            <FaHome />
+          </button>
+          <button onClick={() => navigate('/menu-maq')} className="icon-button" title="Máquinas">
+            <FaRoute />
+          </button>
+          <button onClick={() => navigate('/menu-curso')} className="icon-button" title="Cursos">
+            <FaBook />
+          </button>
           <button onClick={() => navigate('/relatorios')} className="icon-button" title="Relatórios">
             <FaFile />
           </button>

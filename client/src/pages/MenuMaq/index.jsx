@@ -5,18 +5,33 @@ import { useNavigate } from 'react-router-dom';
 import './styles.css';
 
 function MenuMaq() {
-    const [maquinasAtrib, setMaquinasAtrib] = useState([]);
+    const [maquinasAtrib, setMaquinasAtrib] = useState([]); // Corrigir para usar este estado
     const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchMaquinas = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/maquinas');
+                const userId = localStorage.getItem('id'); // Pega o ID do usuário do localStorage
+
+                if (!userId) {
+                    console.error('ID do usuário não encontrado no localStorage.');
+                    return;
+                }
+
+                // Chama a API passando o ID do usuário na URL
+                const response = await fetch(`http://localhost:8000/api/maquinas-do-usuario/${userId}/`);
                 const data = await response.json();
-                setMaquinasAtrib(data);
+
+                // Mapear as máquinas para o formato usado no estado
+                const maquinas = data.map((maquina) => ({
+                    idmaquina: maquina.idmaquina, // Ajustar conforme o retorno da API
+                    nomeMaquina: maquina.nomeMaquina,
+                }));
+
+                setMaquinasAtrib(data); // Atualizar o estado correto
             } catch (error) {
-                console.error('Erro ao buscar máquinas:', error);
+                console.error('Erro ao buscar máquinas do usuário:', error);
             }
         };
 
@@ -52,7 +67,7 @@ function MenuMaq() {
                     {filteredMaq.map((maquina) => {
                         const progressPercent = 70; // Progresso estático
                         return (
-                            <div 
+                            <div
                                 key={maquina.idmaquina}
                                 className="menu-maq-item"
                                 onClick={() => handleMaqClick(maquina.idmaquina)} // Aqui estamos passando idmaquina

@@ -178,3 +178,14 @@ class AulaSerializer(serializers.ModelSerializer):
 
         aula.save()  # Salva as atualizações no banco
         return aula
+    
+class MaquinaUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Maquina
+        fields = ['idmaquina', 'nomeMaquina']
+
+
+class CursosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Curso
+        fields = '__all__' 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaSwatchbook } from 'react-icons/fa'; 
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
-import './styles.css'; 
+import { useNavigate } from 'react-router-dom';
+import './styles.css';
 
 function MenuCurso() {
     const [cursosEmProgresso, setCursosEmProgresso] = useState([]); // Estado para armazenar cursos
@@ -11,9 +11,24 @@ function MenuCurso() {
     useEffect(() => {
         const fetchCursos = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/cursos'); // Substituir pelo seu endpoint da API
+                // Obtém o user_id do localStorage
+                const userId = localStorage.getItem('id');
+
+                if (!userId) {
+                    console.error('ID do usuário não encontrado no localStorage.');
+                    return;
+                }
+
+                // Faz a requisição com o user_id no URL
+                const response = await fetch(`http://localhost:8000/api/cursos-list/${userId}/`); // Passando userId na URL
                 const data = await response.json();
-                setCursosEmProgresso(data); // Atualiza os cursos no estado
+
+                // Verifica se a resposta foi bem-sucedida
+                if (response.ok) {
+                    setCursosEmProgresso(data); // Atualiza os cursos no estado
+                } else {
+                    console.error('Erro ao buscar cursos:', data);
+                }
             } catch (error) {
                 console.error('Erro ao buscar cursos:', error);
             }

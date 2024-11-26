@@ -29,9 +29,8 @@ function LoginUsuarios({ onLoginSuccess }) {
         // Armazena os tokens JWT no localStorage
         localStorage.setItem('access', data.access);
         localStorage.setItem('refresh', data.refresh);
-
-        // Armazena o nome do usuário no localStorage
-        localStorage.setItem('nome', data.nome);  // Salva o nome do usuário
+        localStorage.setItem('id', data.id)
+        localStorage.setItem('nome', data.nome);  
         localStorage.setItem('isAdmin', data.is_admin);
 
         setErro('');

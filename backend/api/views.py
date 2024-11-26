@@ -8,11 +8,13 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from .models import Aula, Video, Slide, User, Maquina, Area, Questionario, Curso, Pergunta, Alternativa
 from .serializers import UserSerializer, MaquinaSerializer, AreaSerializer, QuestionarioSerializer, CursoSerializer, AulaSerializer, VideoSerializer, SlideSerializer
+from .serializers import CursosSerializer, MaquinaUserSerializer
 
 
 class LoginView(APIView):
     def post(self, request):
         email = request.data.get("email")
+        id = request.data.get("id")
         password = request.data.get("password")
 
         # Tenta autenticar o usuário
@@ -21,6 +23,7 @@ class LoginView(APIView):
             refresh = RefreshToken.for_user(user)
             return Response({
                 'nome': user.nome,
+                'id': user.id,
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
                 'is_admin': user.is_admin  # Inclui o valor de is_admin na resposta
@@ -161,3 +164,49 @@ class SlideViewSet(viewsets.ModelViewSet):
     queryset = Slide.objects.all()
     serializer_class = SlideSerializer
  
+class MaquinasDoUsuarioPorIDView(APIView):
+    def get(self, request, user_id):
+        try:
+            # Busca o usuário pelo ID
+            usuario = User.objects.get(id=user_id)
+
+           
+            maquinas = usuario.maquinas.all()
+
+            
+            serializer = MaquinaUserSerializer(maquinas, many=True)
+
+            return Response(serializer.data, status=200)
+        except User.DoesNotExist:
+            return Response({'error': 'Usuário não encontrado.'}, status=404)
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
+        
+        
+class CursoListView(APIView):
+    def get(self, request, user_id):
+        try:
+            # Busca o usuário pelo ID
+            usuario = User.objects.get(id=user_id)
+
+            # Obtém as máquinas associadas ao usuário
+            user_maquinas = usuario.maquinas.all()
+
+            if not user_maquinas:
+                return Response({'error': 'O usuário não tem máquinas associadas.'}, status=404)
+
+            # Filtra os cursos vinculados às máquinas do usuário
+            cursos = Curso.objects.filter(maquina__in=user_maquinas).distinct()
+
+            if not cursos.exists():
+                return Response({'detail': 'Nenhum curso encontrado para as máquinas associadas a este usuário.'}, status=404)
+
+            # Serializa os cursos filtrados
+            serializer = CursosSerializer(cursos, many=True)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except User.DoesNotExist:
+            return Response({'error': 'Usuário não encontrado.'}, status=404)
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)

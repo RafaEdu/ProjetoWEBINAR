@@ -21,14 +21,28 @@ function MenuFunc() {
 
         const fetchMaquinas = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/maquinas'); 
+                const userId = localStorage.getItem('id'); // Pega o ID do usuário do localStorage
+
+                if (!userId) {
+                    console.error('ID do usuário não encontrado no localStorage.');
+                    return;
+                }
+
+                // Chama a API passando o ID do usuário na URL
+                const response = await fetch(`http://localhost:8000/api/maquinas-do-usuario/${userId}/`);
                 const data = await response.json();
-                setMaquinasEmProgresso(data);
+
+                // Mapear as máquinas para o formato usado no estado
+                const maquinas = data.map((maquina) => ({
+                    idmaquina: maquina.idmaquina, // Ajustar conforme o retorno da API
+                    nomeMaquina: maquina.nomeMaquina,
+                }));
+
+                setMaquinasEmProgresso(data); // Atualizar o estado correto
             } catch (error) {
-                console.error('Erro ao buscar máquinas:', error);
+                console.error('Erro ao buscar máquinas do usuário:', error);
             }
         };
-
         const fetchCursos = async () => {
             try {
                 const response = await fetch('http://localhost:8000/api/cursos'); 
