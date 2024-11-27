@@ -7,13 +7,13 @@ function MenuFunc() {
     const [maquinasEmProgresso, setMaquinasEmProgresso] = useState([]);
     const [cursosEmProgresso, setCursosEmProgresso] = useState([]);
     const [userName, setUserName] = useState('');  // Estado para o nome do usuário
-
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
     const maquinasCarousel = useRef(null);
     const cursosCarousel = useRef(null);
     const navigate = useNavigate(); // Hook de navegação
 
     useEffect(() => {
-        // Recuperar o nome do usuário do localStorage
+       if(!isAdmin){
         const storedUserName = localStorage.getItem('nome');
         if (storedUserName) {
             setUserName(storedUserName);  // Atualiza o estado com o nome do usuário
@@ -43,7 +43,47 @@ function MenuFunc() {
                 console.error('Erro ao buscar máquinas do usuário:', error);
             }
         };
-        const fetchCursos = async () => {
+        fetchMaquinas();
+    } else{
+
+        const fetchMaquinasAdm = async () => {
+            const response = await fetch(`http://localhost:8000/api/maquinas`);
+            const data = await response.json();    
+                
+            setMaquinasEmProgresso(data);
+
+    }
+    fetchMaquinasAdm();
+}
+      if(!isAdmin){  
+      const fetchCursos = async () => {
+            try {
+                // Obtém o user_id do localStorage
+                const userId = localStorage.getItem('id');
+
+                if (!userId) {
+                    console.error('ID do usuário não encontrado no localStorage.');
+                    return;
+                }
+
+                // Faz a requisição com o user_id no URL
+                const response = await fetch(`http://localhost:8000/api/cursos-list/${userId}/`); // Passando userId na URL
+                const data = await response.json();
+
+                // Verifica se a resposta foi bem-sucedida
+                if (response.ok) {
+                    setCursosEmProgresso(data); // Atualiza os cursos no estado
+                } else {
+                    console.error('Erro ao buscar cursos:', data);
+                }
+            } catch (error) {
+                console.error('Erro ao buscar cursos:', error);
+            }
+        };
+
+        fetchCursos(); // Puxa os cursos ao carregar o componente
+    } else{
+        const fetchCursosAdm = async () => {
             try {
                 const response = await fetch('http://localhost:8000/api/cursos'); 
                 const data = await response.json();
@@ -52,9 +92,10 @@ function MenuFunc() {
                 console.error('Erro ao buscar cursos:', error);
             }
         };
-
-        fetchMaquinas();
-        fetchCursos();
+        
+        fetchCursosAdm();
+        
+    } 
     }, []);  // O array vazio significa que esse efeito será executado apenas uma vez quando o componente for montado.
 
     const handleScroll = (carouselRef, direction) => {

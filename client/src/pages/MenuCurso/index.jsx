@@ -4,12 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import './styles.css';
 
 function MenuCurso() {
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
     const [cursosEmProgresso, setCursosEmProgresso] = useState([]); // Estado para armazenar cursos
     const [searchTerm, setSearchTerm] = useState(''); // Estado para armazenar a busca
     const navigate = useNavigate(); // Hook para navegação
 
     useEffect(() => {
-        const fetchCursos = async () => {
+      if(!isAdmin){  
+      const fetchCursos = async () => {
             try {
                 // Obtém o user_id do localStorage
                 const userId = localStorage.getItem('id');
@@ -35,7 +37,27 @@ function MenuCurso() {
         };
 
         fetchCursos(); // Puxa os cursos ao carregar o componente
-    }, []);
+    }   else {
+        const fetchCursosAdm = async () => {
+            try {
+            const response = await fetch(`http://localhost:8000/api/cursos`)
+            const data = await response.json();
+
+            if (response.ok) {
+                setCursosEmProgresso(data); // Atualiza os cursos no estado
+            } else {
+                console.error('Erro ao buscar cursos:', data);
+            }
+        } catch (error) {
+            console.error('Erro ao buscar cursos:', error);
+        }
+            
+    }
+    fetchCursosAdm();
+}
+
+}, []);
+
 
     // Função que atualiza o estado da busca conforme o usuário digita
     const handleSearchChange = (event) => {

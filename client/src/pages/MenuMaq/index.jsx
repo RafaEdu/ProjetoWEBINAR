@@ -5,11 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import './styles.css';
 
 function MenuMaq() {
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
     const [maquinasAtrib, setMaquinasAtrib] = useState([]); // Corrigir para usar este estado
     const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
+        if(!isAdmin){
         const fetchMaquinas = async () => {
             try {
                 const userId = localStorage.getItem('id'); // Pega o ID do usuário do localStorage
@@ -36,6 +38,16 @@ function MenuMaq() {
         };
 
         fetchMaquinas();
+    } else{
+
+        const fetchMaquinasAdm = async () => {
+        const response = await fetch(`http://localhost:8000/api/maquinas`);
+        const data = await response.json();    
+            
+        setMaquinasAtrib(data);
+    }
+    fetchMaquinasAdm();
+}
     }, []);
 
     const handleSearchChange = (event) => {

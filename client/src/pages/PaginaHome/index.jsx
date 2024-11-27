@@ -34,6 +34,7 @@ function PaginaHome() {
                 <Route path="/" element={<MenuFunc />} />
                 <Route path="/menu-maq" element={<MenuMaq />} />
                 <Route path="/menu-curso" element={<MenuCurso />} />
+                <Route path="/curso/:idcurso" element={<AulasDoCurso />} />
                 <Route path="/cursos-da-maquina/:id" element={<CursosDaMaquina />} />
                 <Route path="/curso/:idcurso/aula/:idaula" element={<VisualizarAula />} />
                 <Route path="/cadastro-navbar" element={<NavbarPage />} />
