@@ -23,6 +23,7 @@ function VisualizarAula() {
                 setCanProceed(false);
                 setVideoWatched(false);
                 setTimer(0);
+                setConteudo(null); // Limpa conteúdo anterior
 
                 const response = await fetch(`http://localhost:8000/api/aulas/${idaula}/`);
                 if (!response.ok) throw new Error('Erro na resposta da API');
@@ -85,7 +86,7 @@ function VisualizarAula() {
         if (conteudo?.tipo === 'slide') {
             setTimer(0);
             const intervalId = setInterval(() => {
-                setTimer(prevTimer => {
+                setTimer((prevTimer) => {
                     if (prevTimer >= 15) {
                         clearInterval(intervalId);
                         setCanProceed(true);
@@ -100,22 +101,49 @@ function VisualizarAula() {
         }
     }, [conteudo]);
 
+    useEffect(() => {
+        if (conteudo?.tipo === 'video' && videoRef.current) {
+            videoRef.current.load(); // Recarrega o vídeo ao atualizar o conteúdo
+        }
+    }, [conteudo]);
+
     const getNextAulaId = () => {
-        const currentIndex = aulas.findIndex(a => a.idaula === parseInt(idaula));
+        const currentIndex = aulas.findIndex((a) => a.idaula === parseInt(idaula));
         return currentIndex < aulas.length - 1 ? aulas[currentIndex + 1].idaula : null;
     };
 
     const getPrevAulaId = () => {
-        const currentIndex = aulas.findIndex(a => a.idaula === parseInt(idaula));
+        const currentIndex = aulas.findIndex((a) => a.idaula === parseInt(idaula));
         return currentIndex > 0 ? aulas[currentIndex - 1].idaula : null;
     };
 
-    const handleNextClick = () => {
+    const handleNextClick = async () => {
         const nextAulaId = getNextAulaId();
         if (nextAulaId) {
-            navigate(`/curso/${idcurso}/aula/${nextAulaId}`);
+            try {
+                const userId = localStorage.getItem('id');
+                const response = await fetch('http://localhost:8000/api/concluir-aula/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        aula_id: idaula,
+                    }),
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Erro ao concluir aula');
+                }
+    
+                navigate(`/curso/${idcurso}/aula/${nextAulaId}`);
+            } catch (error) {
+                console.error('Erro ao concluir aula:', error);
+            }
         }
     };
+    
 
     const handlePrevClick = () => {
         const prevAulaId = getPrevAulaId();
@@ -136,31 +164,50 @@ function VisualizarAula() {
     const handleRespostaChange = (perguntaIndex, alternativaIndex) => {
         const alternativaSelecionada = questionario.perguntas[perguntaIndex].alternativas[alternativaIndex];
         if (alternativaSelecionada) {
-            setRespostas(prevRespostas => ({
+            setRespostas((prevRespostas) => ({
                 ...prevRespostas,
                 [perguntaIndex]: {
-                    is_correta: alternativaSelecionada.is_correta
-                }
+                    is_correta: alternativaSelecionada.is_correta,
+                },
             }));
         }
     };
 
-    const handleEnviarRespostas = () => {
+    const handleEnviarRespostas = async () => {
         const resultados = Object.values(respostas).map(resposta => resposta.is_correta);
-
+    
         // Verifica se todas as respostas estão corretas
         const todasCorretas = resultados.every(isCorreta => isCorreta);
         
         if (todasCorretas) {
             alert('Todas as respostas estão corretas! Você concluiu o questionário.');
-            // Aqui você pode enviar os resultados para a API
-            console.log('Resultados:', resultados);
-            navigate('/home');
-
+    
+            try {
+                const userId = localStorage.getItem('id'); 
+                const response = await fetch('http://localhost:8000/api/concluir-aula/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        aula_id: idaula,
+                    }),
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Erro ao concluir aula');
+                }
+    
+                navigate('/home');
+            } catch (error) {
+                console.error('Erro ao concluir aula:', error);
+            }
         } else {
             alert('Alguma resposta está errada. Por favor, refaça o questionário.');
         }
     };
+    
 
     if (!aula) return <p>Carregando...</p>;
 
@@ -178,17 +225,17 @@ function VisualizarAula() {
             <section className="aula-section">
                 <h2 className="aula-title">{aula.titulo}</h2>
                 <hr className="aula-separator" />
-                
+
                 <div className="aula-content-display">
                     {conteudo ? (
                         conteudo.tipo === 'video' ? (
                             <div className="aula-video-container">
                                 <h3>Vídeo</h3>
-                                <video 
+                                <video
                                     ref={videoRef}
-                                    controls 
+                                    controls
                                     width="900"
-                                    onEnded={handleVideoEnded} 
+                                    onEnded={handleVideoEnded}
                                 >
                                     <source src={conteudo.url} type="video/mp4" />
                                     Seu navegador não suporta a exibição de vídeos.
@@ -213,15 +260,21 @@ function VisualizarAula() {
                 </div>
 
                 <div className="navigation-buttons">
-                    <button onClick={handlePrevClick} disabled={!getPrevAulaId()}>Voltar</button>
+                    <button onClick={handlePrevClick} disabled={!getPrevAulaId()}>
+                        Voltar
+                    </button>
                     {isLastAula ? (
                         hasQuestionario && !showQuestionario ? (
-                            <button onClick={handleShowQuestionario} disabled={!canProceed}>Responder Questionário</button>
+                            <button onClick={handleShowQuestionario} disabled={!canProceed}>
+                                Responder Questionário
+                            </button>
                         ) : (
                             <button disabled={!canProceed}>Concluir Aula</button>
                         )
                     ) : (
-                        <button onClick={handleNextClick} disabled={!canProceed}>Próxima Aula</button>
+                        <button onClick={handleNextClick} disabled={!canProceed}>
+                            Próxima Aula
+                        </button>
                     )}
                 </div>
 
@@ -231,18 +284,21 @@ function VisualizarAula() {
                         {questionario.perguntas.map((pergunta, index) => (
                             <div key={index}>
                                 <h4>{pergunta.texto}</h4>
-                                {pergunta.alternativas.map((alternativa, altIndex) => (
-                                    <div key={altIndex}>
-                                        <label>
+                                <ul>
+                                    {pergunta.alternativas.map((alternativa, altIndex) => (
+                                        <li key={altIndex}>
                                             <input
                                                 type="radio"
-                                                name={`pergunta_${index}`}
+                                                id={`pergunta-${index}-alt-${altIndex}`}
+                                                name={`pergunta-${index}`}
                                                 onChange={() => handleRespostaChange(index, altIndex)}
                                             />
-                                            {alternativa.texto}
-                                        </label>
-                                    </div>
-                                ))}
+                                            <label htmlFor={`pergunta-${index}-alt-${altIndex}`}>
+                                                {alternativa.texto}
+                                            </label>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
                         ))}
                         <button onClick={handleEnviarRespostas}>Enviar Respostas</button>

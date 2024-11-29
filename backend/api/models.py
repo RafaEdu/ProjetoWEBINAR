@@ -130,3 +130,24 @@ class Aula(models.Model):
     idvideo = models.ForeignKey(Video, on_delete=models.CASCADE, null=True)
     idslide = models.ForeignKey(Slide, on_delete=models.CASCADE, null=True)
     idcurso = models.ForeignKey(Curso, on_delete=models.SET_NULL, null=True)
+
+
+class AulaUsuario(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name="aulas_usuario")
+    aula = models.ForeignKey(Aula, on_delete=models.CASCADE, related_name="usuarios_aula")
+    concluida = models.BooleanField(default=False)  # Indica se o usuário concluiu a aula
+    data_conclusao = models.DateTimeField(null=True, blank=True)  # Data opcional de conclusão
+
+
+class CursoUsuario(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cursos_usuario")
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name="usuarios_curso")
+    progresso = models.FloatField(default=0)  # Porcentagem (0 a 100)
+
+
+
+class MaquinaUsuarioProgresso(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name="maquinas_usuario_progresso")
+    maquina = models.ForeignKey(Maquina, on_delete=models.CASCADE, related_name="usuarios_maquina_progresso")
+    progresso = models.FloatField(default=0)  # Porcentagem (0 a 100)
+

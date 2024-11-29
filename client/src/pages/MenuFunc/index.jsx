@@ -45,6 +45,10 @@ function MenuFunc() {
         };
         fetchMaquinas();
     } else{
+        const storedUserName = localStorage.getItem('nome');
+        if (storedUserName) {
+            setUserName(storedUserName);  // Atualiza o estado com o nome do usuário
+        }
 
         const fetchMaquinasAdm = async () => {
             const response = await fetch(`http://localhost:8000/api/maquinas`);

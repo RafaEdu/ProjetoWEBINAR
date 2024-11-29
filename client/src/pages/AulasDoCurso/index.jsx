@@ -13,7 +13,8 @@ function AulasDoCurso() {
     useEffect(() => {
         const fetchAulas = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/aulas/curso/${idcurso}/`);
+                const userId = localStorage.getItem('id');
+                const response = await fetch(`http://localhost:8000/api/aulas/curso/${idcurso}/completadas/?user_id=${userId}`);
                 const data = await response.json();
                 // Ordenar as aulas por título
                 data.sort((a, b) => a.titulo.localeCompare(b.titulo));
@@ -41,7 +42,6 @@ function AulasDoCurso() {
         navigate(`/curso/${idcurso}/aula/${idaula}`);
     };
     
-
     return (
         <div className="aulas-curso-content">
             <div className="curso-container">
@@ -57,7 +57,13 @@ function AulasDoCurso() {
                     <div className="aulas-curso-list">
                         {aulas.map(aula => (
                             <div key={aula.idaula} className="aulas-curso-item">
-                                <button className="aulas-curso-button" onClick={() => handleAssistirClick(aula.idaula)}>Assistir</button>
+                                <button
+                                    className={`aulas-curso-button ${aula.concluida ? 'concluida' : ''}`}
+                                    onClick={() => !aula.concluida && handleAssistirClick(aula.idaula)}
+                                    disabled={aula.concluida}
+                                >
+                                    {aula.concluida ? 'Concluída' : 'Assistir'}
+                                </button>
                                 <h3 className="aulas-text">{aula.titulo}</h3>
                                 <p className="duracao-aula">
                                     <FaRegClock style={{ marginRight: '5px', color: 'blue' }} />

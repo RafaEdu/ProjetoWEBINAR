@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
-from .models import User, Maquina, Area, Questionario, Pergunta, Alternativa, Curso, Video, Slide, Aula
+from .models import MaquinaUsuarioProgresso, AulaUsuario, CursoUsuario, User, Maquina, Area, Questionario, Pergunta, Alternativa, Curso, Video, Slide, Aula
 
 
 from django.contrib.auth.hashers import make_password
@@ -189,3 +189,20 @@ class CursosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Curso
         fields = '__all__' 
+
+
+
+class ProgressoAulaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AulaUsuario
+        fields = ['aula', 'concluida']
+
+class ProgressoCursoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CursoUsuario
+        fields = ['curso', 'progresso']
+
+class ProgressoMaquinaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MaquinaUsuarioProgresso
+        fields = ['maquina', 'progresso']        

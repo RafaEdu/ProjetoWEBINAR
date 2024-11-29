@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken  
 from rest_framework import serializers  
 from django.contrib.auth import authenticate
-from .models import Aula, Video, Slide, User, Maquina, Area, Questionario, Curso, Pergunta, Alternativa
+from .models import AulaUsuario, MaquinaUsuarioProgresso, CursoUsuario, Aula, Video, Slide, User, Maquina, Area, Questionario, Curso, Pergunta, Alternativa
 from .serializers import UserSerializer, MaquinaSerializer, AreaSerializer, QuestionarioSerializer, CursoSerializer, AulaSerializer, VideoSerializer, SlideSerializer
 from .serializers import CursosSerializer, MaquinaUserSerializer
 
@@ -210,3 +210,150 @@ class CursoListView(APIView):
             return Response({'error': 'Usuário não encontrado.'}, status=404)
         except Exception as e:
             return Response({'error': str(e)}, status=500)
+
+
+
+class ConcluirAulaView(APIView):
+    def post(self, request):
+        user_id = request.data.get('user_id')  # Obter o ID do usuário do payload
+        aula_id = request.data.get('aula_id')
+
+        try:
+            usuario = User.objects.get(pk=user_id)  # Busca o usuário pelo ID
+        except User.DoesNotExist:
+            return Response({"error": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            aula = Aula.objects.get(pk=aula_id)
+        except Aula.DoesNotExist:
+            return Response({"error": "Aula não encontrada."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Marca a aula como concluída para o usuário
+        aula_usuario, created = AulaUsuario.objects.get_or_create(
+            usuario=usuario,
+            aula=aula
+        )
+        aula_usuario.concluida = True
+        aula_usuario.save()
+
+        # Atualiza o progresso do curso relacionado
+        self.atualizar_progresso_curso(usuario, aula.idcurso)
+
+        return Response({"message": "Aula concluída com sucesso!"}, status=status.HTTP_200_OK)
+
+    def atualizar_progresso_curso(self, usuario, curso):
+        # Busca todas as aulas do curso
+        aulas_do_curso = curso.aula_set.all()
+        total_aulas = aulas_do_curso.count()
+
+        # Verifica quantas aulas desse curso o usuário concluiu
+        aulas_concluidas = AulaUsuario.objects.filter(
+            usuario=usuario,
+            aula__idcurso=curso,
+            concluida=True
+        ).count()
+
+        # Calcula o progresso
+        progresso = (aulas_concluidas / total_aulas) * 100 if total_aulas > 0 else 0
+
+        # Atualiza ou cria o registro de progresso do curso para o usuário
+        curso_usuario, created = CursoUsuario.objects.get_or_create(
+            usuario=usuario,
+            curso=curso
+        )
+        curso_usuario.progresso = progresso
+        curso_usuario.save()
+
+        # Atualiza o progresso da máquina associada
+        self.atualizar_progresso_maquina(usuario, curso)
+
+    def atualizar_progresso_maquina(self, usuario, curso):
+        # Identifica as máquinas associadas ao curso
+        maquinas = curso.maquina.all()
+        for maquina in maquinas:
+            cursos_da_maquina = maquina.curso_set.all()
+            total_cursos = cursos_da_maquina.count()
+
+            # Verifica quantos cursos dessa máquina o usuário concluiu
+            cursos_concluidos = CursoUsuario.objects.filter(
+                usuario=usuario,
+                curso__in=cursos_da_maquina,
+                progresso=100
+            ).count()
+
+            # Calcula o progresso da máquina
+            progresso_maquina = (cursos_concluidos / total_cursos) * 100 if total_cursos > 0 else 0
+
+            # Atualiza ou cria o registro de progresso da máquina
+            maquina_usuario, created = MaquinaUsuarioProgresso.objects.get_or_create(
+                usuario=usuario,
+                maquina=maquina
+            )
+            maquina_usuario.progresso = progresso_maquina
+            maquina_usuario.save()
+
+
+
+class ConsultarProgressoView(APIView):
+    def get(self, request, user_id):
+        # Valida a existência do user_id
+        if not user_id:
+            return Response({"error": "O parâmetro user_id é obrigatório."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Verifica se o usuário existe
+        try:
+            usuario = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return Response({"error": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Consulta os dados relacionados
+        maquinas_progresso = MaquinaUsuarioProgresso.objects.filter(usuario=usuario).values(
+            "maquina__idmaquina", "maquina__nomeMaquina", "progresso"
+        )
+        cursos_progresso = CursoUsuario.objects.filter(usuario=usuario).values(
+            "curso__idcurso", "curso__titulo", "progresso"
+        )
+        aulas_concluidas = AulaUsuario.objects.filter(usuario=usuario, concluida=True).values(
+            "aula__idaula", "aula__titulo"
+        )
+
+        # Retorna os dados em formato simplificado
+        return Response({
+            "maquinas": list(maquinas_progresso),
+            "cursos": list(cursos_progresso),
+            "aulasConcluidas": list(aulas_concluidas),
+        }, status=status.HTTP_200_OK)
+
+
+
+
+class AulasComConclusaoView(APIView):
+    def get(self, request, idcurso):
+        user_id = request.query_params.get('user_id')  # Obtém o user_id dos parâmetros da URL
+
+        if not user_id:
+            return Response({"error": "O parâmetro user_id é obrigatório."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            usuario = User.objects.get(pk=user_id)  # Busca o usuário pelo ID
+        except User.DoesNotExist:
+            return Response({"error": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            # Obtém as aulas do curso
+            aulas = Aula.objects.filter(idcurso_id=idcurso).order_by('titulo')
+
+            # Monta os dados das aulas com o status de conclusão
+            aulas_data = []
+            for aula in aulas:
+                concluida = AulaUsuario.objects.filter(usuario=usuario, aula=aula, concluida=True).exists()
+                aulas_data.append({
+                    "idaula": aula.idaula,
+                    "titulo": aula.titulo,
+                    "duracao": aula.duracao,
+                    "concluida": concluida,
+                })
+
+            return Response(aulas_data, status=status.HTTP_200_OK)
+        except Aula.DoesNotExist:
+            return Response({"error": "Curso não encontrado ou sem aulas."}, status=status.HTTP_404_NOT_FOUND)
