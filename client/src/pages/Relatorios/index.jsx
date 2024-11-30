@@ -95,14 +95,48 @@ function Relatorios() {
     fetchDados(categoriaSelecionada);
   }, [categoriaSelecionada]);
 
-  const imprimirRelatorio = () => {
-    window.print();
+  // Função para gerar o arquivo CSV
+  const gerarCSV = () => {
+    let csvContent = "data:text/csv;charset=utf-8,";
+    const headers = ["ID", "Nome", "Relacionados"];
+
+    csvContent += headers.join(",") + "\n";  // Adiciona cabeçalho
+
+    // Prepara os dados de acordo com a categoria selecionada
+    if (categoriaSelecionada === "usuarios") {
+      dados.forEach((usuario) => {
+        const maquinas = relacoes[usuario.id]?.join(", ") || "Nenhuma máquina associada";
+        csvContent += `${usuario.id},${usuario.nome},${maquinas}\n`;
+      });
+    } else if (categoriaSelecionada === "maquinas") {
+      dados.forEach((maquina) => {
+        const usuarios = relacoes[maquina.id]?.join(", ") || "Nenhum usuário";
+        csvContent += `${maquina.id},${maquina.nome},${usuarios}\n`;
+      });
+    } else if (categoriaSelecionada === "cursos") {
+      dados.forEach((curso) => {
+        const funcionarios = relacoes[curso.id]?.join(", ") || "Nenhum funcionário";
+        csvContent += `${curso.id},${curso.nome},${funcionarios}\n`;
+      });
+    } else if (categoriaSelecionada === "areas") {
+      dados.forEach((area) => {
+        const maquinas = relacoes[area.id]?.join(", ") || "Nenhuma máquina";
+        csvContent += `${area.id},${area.nome},${maquinas}\n`;
+      });
+    }
+
+    // Cria um link para download do arquivo CSV
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `relatorio_${categoriaSelecionada}.csv`);
+    link.click();
   };
 
   return (
     <div className="consulta-container">
       <h1>Relatórios de {categoriaSelecionada.charAt(0).toUpperCase() + categoriaSelecionada.slice(1)}</h1>
-      
+
       <div className="botoes-categoria">
         <button onClick={() => setCategoriaSelecionada("usuarios")}>Usuários</button>
         <button onClick={() => setCategoriaSelecionada("maquinas")}>Máquinas</button>
@@ -110,8 +144,8 @@ function Relatorios() {
         <button onClick={() => setCategoriaSelecionada("areas")}>Áreas</button>
       </div>
 
-      <button onClick={imprimirRelatorio} className="btn-imprimir">
-        Imprimir Relatório
+      <button onClick={gerarCSV} className="btn-imprimir">
+        Gerar Relatório 
       </button>
 
       <ul>
