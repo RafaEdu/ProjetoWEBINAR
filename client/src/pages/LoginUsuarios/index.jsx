@@ -30,7 +30,8 @@ function LoginUsuarios({ onLoginSuccess }) {
         localStorage.setItem('access', data.access);
         localStorage.setItem('refresh', data.refresh);
         localStorage.setItem('id', data.id)
-        localStorage.setItem('nome', data.nome);  
+        localStorage.setItem('nome', data.nome);
+        localStorage.setItem('email', data.email);
         localStorage.setItem('isAdmin', data.is_admin);
 
         setErro('');

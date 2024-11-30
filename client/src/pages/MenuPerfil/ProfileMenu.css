@@ -1,0 +1,46 @@
+.profile-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    position: relative;
+    /* Adiciona referência para o dropdown */
+}
+
+/*
+Cor primária: #f5f5f5
+Cor secundária: #034638
+Cor terciária: #41b02a
+*/
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    /* Alinha o menu abaixo do botão */
+    right: 0;
+    width: auto;
+    /* Faz o menu crescer conforme o conteúdo */
+    min-width: 180px;
+    /* Largura mínima para o menu */
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    margin-right: 100px;
+    /* Adiciona espaçamento da borda direita */
+    z-index: 1000;
+    border: 2px solid #034638;
+}
+
+
+
+
+.navbar-buttons {
+    display: flex;
+    align-items: center;
+    /* Centraliza verticalmente */
+    gap: 20px;
+    /* Espaçamento entre os itens */
+}

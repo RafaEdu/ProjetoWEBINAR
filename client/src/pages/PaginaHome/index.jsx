@@ -16,7 +16,7 @@ import CadastroArea from '../CadastroAreas';
 import CadastroQuestionario from '../CadastroQuestionario';
 import Relatorios from '../Relatorios';
 import './styles.css';
-import { FaHome, FaBook, FaRoute, FaFile, FaCog, FaSearch } from 'react-icons/fa';
+import { FaHome, FaBook, FaRoute, FaFile, FaCog, FaSearch, FaAddressCard } from 'react-icons/fa';
 
 function PaginaHome() {
   const isAdmin = localStorage.getItem('isAdmin') === 'true';

@@ -22,6 +22,7 @@ class LoginView(APIView):
         if user is not None:
             refresh = RefreshToken.for_user(user)
             return Response({
+                'email':user.email,
                 'nome': user.nome,
                 'id': user.id,
                 'refresh': str(refresh),
