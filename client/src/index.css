@@ -19,31 +19,19 @@ Cor terciária: #41b02a
 
 .logout-button {
   background-color: #ffffff;
-  /* Cor de fundo do botão de logout */
   color: #034638;
-  /* Cor do texto */
   border: none;
-  /* Sem borda */
-  padding: 10px;
-  /* Padding para tornar o botão maior */
+  padding: 0;
   cursor: pointer;
-  /* Muda o cursor para uma mão ao passar sobre o botão */
-  border-radius: 5px;
-  /* Cantos arredondados */
   font-weight: bold;
-  /* Deixar o texto mais destacado */
   display: flex;
-  /* Alinha os filhos em linha */
   align-items: center;
-  /* Centraliza verticalmente o ícone */
   justify-content: center;
-  /* Centraliza horizontalmente o ícone */
   transition: background-color 0.3s ease;
-  /* Suaviza a transição de cor */
   height: 40px;
-  /* Define uma altura para o botão */
   width: 40px;
-  /* Define uma largura para o botão */
+  margin-top: -1px;
+  /* Ajuste o valor conforme necessário para alinhar */
 }
 
 .logout-button:hover {
