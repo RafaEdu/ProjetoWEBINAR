@@ -45,18 +45,17 @@ function Relatorios() {
   // Função para buscar máquinas relacionadas aos usuários
   const fetchRelacoesUsuarios = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/relacoes/usuarios-maquinas/");
+      const response = await fetch(`http://localhost:8000/api/relacoes/usuarios-maquinas/`);
       if (response.ok) {
         const data = await response.json();
         const relacoesMap = {};
-
+  
         data.forEach((relacao) => {
           if (!relacoesMap[relacao.user_id]) {
-            relacoesMap[relacao.user_id] = [];
+            relacoesMap[relacao.user_id] = relacao.maquinas; // Usa diretamente o array de máquinas
           }
-          relacoesMap[relacao.user_id].push(relacao.maquina_nome);
         });
-
+  
         setRelacoes(relacoesMap);
       } else {
         console.error("Erro ao buscar relações para usuários:", response.status);
@@ -71,18 +70,17 @@ function Relatorios() {
   // Função para buscar usuários relacionados às máquinas
   const fetchRelacoesMaquinas = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/relacoes/maquinas-usuarios/");
+      const response = await fetch(`http://localhost:8000/api/relacoes/maquinas-usuarios/`);
       if (response.ok) {
         const data = await response.json();
         const relacoesMap = {};
-
+  
         data.forEach((relacao) => {
           if (!relacoesMap[relacao.maquina_id]) {
-            relacoesMap[relacao.maquina_id] = [];
+            relacoesMap[relacao.maquina_id] = relacao.usuarios; // Usa diretamente o array de usuários
           }
-          relacoesMap[relacao.maquina_id].push(relacao.usuario_nome);
         });
-
+  
         setRelacoes(relacoesMap);
       } else {
         console.error("Erro ao buscar relações para máquinas:", response.status);
@@ -97,7 +95,7 @@ function Relatorios() {
   // Função para buscar usuários relacionados aos cursos
   const fetchRelacoesCursos = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/relacoes/cursos-usuarios/");
+      const response = await fetch(`http://localhost:8000/api/relacoes/cursos-usuarios/`);
       if (response.ok) {
         const data = await response.json();
         const relacoesMap = {};
@@ -123,7 +121,7 @@ function Relatorios() {
   // Função para buscar máquinas relacionadas às áreas
   const fetchRelacoesAreas = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/relacoes/areas-maquinas/");
+      const response = await fetch(`http://localhost:8000/api/relacoes/areas-maquinas/`);
       if (response.ok) {
         const data = await response.json();
         const relacoesMap = {};

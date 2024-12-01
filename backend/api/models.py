@@ -151,3 +151,20 @@ class MaquinaUsuarioProgresso(models.Model):
     maquina = models.ForeignKey(Maquina, on_delete=models.CASCADE, related_name="usuarios_maquina_progresso")
     progresso = models.FloatField(default=0)  # Porcentagem (0 a 100)
 
+
+
+class UsuarioRel(models.Model):
+    nome = models.CharField(max_length=255)
+    maquinas = models.ManyToManyField('MaquinaRel', related_name='usuarios_rel')
+
+class MaquinaRel(models.Model):
+    nome = models.CharField(max_length=255)
+    usuarios = models.ManyToManyField('UsuarioRel', related_name='maquina_rel')
+
+class CursoRel(models.Model):
+    nome = models.CharField(max_length=255)
+    usuarios = models.ManyToManyField('UsuarioRel', related_name='cursos_rel')
+
+class AreaRel(models.Model):
+    nome = models.CharField(max_length=255)
+    maquinas = models.ManyToManyField('MaquinaRel', related_name='areas_rel')

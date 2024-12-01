@@ -9,6 +9,9 @@ from django.contrib.auth import authenticate
 from .models import AulaUsuario, MaquinaUsuarioProgresso, CursoUsuario, Aula, Video, Slide, User, Maquina, Area, Questionario, Curso, Pergunta, Alternativa
 from .serializers import UserSerializer, MaquinaSerializer, AreaSerializer, QuestionarioSerializer, CursoSerializer, AulaSerializer, VideoSerializer, SlideSerializer
 from .serializers import CursosSerializer, MaquinaUserSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from api.models import UsuarioRel, MaquinaRel, CursoRel, AreaRel
 
 
 class LoginView(APIView):
@@ -358,3 +361,58 @@ class AulasComConclusaoView(APIView):
             return Response(aulas_data, status=status.HTTP_200_OK)
         except Aula.DoesNotExist:
             return Response({"error": "Curso não encontrado ou sem aulas."}, status=status.HTTP_404_NOT_FOUND)
+        
+
+
+
+class RelacoesUsuariosMaquinasView(APIView):
+    def get(self, request):
+        relacoes = UsuarioRel.objects.prefetch_related('maquinas').all()
+        resultado = [
+            {
+                'user_id': usuario.id,
+                'usuario_nome': usuario.nome,
+                'maquinas': [maquina.nome for maquina in usuario.maquinas.all()]
+            }
+            for usuario in relacoes
+        ]
+        return Response(resultado)
+
+class RelacoesMaquinasUsuariosView(APIView):
+    def get(self, request):
+        relacoes = MaquinaRel.objects.prefetch_related('usuarios').all()
+        resultado = [
+            {
+                'maquina_id': maquina.id,
+                'maquina_nome': maquina.nome,
+                'usuarios': [usuario.nome for usuario in maquina.usuarios.all()]
+            }
+            for maquina in relacoes
+        ]
+        return Response(resultado)
+
+class RelacoesCursosUsuariosView(APIView):
+    def get(self, request):
+        relacoes = CursoRel.objects.prefetch_related('usuarios').all()
+        resultado = [
+            {
+                'curso_id': curso.id,
+                'curso_nome': curso.nome,
+                'usuarios': [usuario.nome for usuario in curso.usuarios.all()]
+            }
+            for curso in relacoes
+        ]
+        return Response(resultado)
+
+class RelacoesAreasMaquinasView(APIView):
+    def get(self, request):
+        relacoes = AreaRel.objects.prefetch_related('maquinas').all()
+        resultado = [
+            {
+                'area_id': area.id,
+                'area_nome': area.nome,
+                'maquinas': [maquina.nome for maquina in area.maquinas.all()]
+            }
+            for area in relacoes
+        ]
+        return Response(resultado)

@@ -5,6 +5,12 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from api.views import AulasComConclusaoView, ConsultarProgressoView, ConcluirAulaView, CursoListView, MaquinasDoUsuarioPorIDView, LoginView, LogoutView, UserViewSet, MaquinaViewSet, AreaViewSet, QuestionarioViewSet, CursoViewSet, AulaViewSet, VideoViewSet, SlideViewSet 
+from api.views import (
+    RelacoesUsuariosMaquinasView,
+    RelacoesMaquinasUsuariosView,
+    RelacoesCursosUsuariosView,
+    RelacoesAreasMaquinasView
+)
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -26,6 +32,10 @@ urlpatterns = [
     path('api/cursos-list/<int:user_id>/', CursoListView.as_view(), name='curso-list-by-user'),
     path('api/aulas/curso/<int:idcurso>/', AulaViewSet.as_view({'get': 'list_by_curso'}), name='aula-by-curso'),
     path('api/maquinas-do-usuario/<int:user_id>/', MaquinasDoUsuarioPorIDView.as_view(), name='maquinas-do-usuario-id'),
+    path('api/relacoes/usuarios-maquinas/', RelacoesUsuariosMaquinasView.as_view(), name='relacoes-usuarios-maquinas'),
+    path('api/relacoes/maquinas-usuarios/', RelacoesMaquinasUsuariosView.as_view(), name='relacoes-maquinas-usuarios'),
+    path('api/relacoes/cursos-usuarios/', RelacoesCursosUsuariosView.as_view(), name='relacoes-cursos-usuarios'),
+    path('api/relacoes/areas-maquinas/', RelacoesAreasMaquinasView.as_view(), name='relacoes-areas-maquinas'),
 
 ]
 
