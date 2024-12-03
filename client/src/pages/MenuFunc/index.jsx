@@ -9,6 +9,8 @@ function MenuFunc() {
     const [userName, setUserName] = useState('');  // Estado para o nome do usuário
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
     const maquinasCarousel = useRef(null);
+    const [progressData, setProgressData] = useState({});
+    const [progressCurso, setProgressCurso] = useState({});
     const cursosCarousel = useRef(null);
     const navigate = useNavigate(); // Hook de navegação
 
@@ -100,7 +102,44 @@ function MenuFunc() {
         fetchCursosAdm();
         
     } 
-    }, []);  // O array vazio significa que esse efeito será executado apenas uma vez quando o componente for montado.
+    }, []);  
+    
+    useEffect(() => {
+        const fetchProgress = async () => {
+            try {
+                const userId = localStorage.getItem('id');
+                if (!userId) {
+                    console.error('ID do usuário não encontrado no localStorage.');
+                    return;
+                }
+
+                const response = await fetch(`http://localhost:8000/api/progresso/${userId}/`);
+                const data = await response.json();
+
+                // Mapeia o progresso das máquinas
+                const progressMap = {};
+                data.maquinas.forEach((item) => {
+                    progressMap[item.maquina__idmaquina] = item.progresso;
+                });
+
+                setProgressData(progressMap);
+
+                const progressCurso = {};
+                data.cursos.forEach((item) => {
+                    progressCurso[item.curso__idcurso] = item.progresso;
+                });
+
+                setProgressCurso(progressCurso);
+
+            } catch (error) {
+                console.error('Erro ao buscar progresso das máquinas:', error);
+            }
+        };
+
+        fetchProgress();
+    }, []);
+    
+    // O array vazio significa que esse efeito será executado apenas uma vez quando o componente for montado.
 
     const handleScroll = (carouselRef, direction) => {
         const itemWidth = carouselRef.current.querySelector('.carousel-item').offsetWidth + 70;
@@ -136,8 +175,7 @@ function MenuFunc() {
                         <div className="carousel" ref={maquinasCarousel}>
                             <div className="carousel-content">
                                 {maquinasEmProgresso.map((maquina) => {
-                                    const progressPercent = 40; // Exemplo de valor estático para progresso
-                                    return (
+                                    const progressPercent = progressData[maquina.idmaquina] || 0;                                    return (
                                         <div key={maquina.idmaquina} className="carousel-item" onClick={() => handleMaquinaClick(maquina.idmaquina)}> {/* Adiciona o evento de clique */}
                                             <div className="maquina-nome">{maquina.nomeMaquina}</div>
                                             <div className="icon-container">
@@ -170,8 +208,8 @@ function MenuFunc() {
                         <div className="carousel" ref={cursosCarousel}>
                             <div className="carousel-content">
                                 {cursosEmProgresso.map((curso) => {
-                                    const progressPercent = 70; // Exemplo de valor estático para progresso
-                                    return (
+                                        const progressPercent = progressCurso[curso.idcurso] || 0; // Se não encontrar, usa 0
+                                            return (
                                         <div key={curso.id} className="carousel-item" onClick={() => handleCursoClick(curso.idcurso)}> {/* Adiciona o evento de clique */}
                                             <div className="curso-nome">{curso.titulo}</div>
                                             <div className="icon-container">

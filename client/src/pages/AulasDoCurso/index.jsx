@@ -8,7 +8,7 @@ function AulasDoCurso() {
     const navigate = useNavigate();
     const [aulas, setAulas] = useState([]);
     const [tituloCurso, setTituloCurso] = useState('');
-    const [progressoCurso, setProgressoCurso] = useState(55);
+    const [progressoCurso, setProgressoCurso] = useState(0);  // Inicializado com 0, pode ser ajustado conforme a API
 
     useEffect(() => {
         const fetchAulas = async () => {
@@ -37,6 +37,34 @@ function AulasDoCurso() {
         fetchAulas();
         fetchTituloCurso();
     }, [idcurso]);
+
+    useEffect(() => {
+        // Função para buscar o progresso dos cursos
+        const fetchProgress = async () => {
+            try {
+                const userId = localStorage.getItem('id');
+                const response = await fetch(`http://localhost:8000/api/progresso/${userId}/`);
+                const data = await response.json();
+                
+                // Cria um mapa de progresso com idcurso como chave
+                const progressMap = {};
+                data.cursos.forEach((curso) => {
+                    progressMap[curso.curso__idcurso] = curso.progresso;
+                });
+
+                // Atualiza o progresso do curso específico
+                if (progressMap[idcurso]) {
+                    setProgressoCurso(progressMap[idcurso]);
+                } else {
+                    setProgressoCurso(0); // Caso o progresso do curso não seja encontrado
+                }
+            } catch (error) {
+                console.error('Erro ao buscar progresso dos cursos:', error);
+            }
+        };
+
+        fetchProgress(); // Puxa o progresso dos cursos
+    }, [idcurso]);  // Atualiza sempre que o idcurso mudar
 
     const handleAssistirClick = (idaula) => {
         navigate(`/curso/${idcurso}/aula/${idaula}`);
