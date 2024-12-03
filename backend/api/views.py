@@ -219,11 +219,11 @@ class CursoListView(APIView):
 
 class ConcluirAulaView(APIView):
     def post(self, request):
-        user_id = request.data.get('user_id')  # Obter o ID do usuário do payload
+        user_id = request.data.get('user_id') 
         aula_id = request.data.get('aula_id')
 
         try:
-            usuario = User.objects.get(pk=user_id)  # Busca o usuário pelo ID
+            usuario = User.objects.get(pk=user_id) 
         except User.DoesNotExist:
             return Response({"error": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
 
@@ -272,23 +272,20 @@ class ConcluirAulaView(APIView):
         self.atualizar_progresso_maquina(usuario, curso)
 
     def atualizar_progresso_maquina(self, usuario, curso):
-        # Identifica as máquinas associadas ao curso
         maquinas = curso.maquina.all()
         for maquina in maquinas:
             cursos_da_maquina = maquina.curso_set.all()
             total_cursos = cursos_da_maquina.count()
 
-            # Verifica quantos cursos dessa máquina o usuário concluiu
             cursos_concluidos = CursoUsuario.objects.filter(
                 usuario=usuario,
                 curso__in=cursos_da_maquina,
                 progresso=100
             ).count()
-
-            # Calcula o progresso da máquina
+ 
             progresso_maquina = (cursos_concluidos / total_cursos) * 100 if total_cursos > 0 else 0
 
-            # Atualiza ou cria o registro de progresso da máquina
+            
             maquina_usuario, created = MaquinaUsuarioProgresso.objects.get_or_create(
                 usuario=usuario,
                 maquina=maquina
@@ -300,11 +297,9 @@ class ConcluirAulaView(APIView):
 
 class ConsultarProgressoView(APIView):
     def get(self, request, user_id):
-        # Valida a existência do user_id
         if not user_id:
             return Response({"error": "O parâmetro user_id é obrigatório."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Verifica se o usuário existe
         try:
             usuario = User.objects.get(pk=user_id)
         except User.DoesNotExist:
@@ -321,7 +316,6 @@ class ConsultarProgressoView(APIView):
             "aula__idaula", "aula__titulo"
         )
 
-        # Retorna os dados em formato simplificado
         return Response({
             "maquinas": list(maquinas_progresso),
             "cursos": list(cursos_progresso),
